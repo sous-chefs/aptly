@@ -47,6 +47,7 @@ directory node['aptly']['rootdir'] do
   owner node['aptly']['user']
   group node['aptly']['group']
   mode  00755
+  recursive true
   action :create
 end
 
