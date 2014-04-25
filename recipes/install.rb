@@ -71,3 +71,5 @@ template '/etc/aptly.conf' do
     :ppacodename => node['aptly']['ppacodename']
   })
 end
+
+include_recipe "aptly::_import_system_keyrings"
