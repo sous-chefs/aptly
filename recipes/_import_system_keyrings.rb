@@ -21,7 +21,8 @@ keyring_files = Dir.glob('/usr/share/keyrings/*keyring.gpg').to_a
 keyring_files.each do |key|
   name = File.basename("#{key}")
   execute "Importing System Keyring - #{name}" do
-    user 'aptly'
+    user node['aptly']['user']
+    group node['aptly']['group']
     cwd node['aptly']['rootdir']
     command "export HOME=#{node['aptly']['rootdir']} && gpg --keyring #{key} --export | gpg --no-default-keyring --keyring trustedkeys.gpg --import"
   end
