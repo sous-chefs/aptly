@@ -92,6 +92,46 @@ aptly_repo "myrepo" do
 end
 ```
 
+```
+aptly_snapshot "pulltest" do
+  action :create
+  from "myrepo"
+  type "repo"
+  empty false
+end
+```
+
+```
+aptly_snapshot "pulltest" do
+  action :drop
+end
+```
+
+```
+aptly_snapshot "merged-snapshot" do
+  action :merge
+  merge_source1 "pullrepo1"
+  merge_source2 "pullrepo2"
+end
+```
+
+```
+aptly_snapshot "merged-snapshot" do
+  action :verify
+end
+```
+
+```
+aptly_snapshot "pulledpork" do
+  action :pull
+  deps false
+  remove false
+  package "openjdk-6-jre-headless_6b30-1.13.1-1ubuntu2~0.12.04.1_amd64"
+  resource "pullrepo1"
+  source "pullrepo2"
+end
+```
+
 License & Authors
 -----------------
 - Author:: Aaron Baer (aaron@hw-ops.com)
