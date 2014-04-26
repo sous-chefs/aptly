@@ -51,6 +51,16 @@ directory node['aptly']['rootdir'] do
   action :create
 end
 
+%w{db pool public}.each do |dir|
+  directory "#{node['aptly']['rootdir']}/#{dir}" do
+    owner node['aptly']['user']
+    group node['aptly']['group']
+    mode 00755
+    recursive true
+    action :create
+  end
+end
+
 template '/etc/aptly.conf' do
   source 'aptly.conf.erb'
   owner 'root'
