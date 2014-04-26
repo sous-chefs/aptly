@@ -47,6 +47,51 @@ Usage
 ### include recipe
 include_recipe "aptly"
 
+Resources
+---------
+
+```
+aptly_repo "myrepo" do
+  action :create
+  comment "This is a comment"
+  component "main"
+  distribution "Ubuntu"
+end
+```
+
+```
+aptly_repo "myrepo" do
+  action :create
+end
+```
+
+```
+aptly_repo "myrepo" do
+  action :drop
+end
+```
+
+```
+aptly_repo "myrepo" do
+  action :add
+  file "/path/to/package-1.0.1.deb"
+end
+```
+
+```
+aptly_repo "myrepo" do
+  action :add
+  directory "/path/to/packages"
+end
+```
+
+```
+aptly_repo "myrepo" do
+  action :remove
+  file "/path/to/package-1.0.1.deb"
+end
+```
+
 License & Authors
 -----------------
 - Author:: Aaron Baer (aaron@hw-ops.com)
