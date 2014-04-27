@@ -126,7 +126,7 @@ aptly_snapshot "pulledpork" do
   action :pull
   deps false
   remove false
-  package "openjdk-6-jre-headless_6b30-1.13.1-1ubuntu2~0.12.04.1_amd64"
+  package "package-1.0.1"
   resource "pullrepo1"
   source "pullrepo2"
 end
