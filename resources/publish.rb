@@ -23,7 +23,7 @@ default_action :create if defined?(default_action)
 # Needed for Chef versions < 0.10.10
 def initialize(*args)
   super
-  @action = :add
+  @action = :create
 end
 
 attribute :name, :kind_of => String, :name_attribute => true
