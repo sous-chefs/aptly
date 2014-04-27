@@ -53,7 +53,7 @@ Resources
 ```
 aptly_repo "myrepo" do
   action :create
-  comment "This is a comment"
+  comment "A repository of packages"
   component "main"
   distribution "Ubuntu"
 end
@@ -129,6 +129,36 @@ aptly_snapshot "pulledpork" do
   package "openjdk-6-jre-headless_6b30-1.13.1-1ubuntu2~0.12.04.1_amd64"
   resource "pullrepo1"
   source "pullrepo2"
+end
+```
+
+```
+aptly_publish "myrepo" do
+  action :create
+  type "repo"
+  prefix "foo"
+end
+```
+
+```
+aptly_publish "pulledpork" do
+  action :create
+  type "snapshot"
+  prefix "bar"
+end
+```
+
+```
+aptly_publish "mycompany" do
+  action :update
+  prefix "foo"
+end
+```
+
+```
+aptly_publish "mycompany" do
+  action :drop
+  prefix "foo"
 end
 ```
 
