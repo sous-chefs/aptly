@@ -45,12 +45,12 @@ Usage
 ### add to run_list
 
 ### include recipe
-include_recipe "aptly"
+`include_recipe "aptly"`
 
 Examples
 ---------
 
-```
+```ruby
 aptly_repo "myrepo" do
   action :create
   comment "A repository of packages"
@@ -59,40 +59,40 @@ aptly_repo "myrepo" do
 end
 ```
 
-```
+```ruby
 aptly_repo "myrepo" do
   action :create
 end
 ```
 
-```
+```ruby
 aptly_repo "myrepo" do
   action :drop
 end
 ```
 
-```
+```ruby
 aptly_repo "myrepo" do
   action :add
   file "/path/to/package-1.0.1.deb"
 end
 ```
 
-```
+```ruby
 aptly_repo "myrepo" do
   action :add
   directory "/path/to/packages"
 end
 ```
 
-```
+```ruby
 aptly_repo "myrepo" do
   action :remove
   file "/path/to/package-1.0.1.deb"
 end
 ```
 
-```
+```ruby
 aptly_mirror "ubuntu-precise-main" do
   action :create
   distribution "precise"
@@ -103,19 +103,19 @@ aptly_mirror "ubuntu-precise-main" do
 end
 ```
 
-```
+```ruby
 aptly_mirror "ubuntu-precise-main" do
   action :update
 end
 ```
 
-```
+```ruby
 aptly_mirror "ubuntu-precise-main" do
   action :drop
 end
 ```
 
-```
+```ruby
 aptly_snapshot "pulltest" do
   action :create
   from "myrepo"
@@ -124,13 +124,13 @@ aptly_snapshot "pulltest" do
 end
 ```
 
-```
+```ruby
 aptly_snapshot "pulltest" do
   action :drop
 end
 ```
 
-```
+```ruby
 aptly_snapshot "merged-snapshot" do
   action :merge
   merge_source1 "pullrepo1"
@@ -138,13 +138,13 @@ aptly_snapshot "merged-snapshot" do
 end
 ```
 
-```
+```ruby
 aptly_snapshot "merged-snapshot" do
   action :verify
 end
 ```
 
-```
+```ruby
 aptly_snapshot "pulledpork" do
   action :pull
   deps false
@@ -155,7 +155,7 @@ aptly_snapshot "pulledpork" do
 end
 ```
 
-```
+```ruby
 aptly_publish "myrepo" do
   action :create
   type "repo"
@@ -163,7 +163,7 @@ aptly_publish "myrepo" do
 end
 ```
 
-```
+```ruby
 aptly_publish "pulledpork" do
   action :create
   type "snapshot"
@@ -171,27 +171,27 @@ aptly_publish "pulledpork" do
 end
 ```
 
-```
+```ruby
 aptly_publish "mycompany" do
   action :update
   prefix "foo"
 end
 ```
 
-```
+```ruby
 aptly_publish "mycompany" do
   action :drop
   prefix "foo"
 end
 ```
 
-```
+```ruby
 aptly_db "cleanup" do
   action :cleanup
 end
 ```
 
-```
+```ruby
 aptly_db "recover" do
   action :recover
 end
