@@ -93,6 +93,29 @@ end
 ```
 
 ```
+aptly_mirror "ubuntu-precise-main" do
+  action :create
+  distribution "precise"
+  component "main"
+  keyid "437D05B5"
+  keyserver "keys.gnupg.net"
+  uri "http://ubuntu.osuosl.org/ubuntu/"
+end
+```
+
+```
+aptly_mirror "ubuntu-precise-main" do
+  action :update
+end
+```
+
+```
+aptly_mirror "ubuntu-precise-main" do
+  action :drop
+end
+```
+
+```
 aptly_snapshot "pulltest" do
   action :create
   from "myrepo"
