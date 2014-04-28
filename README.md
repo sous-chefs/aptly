@@ -185,6 +185,19 @@ aptly_publish "mycompany" do
 end
 ```
 
+```
+aptly_db "cleanup" do
+  action :cleanup
+end
+```
+
+```
+aptly_db "recover" do
+  action :recover
+end
+```
+
+
 License & Authors
 -----------------
 - Author:: Aaron Baer (aaron@hw-ops.com)
