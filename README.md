@@ -47,6 +47,157 @@ Usage
 ### include recipe
 include_recipe "aptly"
 
+Examples
+---------
+
+```
+aptly_repo "myrepo" do
+  action :create
+  comment "A repository of packages"
+  component "main"
+  distribution "Ubuntu"
+end
+```
+
+```
+aptly_repo "myrepo" do
+  action :create
+end
+```
+
+```
+aptly_repo "myrepo" do
+  action :drop
+end
+```
+
+```
+aptly_repo "myrepo" do
+  action :add
+  file "/path/to/package-1.0.1.deb"
+end
+```
+
+```
+aptly_repo "myrepo" do
+  action :add
+  directory "/path/to/packages"
+end
+```
+
+```
+aptly_repo "myrepo" do
+  action :remove
+  file "/path/to/package-1.0.1.deb"
+end
+```
+
+```
+aptly_mirror "ubuntu-precise-main" do
+  action :create
+  distribution "precise"
+  component "main"
+  keyid "437D05B5"
+  keyserver "keys.gnupg.net"
+  uri "http://ubuntu.osuosl.org/ubuntu/"
+end
+```
+
+```
+aptly_mirror "ubuntu-precise-main" do
+  action :update
+end
+```
+
+```
+aptly_mirror "ubuntu-precise-main" do
+  action :drop
+end
+```
+
+```
+aptly_snapshot "pulltest" do
+  action :create
+  from "myrepo"
+  type "repo"
+  empty false
+end
+```
+
+```
+aptly_snapshot "pulltest" do
+  action :drop
+end
+```
+
+```
+aptly_snapshot "merged-snapshot" do
+  action :merge
+  merge_source1 "pullrepo1"
+  merge_source2 "pullrepo2"
+end
+```
+
+```
+aptly_snapshot "merged-snapshot" do
+  action :verify
+end
+```
+
+```
+aptly_snapshot "pulledpork" do
+  action :pull
+  deps false
+  remove false
+  package "package-1.0.1"
+  resource "pullrepo1"
+  source "pullrepo2"
+end
+```
+
+```
+aptly_publish "myrepo" do
+  action :create
+  type "repo"
+  prefix "foo"
+end
+```
+
+```
+aptly_publish "pulledpork" do
+  action :create
+  type "snapshot"
+  prefix "bar"
+end
+```
+
+```
+aptly_publish "mycompany" do
+  action :update
+  prefix "foo"
+end
+```
+
+```
+aptly_publish "mycompany" do
+  action :drop
+  prefix "foo"
+end
+```
+
+```
+aptly_db "cleanup" do
+  action :cleanup
+end
+```
+
+```
+aptly_db "recover" do
+  action :recover
+end
+```
+
+
 License & Authors
 -----------------
 - Author:: Aaron Baer (aaron@hw-ops.com)

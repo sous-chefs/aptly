@@ -51,6 +51,23 @@ directory node['aptly']['rootdir'] do
   action :create
 end
 
+%w{db pool public}.each do |dir|
+  directory "#{node['aptly']['rootdir']}/#{dir}" do
+    owner node['aptly']['user']
+    group node['aptly']['group']
+    mode 00755
+    recursive true
+    action :create
+  end
+end
+
+execute "seed aptly db" do
+  command "aptly repo list"
+  user node['aptly']['user']
+  group node['aptly']['group']
+  not_if { File.exists?("#{node['aptly']['rootdir']}/db/CURRENT") }
+end
+
 template '/etc/aptly.conf' do
   source 'aptly.conf.erb'
   owner 'root'
@@ -72,4 +89,3 @@ template '/etc/aptly.conf' do
   })
 end
 
-include_recipe "aptly::_import_system_keyrings"
