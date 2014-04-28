@@ -61,6 +61,13 @@ end
   end
 end
 
+execute "seed aptly db" do
+  command "aptly repo list"
+  user node['aptly']['user']
+  group node['aptly']['group']
+  not_if { File.exists?("#{node['aptly']['rootdir']}/db/CURRENT") }
+end
+
 template '/etc/aptly.conf' do
   source 'aptly.conf.erb'
   owner 'root'
@@ -82,4 +89,3 @@ template '/etc/aptly.conf' do
   })
 end
 
-include_recipe "aptly::_import_system_keyrings"
