@@ -47,7 +47,7 @@ Usage
 ### include recipe
 include_recipe "aptly"
 
-Resources
+Examples
 ---------
 
 ```
