@@ -32,6 +32,7 @@ action :create do
     end
     user node['aptly']['user']
     group node['aptly']['group']
+    environment aptly_env
     not_if %{ aptly repo list --raw | grep #{new_resource.name} }
   end
 end
@@ -41,6 +42,7 @@ action :drop do
     command "aptly repo drop #{new_resource.name}"
     user node['aptly']['user']
     group node['aptly']['group']
+    environment aptly_env
     only_if %{ aptly repo list --raw | grep #{new_resource.name} }
   end
 end
@@ -52,6 +54,7 @@ action :add do
         command "aptly repo add #{new_resource.name} #{new_resource.directory}"
         user node['aptly']['user']
         group node['aptly']['group']
+        environment aptly_env
       end
     else
       Chef::Log.info "#{new_resource.directory} is not a valid directory"
@@ -64,6 +67,7 @@ action :add do
         command "aptly repo add #{new_resource.name} #{new_resource.file}"
         user node['aptly']['user']
         group node['aptly']['group']
+        environment aptly_env
         not_if %{ aptly repo show -with-packages #{new_resource.name} | grep #{pk} }
       end
     else
@@ -80,6 +84,7 @@ action :remove do
     command "aptly repo remove #{new_resource.name} #{pkg}"
     user node['aptly']['user']
     group node['aptly']['group']
+    environment aptly_env
     only_if %{ aptly repo show -with-packages #{new_resource.name} | grep #{pkg} }
   end
 end

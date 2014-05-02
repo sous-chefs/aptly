@@ -24,23 +24,21 @@ def whyrun_supported?
 end
 
 action :create do
-  environment = { "HOME" => "#{node['aptly']['rootdir']}" }
   execute "Publish #{new_resource.type} - #{new_resource.name}" do
     command "aptly publish #{new_resource.type} #{new_resource.name} #{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
-    environment environment
+    environment aptly_env
     not_if %{ aptly publish list | grep #{new_resource.name} }
   end
 end
 
 action :update do
-  environment = { "HOME" => "#{node['aptly']['rootdir']}" }
   execute "Updating distribution - #{new_resource.prefix} #{new_resource.name}" do
     command "aptly publish update #{new_resource.name} #{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
-    environment environment
+    environment aptly_env
   end
 end
 
@@ -50,5 +48,6 @@ action :drop do
     user node['aptly']['user']
     group node['aptly']['group']
     only_if %{ aptly publish list | grep #{new_resource.name} }
+    environment aptly_env
   end
 end

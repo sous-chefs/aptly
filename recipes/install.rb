@@ -61,11 +61,13 @@ end
   end
 end
 
+aptly_environment = { "HOME" => node['aptly']['rootdir'], "USER" => node['aptly']['user'] }
 execute "seed aptly db" do
   command "aptly repo list"
   user node['aptly']['user']
   group node['aptly']['group']
   not_if { File.exists?("#{node['aptly']['rootdir']}/db/CURRENT") }
+  environment aptly_environment
 end
 
 template '/etc/aptly.conf' do
