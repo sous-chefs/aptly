@@ -29,6 +29,7 @@ action :create do
       command "aptly snapshot create #{new_resource.name} empty"
       user node['aptly']['user']
       group node['aptly']['group']
+      environment aptly_env
       not_if %{ aptly snapshot -raw list | grep #{new_resource.name} }
     end
   else
@@ -36,6 +37,7 @@ action :create do
       command "aptly snapshot create #{new_resource.name} from #{new_resource.type} #{new_resource.from}"
       user node['aptly']['user']
       group node['aptly']['group']
+      environment aptly_env
       not_if %{ aptly snapshot -raw list | grep #{new_resource.name} }
     end
   end
@@ -46,6 +48,7 @@ action :verify do
     command "aptly snapshot verify #{new_resource.name}"
     user node['aptly']['user']
     group node['aptly']['group']
+    environment aptly_env
     only_if %{ aptly snapshot -raw list | grep #{new_resource.name} }
   end
 end
@@ -55,6 +58,7 @@ action :pull do
     command "aptly snapshot pull -no-deps=#{new_resource.deps} -no-remove=#{new_resource.remove} #{new_resource.resource} #{new_resource.source} #{new_resource.name} #{new_resource.package}"
     user node['aptly']['user']
     group node['aptly']['group']
+    environment aptly_env
     not_if %{ aptly snapshot -raw list | grep #{new_resource.name} }
   end
 end
@@ -64,6 +68,7 @@ action :merge do
     command "aptly snapshot merge #{new_resource.name} #{new_resource.merge_source1} #{new_resource.merge_source2}"
     user node['aptly']['user']
     group node['aptly']['group']
+    environment aptly_env
     not_if %{ aptly snapshot -raw list | grep #{new_resource.name} }
   end
 end
@@ -73,6 +78,7 @@ action :drop do
     command "aptly snapshot drop #{new_resource.name}"
     user node['aptly']['user']
     group node['aptly']['group']
+    environment aptly_env
     only_if %{ aptly snapshot -raw list | grep #{new_resource.name} }
   end
 end

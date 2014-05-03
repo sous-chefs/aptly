@@ -24,12 +24,11 @@ def whyrun_supported?
 end
 
 def install_key(keyid, keyserver)
-  environment = { "HOME" => "#{node['aptly']['rootdir']}" }
   execute "Installing external repository key" do
     command "gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver #{keyserver} --recv-keys #{keyid}"
     user node['aptly']['user']
     group node['aptly']['group']
-    environment environment
+    environment aptly_env
   end
 end
 
@@ -38,12 +37,11 @@ action :create do
   if !new_resource.keyid.nil?
     install_key(new_resource.keyid, new_resource.keyserver)
   end
-  environment = { "HOME" => "#{node['aptly']['rootdir']}" }
   execute "Creating mirror - #{new_resource.name}" do
     command "aptly mirror create #{new_resource.name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
     user node['aptly']['user']
     group node['aptly']['group']
-    environment environment
+    environment aptly_env
     not_if %{ aptly mirror -raw list | grep #{new_resource.name} }
   end
 end
@@ -53,6 +51,7 @@ action :update do
     command "aptly mirror update #{new_resource.name}"
     user node['aptly']['user']
     group node['aptly']['group']
+    environment aptly_env
     only_if %{ aptly mirror -raw list | grep #{new_resource.name} }
   end
 end
@@ -62,6 +61,7 @@ action :drop do
     command "aptly mirror drop #{new_resource.name}"
     user node['aptly']['user']
     group node['aptly']['group']
+    environment aptly_env
     only_if %{ aptly mirror -raw list | grep #{new_resource.name} }
   end
 end
