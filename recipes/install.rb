@@ -61,15 +61,6 @@ end
   end
 end
 
-aptly_environment = { "HOME" => node['aptly']['rootdir'], "USER" => node['aptly']['user'] }
-execute "seed aptly db" do
-  command "aptly repo list"
-  user node['aptly']['user']
-  group node['aptly']['group']
-  not_if { File.exists?("#{node['aptly']['rootdir']}/db/CURRENT") }
-  environment aptly_environment
-end
-
 template '/etc/aptly.conf' do
   source 'aptly.conf.erb'
   owner 'root'
@@ -89,5 +80,13 @@ template '/etc/aptly.conf' do
     :ppadistributorid => node['aptly']['ppadistributorid'],
     :ppacodename => node['aptly']['ppacodename']
   })
+end
+
+execute "seed aptly db" do
+  command "aptly repo list"
+  user node['aptly']['user']
+  group node['aptly']['group']
+  environment aptly_env
+  not_if { File.exists?("#{node['aptly']['rootdir']}/db/CURRENT") }
 end
 
