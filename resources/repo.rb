@@ -27,6 +27,7 @@ def initialize(*args)
 end
 
 attribute :name, :kind_of => String, :name_attribute => true
+attribute :repo, :kind_of => String, :default => nil
 attribute :component, :kind_of => String, :default => nil
 attribute :comment, :kind_of => String, :default => nil
 attribute :distribution, :kind_of => String, :default => nil
