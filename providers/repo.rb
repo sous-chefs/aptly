@@ -24,34 +24,41 @@ def whyrun_supported?
 end
 
 action :create do
+  repo_name = new_resource.repo || new_resource.name
   execute "Creating Repo - #{new_resource.name}" do
     if !new_resource.comment.nil? || !new_resource.component.nil? || !new_resource.distribution.nil?
-      command "aptly repo create -comment='#{new_resource.comment}' -component='#{new_resource.component}' -distribution='#{new_resource.distribution}' #{new_resource.name}"
+      command "aptly repo create -comment='#{new_resource.comment}' -component='#{new_resource.component}' -distribution='#{new_resource.distribution}' #{repo_name}"
     else
-      command "aptly repo create #{new_resource.name}"
+      command "aptly repo create #{repo_name}"
     end
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    not_if %{ aptly repo list --raw | grep #{new_resource.name} }
+    not_if %{ aptly repo list --raw | grep #{repo_name} }
   end
 end
 
 action :drop do
+  repo_name = new_resource.repo || new_resource.name
   execute "Droping Repo - #{new_resource.name}" do
-    command "aptly repo drop #{new_resource.name}"
+    command "aptly repo drop #{repo_name}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %{ aptly repo list --raw | grep #{new_resource.name} }
+    only_if %{ aptly repo list --raw | grep #{repo_name} }
   end
 end
 
 action :add do
+  repo_name = new_resource.repo || new_resource.name
   if new_resource.file.nil?
     if ::Dir.exist?("#{new_resource.directory}")
       execute "Adding packages from #{new_resource.directory}" do
-        command "aptly repo add #{new_resource.name} #{new_resource.directory}"
+        if new_resource.remove_files
+          command "aptly repo add -remove-files #{repo_name} #{new_resource.directory}"
+        else
+          command "aptly repo add #{repo_name} #{new_resource.directory}"
+        end
         user node['aptly']['user']
         group node['aptly']['group']
         environment aptly_env
@@ -64,11 +71,11 @@ action :add do
       pkg = ::File.basename("#{new_resource.file}")
       pk = pkg.split('.').first
       execute "Adding Package - #{pkg}" do
-        command "aptly repo add #{new_resource.name} #{new_resource.file}"
+        command "aptly repo add #{repo_name} #{new_resource.file}"
         user node['aptly']['user']
         group node['aptly']['group']
         environment aptly_env
-        not_if %{ aptly repo show -with-packages #{new_resource.name} | grep #{pk} }
+        not_if %{ aptly repo show -with-packages #{repo_name} | grep #{pk} }
       end
     else
       Chef::Log.info "#{new_resource.file} does not exist"
@@ -79,13 +86,14 @@ action :add do
 end
 
 action :remove do
+  repo_name = new_resource.repo || new_resource.name
   pkg = ::File.basename("#{new_resource.file}").split('.').first
   execute "Removing Package - #{new_resource.file}" do
-    command "aptly repo remove #{new_resource.name} #{pkg}"
+    command "aptly repo remove #{repo_name} #{pkg}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %{ aptly repo show -with-packages #{new_resource.name} | grep #{pkg} }
+    only_if %{ aptly repo show -with-packages #{repo_name} | grep #{pkg} }
   end
 end
 
