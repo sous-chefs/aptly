@@ -61,8 +61,10 @@ end
   end
 end
 
+environment = { "USER" => "#{node['aptly']['user']}" }
 execute "seed aptly db" do
   command "aptly repo list"
+  environment environment
   user node['aptly']['user']
   group node['aptly']['group']
   not_if { File.exists?("#{node['aptly']['rootdir']}/db/CURRENT") }
