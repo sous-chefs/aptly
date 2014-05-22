@@ -19,6 +19,11 @@
 
 include_recipe "apt"
 
+environment = {
+  "USER" => "#{node['aptly']['user']}",
+  "HOME" => "#{node['aptly']['rootdir']}"
+}
+
 apt_repository "aptly" do
   uri node['aptly']['uri']
   distribution node['aptly']['dist']
@@ -61,13 +66,16 @@ end
   end
 end
 
-environment = { "USER" => "#{node['aptly']['user']}" }
 execute "seed aptly db" do
   command "aptly repo list"
   environment environment
   user node['aptly']['user']
   group node['aptly']['group']
   not_if { File.exists?("#{node['aptly']['rootdir']}/db/CURRENT") }
+end
+
+execute "aptly db ownership" do
+  command "chown -R #{node['aptly']['user']}:#{node['aptly']['user']} #{node['aptly']['rootdir']}/db"
 end
 
 template '/etc/aptly.conf' do
