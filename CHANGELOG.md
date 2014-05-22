@@ -3,6 +3,9 @@ aptly CHANGELOG
 
 This file is used to list changes made in each version of the aptly cookbook.
 
+0.2.2
+-----
+- [Aaron Baer] - frustrating issue with file ownership
 0.2.1
 -----
 - [Aaron Baer] - bug fix for writing files to the system as the wrong user
