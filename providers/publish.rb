@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+include ::Aptly
+
 use_inline_resources if defined?(use_inline_resources)
 
 def whyrun_supported?
@@ -30,12 +32,12 @@ action :create do
     user node['aptly']['user']
     group node['aptly']['group']
     environment environment
-    not_if %{ aptly publish list | grep #{new_resource.name} }
+    not_if "#{publish_list} | grep #{new_resource.name}"
   end
 end
 
 action :update do
-  environment = { "HOME" => "#{node['aptly']['rootdir']}" }
+  environment = { "HOME" => node['aptly']['rootdir'] }
   execute "Updating distribution - #{new_resource.prefix} #{new_resource.name}" do
     command "aptly publish update #{new_resource.name} #{new_resource.prefix}"
     user node['aptly']['user']
@@ -49,6 +51,6 @@ action :drop do
     command "aptly publish drop #{new_resource.name} #{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
-    only_if %{ aptly publish list | grep #{new_resource.name} }
+    only_if "#{publish_list} | grep #{new_resource.name}"
   end
 end

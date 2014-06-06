@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+include ::Aptly
+
 use_inline_resources if defined?(use_inline_resources)
 
 def whyrun_supported?
@@ -32,7 +34,7 @@ action :create do
     end
     user node['aptly']['user']
     group node['aptly']['group']
-    not_if %{ aptly repo list --raw | grep #{new_resource.name} }
+    not_if "#{repo_list} | grep #{new_resource.name}"
   end
 end
 
@@ -41,7 +43,7 @@ action :drop do
     command "aptly repo drop #{new_resource.name}"
     user node['aptly']['user']
     group node['aptly']['group']
-    only_if %{ aptly repo list --raw | grep #{new_resource.name} }
+    only_if "#{repo_list} | grep #{new_resource.name}"
   end
 end
 
@@ -64,7 +66,7 @@ action :add do
         command "aptly repo add #{new_resource.name} #{new_resource.file}"
         user node['aptly']['user']
         group node['aptly']['group']
-        not_if %{ aptly repo show -with-packages #{new_resource.name} | grep #{pk} }
+        not_if "#{aptly('repo show -with-packages')} #{new_resource.name} | grep #{pk}"
       end
     else
       Chef::Log.info "#{new_resource.file} does not exist"
@@ -75,12 +77,11 @@ action :add do
 end
 
 action :remove do
-  pkg = ::File.basename("#{new_resource.file}").split('.').first
+  pkg = ::File.basename(new_resource.file).split('.').first
   execute "Removing Package - #{new_resource.file}" do
     command "aptly repo remove #{new_resource.name} #{pkg}"
     user node['aptly']['user']
     group node['aptly']['group']
-    only_if %{ aptly repo show -with-packages #{new_resource.name} | grep #{pkg} }
+    only_if "#{aptly('repo show -with-packages')} #{new_resource.name} | grep #{pk}"
   end
 end
-
