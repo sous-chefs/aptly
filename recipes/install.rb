@@ -96,5 +96,5 @@ execute "seed aptly db" do
 end
 
 execute "aptly db ownership" do
-  command "chown -R #{node['aptly']['user']}:#{node['aptly']['user']} #{node['aptly']['rootdir']}/db"
+  command "chown -R #{node['aptly']['user']}:#{node['aptly']['group']} #{node['aptly']['rootdir']}/db"
 end
