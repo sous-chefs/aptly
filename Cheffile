@@ -6,3 +6,4 @@ cookbook 'apt'
 cookbook 'ubuntu'
 
 cookbook 'aptly', path: '.'
+cookbook 'aptly_test', path: './test/integration/default/cookbooks/aptly_test'
