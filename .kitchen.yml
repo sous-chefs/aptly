@@ -23,4 +23,5 @@ suites:
   - name: default
     run_list:
       - recipe[aptly::default]
+      - recipe[aptly_test::default]
     attributes:

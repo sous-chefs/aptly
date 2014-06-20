@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: aptly
-# Provider:: db
+# Library:: helpers
 #
 # Copyright 2014, Heavy Water Operations, LLC
 #
@@ -17,26 +17,14 @@
 # limitations under the License.
 #
 
-use_inline_resources if defined?(use_inline_resources)
-
-def whyrun_supported?
-  true
-end
-
-action :cleanup do
-  execute "DB Cleanup" do
-    command "aptly db cleanup"
-    user node['aptly']['user']
-    user node['aptly']['group']
-    environment aptly_env
+module Aptly
+  module Helpers
+    def aptly_env
+      { "HOME" => node['aptly']['rootdir'], "USER" => node['aptly']['user'] }
+    end
   end
 end
 
-action :recover do
-  execute "DB Recover" do
-    command "aptly db recover"
-    user node['aptly']['user']
-    user node['aptly']['group']
-    environment aptly_env
-  end
-end
+Chef::Recipe.send(:include, ::Aptly::Helpers)
+Chef::Provider.send(:include, ::Aptly::Helpers)
+Chef::Resource.send(:include, ::Aptly::Helpers)

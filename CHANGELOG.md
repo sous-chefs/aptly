@@ -5,7 +5,10 @@ This file is used to list changes made in each version of the aptly cookbook.
 
 0.2.2
 -----
-- [Aaron Baer] - frustrating issue with file ownership
+- Helper to define proper environment
+- Add repo attribute to repo resource
+- Fix group owner attribute
+- Correction for aptly user seed action
 0.2.1
 -----
 - [Aaron Baer] - bug fix for writing files to the system as the wrong user
