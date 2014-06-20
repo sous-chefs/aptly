@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: aptly
-# Recipe:: integration
+# Cookbook Name:: aptly_test
+# Recipe:: default
 #
 # Copyright 2014, Heavy Water Operations, LLC
 #
@@ -38,20 +38,35 @@ aptly_repo "failtest" do
   action :drop
 end
 
+directory "/opt/aptly/pkgs" do
+  owner "aptly"
+  group "aptly"
+end
+
+if node.platform_version == "14.04"
+  remote_file "/opt/aptly/pkgs/wget_1.15-1ubuntu1_amd64.deb" do
+    source "http://mirrors.kernel.org/ubuntu/pool/main/w/wget/wget_1.15-1ubuntu1_amd64.deb"
+  end
+elsif node.platform_version == "12.04"
+  remote_file "/opt/aptly/pkgs/wget_1.15-1ubuntu1_amd64.deb" do
+    source "http://mirrors.kernel.org/ubuntu/pool/main/w/wget/wget_1.13.4-2ubuntu1_amd64.deb"
+  end
+end
+
 aptly_repo "myrepo" do
   action :add
   directory "/opt/aptly/pkgs"
 end
 
-aptly_repo "myrepo" do
-  action :add
-  file "/opt/aptly/pkgs/openjdk-6-jdk_6b30-1.13.1-1ubuntu2~0.12.04.1_amd64.deb"
-end
+#aptly_repo "myrepo" do
+#  action :add
+#  file "/opt/aptly/pkgs/openjdk-6-jdk_6b30-1.13.1-1ubuntu2~0.12.04.1_amd64.deb"
+#end
 
-aptly_repo "myrepo" do
-  action :remove
-  file "/opt/aptly/pkgs/openjdk-6-jdk_6b30-1.13.1-1ubuntu2~0.12.04.1_amd64.deb"
-end
+#aptly_repo "myrepo" do
+  #action :remove
+  #file "/opt/aptly/pkgs/openjdk-6-jdk_6b30-1.13.1-1ubuntu2~0.12.04.1_amd64.deb"
+#end
 
 aptly_snapshot "pulltest" do
   action :create
@@ -87,37 +102,38 @@ aptly_snapshot "pulledpork" do
   action :pull
   deps false
   remove false
-  package "openjdk-6-jre-headless_6b30-1.13.1-1ubuntu2~0.12.04.1_amd64"
+  package "wget_1.15-1ubuntu1_amd64.deb"
   resource "pullrepo1"
   source "pullrepo2"
 end
 
-aptly_publish "myrepo" do
-  action :create
-  type "repo"
-  prefix "foo"
-end
-
-aptly_publish "pulledpork" do
-  action :create
-  type "snapshot"
-  prefix "bar"
-end
-
-aptly_publish "mycompany" do
-  action :update
-  prefix "foo"
-end
-
-aptly_publish "mycompany" do
-  action :drop
-  prefix "foo"
-end
-
-aptly_publish "mycompany" do
-  action :drop
-  prefix "bar"
-end
+## need to import a gpg key for testing to publish these tests
+#aptly_publish "myrepo" do
+  #action :create
+  #type "repo"
+  #prefix "foo"
+#end
+#
+#aptly_publish "pulledpork" do
+  #action :create
+  #type "snapshot"
+  #prefix "bar"
+#end
+#
+#aptly_publish "mycompany" do
+  #action :update
+  #prefix "foo"
+#end
+#
+#aptly_publish "mycompany" do
+  #action :drop
+  #prefix "foo"
+#end
+#
+#aptly_publish "mycompany" do
+  #action :drop
+  #prefix "bar"
+#end
 
 %w{pulledpork merged-snapshot pullrepo1 pullrepo2}.each do |repos|
   aptly_snapshot "#{repos}" do
