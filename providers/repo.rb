@@ -56,11 +56,13 @@ action :add do
       execute "Adding packages from #{new_resource.directory}" do
         if new_resource.remove_files
           command "aptly repo add -remove-files #{repo_name} #{new_resource.directory}"
+          user 'root'
+          group 'root'
         else
           command "aptly repo add #{repo_name} #{new_resource.directory}"
+          user node['aptly']['user']
+          group node['aptly']['group']
         end
-        user node['aptly']['user']
-        group node['aptly']['group']
         environment aptly_env
       end
     else
@@ -96,4 +98,3 @@ action :remove do
     only_if %{ aptly repo show -with-packages #{repo_name} | grep #{pkg} }
   end
 end
-
