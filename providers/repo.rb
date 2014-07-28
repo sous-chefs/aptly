@@ -65,6 +65,13 @@ action :add do
         end
         environment aptly_env
       end
+      if new_resource.remove_files
+        execute "Fix up DB and Pool permissions" do
+          command "chown -R #{node['aptly']['user']}:#{node['aptly']['group']} #{node['aptly']['rootdir']}/db/* "\
+                  "&& "\
+                  "chown -R #{node['aptly']['user']}:#{node['aptly']['group']} #{node['aptly']['rootdir']}/pool/*"
+        end
+      end
     else
       Chef::Log.info "#{new_resource.directory} is not a valid directory"
     end
