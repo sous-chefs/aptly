@@ -87,6 +87,14 @@ template '/etc/aptly.conf' do
   })
 end
 
+execute "initialize gpg for aptly user #{node['aptly']['user']}" do
+  command "gpg --list-keys"
+  environment environment
+  user node['aptly']['user']
+  group node['aptly']['group']
+  not_if { Dir.exists?("#{node['aptly']['rootdir']}/.gnupg") }
+end
+
 execute "seed aptly db" do
   command "aptly repo list"
   environment environment
