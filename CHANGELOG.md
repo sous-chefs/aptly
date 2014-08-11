@@ -3,6 +3,11 @@ aptly CHANGELOG
 
 This file is used to list changes made in each version of the aptly cookbook.
 
+0.2.3
+-----
+- Support for cookbook file to distribute gpg key
+- Initializing gpg config for default user
+
 0.2.2
 -----
 - Helper to define proper environment
