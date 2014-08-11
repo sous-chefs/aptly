@@ -32,9 +32,23 @@ def install_key(keyid, keyserver)
   end
 end
 
+def install_local_key(keyfile)
+  cookbook_file keyfile do
+    action :create_if_missing
+    path "/tmp/#{keyfile}"
+  end
+  execute "Installing external repository key from #{keyfile}" do
+    command "gpg --no-default-keyring --keyring trustedkeys.gpg --import /tmp/#{keyfile}"
+    user node['aptly']['user']
+    group node['aptly']['group']
+    environment aptly_env
+  end
+end
 
 action :create do
-  if !new_resource.keyid.nil?
+  if !new_resource.keyfile.nil?
+    install_local_key(new_resource.keyfile)
+  elsif !new_resource.keyid.nil? && !new_resource.keyserver.nil?
     install_key(new_resource.keyid, new_resource.keyserver)
   end
   execute "Creating mirror - #{new_resource.name}" do
