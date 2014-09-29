@@ -56,7 +56,7 @@ action :create do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    not_if %{ aptly mirror -raw list | grep #{new_resource.name} }
+    not_if %{ aptly mirror -raw list | grep ^#{new_resource.name}$ }
   end
 end
 
@@ -66,7 +66,7 @@ action :update do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %{ aptly mirror -raw list | grep #{new_resource.name} }
+    only_if %{ aptly mirror -raw list | grep ^#{new_resource.name}$ }
   end
 end
 
@@ -76,7 +76,7 @@ action :drop do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %{ aptly mirror -raw list | grep #{new_resource.name} }
+    only_if %{ aptly mirror -raw list | grep ^#{new_resource.name}$ }
   end
 end
 
