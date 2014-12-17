@@ -3,6 +3,11 @@ aptly CHANGELOG
 
 This file is used to list changes made in each version of the aptly cookbook.
 
+0.2.4
+-----
+- use exact matches in provider for not_if checks
+- Add chefspec matchers
+
 0.2.3
 -----
 - Support for cookbook file to distribute gpg key
