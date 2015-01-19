@@ -28,7 +28,7 @@ action :create do
   sources << new_resource.name if sources.empty?
   components = sources.map { |e| '' }.join ','
   execute "Publish #{new_resource.type} - #{new_resource.name}" do
-    command "aptly publish #{new_resource.type} --components '#{components}' #{sources.join ' '} #{new_resource.prefix}"
+    command "aptly publish #{new_resource.type} --component '#{components}' #{sources.join ' '} #{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
