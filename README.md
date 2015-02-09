@@ -100,6 +100,7 @@ aptly_mirror "ubuntu-precise-main" do
   keyid "437D05B5"
   keyserver "keys.gnupg.net"
   uri "http://ubuntu.osuosl.org/ubuntu/"
+  filter "my_awesome_package"
 end
 ```
 
