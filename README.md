@@ -100,6 +100,7 @@ aptly_mirror "ubuntu-precise-main" do
   keyid "437D05B5"
   keyserver "keys.gnupg.net"
   uri "http://ubuntu.osuosl.org/ubuntu/"
+  filter "my_awesome_package"
 end
 ```
 
@@ -158,6 +159,15 @@ end
 ```ruby
 aptly_publish "myrepo" do
   action :create
+  type "repo"
+  prefix "foo"
+end
+```
+
+```ruby
+aptly_publish "myrepo" do
+  action :create
+  source ['myrepo-main', 'myrepo-contrib']
   type "repo"
   prefix "foo"
 end

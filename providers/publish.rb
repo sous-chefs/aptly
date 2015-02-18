@@ -24,12 +24,15 @@ def whyrun_supported?
 end
 
 action :create do
+  sources = Array[new_resource.source].compact.flatten
+  sources << new_resource.name if sources.empty?
+  components = sources.map { |e| '' }.join ','
   execute "Publish #{new_resource.type} - #{new_resource.name}" do
-    command "aptly publish #{new_resource.type} #{new_resource.name} #{new_resource.prefix}"
+    command "aptly publish #{new_resource.type} --component '#{components}' #{sources.join ' '} #{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    not_if %{ aptly publish list | grep ^#{new_resource.name}$ }
+    not_if %{ aptly publish list | grep #{new_resource.name} }
   end
 end
 
@@ -47,7 +50,7 @@ action :drop do
     command "aptly publish drop #{new_resource.name} #{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
-    only_if %{ aptly publish list | grep ^#{new_resource.name}$ }
+    only_if %{ aptly publish list | grep #{new_resource.name} }
     environment aptly_env
   end
 end
