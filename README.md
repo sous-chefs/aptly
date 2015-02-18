@@ -164,6 +164,15 @@ end
 ```
 
 ```ruby
+aptly_publish "myrepo" do
+  action :create
+  source ['myrepo-main', 'myrepo-contrib']
+  type "repo"
+  prefix "foo"
+end
+```
+
+```ruby
 aptly_publish "pulledpork" do
   action :create
   type "snapshot"
