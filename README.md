@@ -33,12 +33,30 @@ Attributes
 * `default['aptly']['downloadsourcepackages'] = false`
 * `default['aptly']['ppadistributorid'] = ""`
 * `default['aptly']['ppacodename'] = ""`
+* `default["aptly"]["public"]["fqdn"] = "#{node['fqdn']}"`
+* `default["aptly"]["public"]["dir"] = "#{node['aptly']['rootdir']}/public"`
+* `default["aptly"]["public"]["key"] = "#{node["aptly"]["public"]["dir"]}/repo.key"
+* `default['aptly']['api']['port'] = 8080`
+* `default["aptly"]["repos"]["databag"] = 'aptly_repos'`
+
 
 Recipes
 -------
 ### `default`
 
 Installs aptly
+
+#### `nginx`
+
+Enable a HTTP service tp serve the published repositories by using nginx
+
+#### `api`
+
+Enable and configure the service for the REST api
+
+#### `databag`
+
+Read the repositories information from a data bag
 
 Usage
 -----
