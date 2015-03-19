@@ -19,3 +19,11 @@ default['aptly']['gpgdisableverify'] = false
 default['aptly']['downloadsourcepackages'] = false
 default['aptly']['ppadistributorid'] = ""
 default['aptly']['ppacodename'] = ""
+
+default["aptly"]["public"]["fqdn"] = "#{node['fqdn']}"
+default["aptly"]["public"]["dir"] = "#{node['aptly']['rootdir']}/public"
+default["aptly"]["public"]["key"] = "#{node["aptly"]["public"]["dir"]}/repo.key"
+
+default['aptly']['api']['port'] = 8080
+
+default["aptly"]["repos"]["databag"] = "aptly_repos"

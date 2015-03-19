@@ -1,0 +1,32 @@
+{
+  "name": "aptly",
+  "description": "Installs/Configures aptly",
+  "long_description": "aptly Cookbook\n=====\n\nThis cookbook installs and configures aptly (http://www.aptly.info)\n\nRequirements\n------------\n\n### Platform\n\n* Ubuntu 12.04\n* Ubuntu 14.04\n\nAttributes\n----------\n\n* `default['aptly']['uri'] = 'http://repo.aptly.info/'`\n* `default['aptly']['dist'] = \"squeeze\"`\n* `default['aptly']['components'] = ['main']`\n* `default['aptly']['keyserver'] = 'keys.gnupg.net'`\n* `default['aptly']['key'] = '2A194991'`\n* `default['aptly']['user'] = 'aptly'`\n* `default['aptly']['group'] = 'aptly'`\n* `default['aptly']['rootdir'] = \"/opt/aptly\"`\n* `default['aptly']['downloadconcurrency'] = 4`\n* `default['aptly']['architectures'] = []`\n* `default['aptly']['dependencyfollowsuggests'] = false`\n* `default['aptly']['dependencyfollowrecommends'] = false`\n* `default['aptly']['dependencyfollowallvariants'] = false`\n* `default['aptly']['dependencyfollowsource'] = false`\n* `default['aptly']['gpgdisablesign'] = false`\n* `default['aptly']['gpgdisableverify'] = false`\n* `default['aptly']['downloadsourcepackages'] = false`\n* `default['aptly']['ppadistributorid'] = \"\"`\n* `default['aptly']['ppacodename'] = \"\"`\n\nRecipes\n-------\n### `default`\n\nInstalls aptly\n\nUsage\n-----\n### add to run_list\n\n### include recipe\n`include_recipe \"aptly\"`\n\nExamples\n---------\n\n```ruby\naptly_repo \"myrepo\" do\n  action :create\n  comment \"A repository of packages\"\n  component \"main\"\n  distribution \"Ubuntu\"\nend\n```\n\n```ruby\naptly_repo \"myrepo\" do\n  action :create\nend\n```\n\n```ruby\naptly_repo \"myrepo\" do\n  action :drop\nend\n```\n\n```ruby\naptly_repo \"myrepo\" do\n  action :add\n  file \"/path/to/package-1.0.1.deb\"\nend\n```\n\n```ruby\naptly_repo \"myrepo\" do\n  action :add\n  directory \"/path/to/packages\"\nend\n```\n\n```ruby\naptly_repo \"myrepo\" do\n  action :remove\n  file \"/path/to/package-1.0.1.deb\"\nend\n```\n\n```ruby\naptly_mirror \"ubuntu-precise-main\" do\n  action :create\n  distribution \"precise\"\n  component \"main\"\n  keyid \"437D05B5\"\n  keyserver \"keys.gnupg.net\"\n  uri \"http://ubuntu.osuosl.org/ubuntu/\"\nend\n```\n\n```ruby\naptly_mirror \"ubuntu-precise-main\" do\n  action :update\nend\n```\n\n```ruby\naptly_mirror \"ubuntu-precise-main\" do\n  action :drop\nend\n```\n\n```ruby\naptly_snapshot \"pulltest\" do\n  action :create\n  from \"myrepo\"\n  type \"repo\"\n  empty false\nend\n```\n\n```ruby\naptly_snapshot \"pulltest\" do\n  action :drop\nend\n```\n\n```ruby\naptly_snapshot \"merged-snapshot\" do\n  action :merge\n  merge_source1 \"pullrepo1\"\n  merge_source2 \"pullrepo2\"\nend\n```\n\n```ruby\naptly_snapshot \"merged-snapshot\" do\n  action :verify\nend\n```\n\n```ruby\naptly_snapshot \"pulledpork\" do\n  action :pull\n  deps false\n  remove false\n  package \"package-1.0.1\"\n  resource \"pullrepo1\"\n  source \"pullrepo2\"\nend\n```\n\n```ruby\naptly_publish \"myrepo\" do\n  action :create\n  type \"repo\"\n  prefix \"foo\"\nend\n```\n\n```ruby\naptly_publish \"pulledpork\" do\n  action :create\n  type \"snapshot\"\n  prefix \"bar\"\nend\n```\n\n```ruby\naptly_publish \"mycompany\" do\n  action :update\n  prefix \"foo\"\nend\n```\n\n```ruby\naptly_publish \"mycompany\" do\n  action :drop\n  prefix \"foo\"\nend\n```\n\n```ruby\naptly_db \"cleanup\" do\n  action :cleanup\nend\n```\n\n```ruby\naptly_db \"recover\" do\n  action :recover\nend\n```\n\n\nLicense & Authors\n-----------------\n- Author:: Aaron Baer (aaron@hw-ops.com)\n\n```text\nCopyright 2014, Heavy Water Operations, LLC\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\nhttp://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n```\n",
+  "maintainer": "Heavy Water Operations, LLC",
+  "maintainer_email": "aaron@hw-ops.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "ubuntu": ">= 0.0.0",
+    "debian": ">= 0.0.0"
+  },
+  "dependencies": {
+    "apt": ">= 0.0.0"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.2.2"
+}
