@@ -54,3 +54,17 @@ action :drop do
     environment aptly_env
   end
 end
+
+action :switch do
+  execute "Switching #{new_resource.name} to #{new_resource.snapshot}" do
+    command "aptly publish switch #{new_resource.name} #{new_resource.prefix} #{new_resource.snapshot}"
+    user node['aptly']['user']
+    group node['aptly']['group']
+    if new_resource.prefix
+      only_if %( aptly publish list | grep "* #{new_resource.prefix}/#{new_resource.name}" | grep -v #{new_resource.snapshot})
+    else
+      only_if %( aptly publish list | grep "* ./#{new_resource.name}" | grep -v #{new_resource.snapshot})
+    end
+    environment aptly_env
+  end
+end

@@ -61,6 +61,10 @@ if defined?(ChefSpec)
     ChefSpec::Matchers::ResourceMatcher.new(:aptly_publish, :drop, resource_name)
   end
 
+  def switch_aptly_publish(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:aptly_publish, :switch, resource_name)
+  end
+
   # Db commands
   def cleanup_aptly_db(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:aptly_db, :cleanup, resource_name)
