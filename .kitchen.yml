@@ -1,23 +1,14 @@
----
 driver:
   name: vagrant
-  driver_config:
-    require_chef_omnibus: true
 
 provisioner:
-  name: chef_solo
+  name: chef_zero
 
 platforms:
   - name: ubuntu-12.04
-    driver_config:
-      box: ubuntu1204
-      run_list:
-        - recipe[apt]
+    run_list: apt::default
   - name: ubuntu-14.04
-    driver_config:
-      box: ubuntu1404
-      run_list:
-        - recipe[apt]
+    run_list: apt::default
 
 suites:
   - name: default
