@@ -3,6 +3,10 @@ aptly CHANGELOG
 
 This file is used to list changes made in each version of the aptly cookbook.
 
+0.2.8
+-----
+- Update GPG Key for aptly repository
+
 0.2.6
 -----
 - Support for multi-component publishing #16
