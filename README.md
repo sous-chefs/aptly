@@ -1,5 +1,5 @@
-aptly Cookbook
-=====
+# aptly Cookbook
+[![Cookbook Version](https://img.shields.io/cookbook/v/aptly.svg)](https://supermarket.chef.io/cookbooks/aptly)
 
 This cookbook installs and configures aptly (http://www.aptly.info)
 
