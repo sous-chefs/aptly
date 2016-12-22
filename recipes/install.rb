@@ -105,4 +105,5 @@ end
 
 execute "aptly db ownership" do
   command "chown -R #{node['aptly']['user']}:#{node['aptly']['group']} #{node['aptly']['rootdir']}/db"
+  not_if { Etc.getpwuid(File.stat("#{node['aptly']['rootdir']}/db/CURRENT").uid).name == node['aptly']['user'] }
 end
