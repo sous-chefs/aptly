@@ -10,14 +10,16 @@ provisioner:
 platforms:
   - name: ubuntu-12.04
     driver_config:
-      box: ubuntu1204
       run_list:
         - recipe[apt]
   - name: ubuntu-14.04
     driver_config:
-      box: ubuntu1404
       run_list:
         - recipe[apt]
+  - name: centos-7.2
+    attributes:
+      aptly:
+        architectures: [amd64]
 
 suites:
   - name: default

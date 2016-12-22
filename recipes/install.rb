@@ -17,24 +17,16 @@
 # limitations under the License.
 #
 
-include_recipe "apt"
+if node[:platform_family] == 'debian'
+  include_recipe 'aptly::install_from_packages'
+else
+  include_recipe 'aptly::install_from_tarball'
+end
 
 environment = {
   "USER" => "#{node['aptly']['user']}",
   "HOME" => "#{node['aptly']['rootdir']}"
 }
-
-apt_repository "aptly" do
-  uri node['aptly']['uri']
-  distribution node['aptly']['dist']
-  components node['aptly']['components']
-  keyserver node['aptly']['keyserver']
-  key node['aptly']['key']
-  action :add
-end
-
-package "aptly"
-package "graphviz"
 
 group node['aptly']['group'] do
   action :create
