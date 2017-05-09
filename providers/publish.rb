@@ -28,7 +28,7 @@ action :create do
   sources << new_resource.name if sources.empty?
   components = sources.map { |e| '' }.join ','
   execute "Publish #{new_resource.type} - #{new_resource.name}" do
-    command "aptly publish #{new_resource.type} --component '#{components}' #{sources.join ' '} #{new_resource.prefix}"
+    command "aptly publish #{new_resource.type} --component '#{components}' --distribution '#{distribution}' #{sources.join ' '} #{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
@@ -51,6 +51,20 @@ action :drop do
     user node['aptly']['user']
     group node['aptly']['group']
     only_if %{ aptly publish list | grep #{new_resource.name} }
+    environment aptly_env
+  end
+end
+
+action :switch do
+  execute "Switching #{new_resource.name} to #{new_resource.snapshot}" do
+    command "aptly publish switch #{new_resource.name} #{new_resource.prefix} #{new_resource.snapshot}"
+    user node['aptly']['user']
+    group node['aptly']['group']
+    if new_resource.prefix
+      only_if %( aptly publish list | grep "* #{new_resource.prefix}/#{new_resource.name}" | grep -v #{new_resource.snapshot})
+    else
+      only_if %( aptly publish list | grep "* ./#{new_resource.name}" | grep -v #{new_resource.snapshot})
+    end
     environment aptly_env
   end
 end
