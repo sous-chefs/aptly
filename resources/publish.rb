@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-actions :create, :update, :drop
+actions :create, :update, :drop, :switch
 default_action :create if defined?(default_action)
 
 # Needed for Chef versions < 0.10.10
@@ -31,4 +31,3 @@ attribute :source, :kind_of => [Array, String], :default => nil
 attribute :type, :kind_of => String, :default => nil
 attribute :prefix, :kind_of => String, :default => nil
 attribute :distribution, :kind_of => String, :default => nil
-

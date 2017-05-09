@@ -83,7 +83,11 @@ template '/etc/aptly.conf' do
     :gpgdisableverify => node['aptly']['gpgdisableverify'],
     :downloadsourcepackages => node['aptly']['downloadsourcepackages'],
     :ppadistributorid => node['aptly']['ppadistributorid'],
-    :ppacodename => node['aptly']['ppacodename']
+    :ppacodename => node['aptly']['ppacodename'],
+    :bucket => node['aptly']['bucket'],
+    :region => node['aptly']['region'],
+    :awsAccessKeyID => node['aptly']['awsAccessKeyID'],
+    :awsSecretAccessKey => node['aptly']['awsSecretAccessKey']
   })
 end
 

@@ -10,5 +10,13 @@
   "gpgDisableVerify": <%= @gpgdisableverify %>,
   "downloadSourcePackages": <%= @downloadsourcepackages %>,
   "ppaDistributorID": "<%= @ppadistributorid %>",
-  "ppaCodename": "<%= @ppacodename %>"
+  "ppaCodename": "<%= @ppacodename %>",
+  "S3PublishEndpoints": {
+    "<%= @bucket %>": {
+      "region": "<%= @region %>",
+      "bucket": "<%= @bucket %>",
+      "awsAccessKeyID": "<%= @awsAccessKeyID %>",
+      "awsSecretAccessKey": "<%= @awsSecretAccessKey %>"
+    }
+  }
 }
