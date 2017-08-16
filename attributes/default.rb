@@ -19,3 +19,5 @@ default['aptly']['gpgdisableverify'] = false
 default['aptly']['downloadsourcepackages'] = false
 default['aptly']['ppadistributorid'] = ""
 default['aptly']['ppacodename'] = ""
+default['aptly']['s3publishendpoints'] = {}
+default['aptly']['swiftpublishendpoints'] = {}
