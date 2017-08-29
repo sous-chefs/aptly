@@ -18,13 +18,7 @@
 #
 
 actions :create, :verify, :pull, :merge, :drop
-default_action :create if defined?(default_action)
-
-# Needed for Chef versions < 0.10.10
-def initialize(*args)
-  super
-  @action = :create
-end
+default_action :create
 
 attribute :name, kind_of: String, name_attribute: true
 attribute :from, kind_of: String, default: nil
