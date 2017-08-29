@@ -6,7 +6,7 @@ description      'Installs/Configures aptly'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.2.9'
 
-supports "ubuntu"
-supports "debian"
+supports 'ubuntu'
+supports 'debian'
 
-depends "apt"
+depends 'apt'

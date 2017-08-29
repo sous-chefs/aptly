@@ -17,14 +17,14 @@
 # limitations under the License.
 #
 
-include_recipe "apt"
+include_recipe 'apt'
 
 environment = {
-  "USER" => "#{node['aptly']['user']}",
-  "HOME" => "#{node['aptly']['rootdir']}"
+  'USER' => (node['aptly']['user']).to_s,
+  'HOME' => (node['aptly']['rootdir']).to_s,
 }
 
-apt_repository "aptly" do
+apt_repository 'aptly' do
   uri node['aptly']['uri']
   distribution node['aptly']['dist']
   components node['aptly']['components']
@@ -33,8 +33,8 @@ apt_repository "aptly" do
   action :add
 end
 
-package "aptly"
-package "graphviz"
+package 'aptly'
+package 'graphviz'
 
 group node['aptly']['group'] do
   action :create
@@ -56,7 +56,7 @@ directory node['aptly']['rootdir'] do
   action :create
 end
 
-%w{db pool public}.each do |dir|
+%w(db pool public).each do |dir|
   directory "#{node['aptly']['rootdir']}/#{dir}" do
     owner node['aptly']['user']
     group node['aptly']['group']
@@ -71,41 +71,39 @@ template '/etc/aptly.conf' do
   owner 'root'
   group 'root'
   mode  00644
-  variables({
-    :rootdir => node['aptly']['rootdir'],
-    :downloadconcurrency => node['aptly']['downloadconcurrency'],
-    :architectures => node['aptly']['architectures'],
-    :dependencyfollowsuggests => node['aptly']['dependencyfollowsuggests'],
-    :dependencyfollowrecommends => node['aptly']['dependencyfollowrecommends'],
-    :dependencyfollowallvariants => node['aptly']['dependencyfollowallvariants'],
-    :dependencyfollowsource => node['aptly']['dependencyfollowsource'],
-    :gpgdisablesign => node['aptly']['gpgdisablesign'],
-    :gpgdisableverify => node['aptly']['gpgdisableverify'],
-    :downloadsourcepackages => node['aptly']['downloadsourcepackages'],
-    :ppadistributorid => node['aptly']['ppadistributorid'],
-    :ppacodename => node['aptly']['ppacodename'],
-    :s3publishendpoints => node['aptly']['s3publishendpoints'],
-    :swiftpublishendpoints => node['aptly']['swiftpublishendpoints']
-  })
+  variables(rootdir: node['aptly']['rootdir'],
+            downloadconcurrency: node['aptly']['downloadconcurrency'],
+            architectures: node['aptly']['architectures'],
+            dependencyfollowsuggests: node['aptly']['dependencyfollowsuggests'],
+            dependencyfollowrecommends: node['aptly']['dependencyfollowrecommends'],
+            dependencyfollowallvariants: node['aptly']['dependencyfollowallvariants'],
+            dependencyfollowsource: node['aptly']['dependencyfollowsource'],
+            gpgdisablesign: node['aptly']['gpgdisablesign'],
+            gpgdisableverify: node['aptly']['gpgdisableverify'],
+            downloadsourcepackages: node['aptly']['downloadsourcepackages'],
+            ppadistributorid: node['aptly']['ppadistributorid'],
+            ppacodename: node['aptly']['ppacodename'],
+            s3publishendpoints: node['aptly']['s3publishendpoints'],
+            swiftpublishendpoints: node['aptly']['swiftpublishendpoints'])
 end
 
 execute "initialize gpg for aptly user #{node['aptly']['user']}" do
-  command "gpg --list-keys"
+  command 'gpg --list-keys'
   environment environment
   user node['aptly']['user']
   group node['aptly']['group']
-  not_if { Dir.exists?("#{node['aptly']['rootdir']}/.gnupg") }
+  not_if { Dir.exist?("#{node['aptly']['rootdir']}/.gnupg") }
 end
 
-execute "seed aptly db" do
-  command "aptly repo list"
+execute 'seed aptly db' do
+  command 'aptly repo list'
   environment environment
   user node['aptly']['user']
   group node['aptly']['group']
-  not_if { File.exists?("#{node['aptly']['rootdir']}/db/CURRENT") }
+  not_if { File.exist?("#{node['aptly']['rootdir']}/db/CURRENT") }
 end
 
-execute "aptly db ownership" do
+execute 'aptly db ownership' do
   command "chown -R #{node['aptly']['user']}:#{node['aptly']['group']} #{node['aptly']['rootdir']}/db"
   not_if { Etc.getpwuid(File.stat("#{node['aptly']['rootdir']}/db/CURRENT").uid).name == node['aptly']['user'] }
 end

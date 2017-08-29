@@ -26,11 +26,11 @@ def initialize(*args)
   @action = :create
 end
 
-attribute :name, :kind_of => String, :name_attribute => true
-attribute :repo, :kind_of => String, :default => nil
-attribute :component, :kind_of => String, :default => nil
-attribute :comment, :kind_of => String, :default => nil
-attribute :distribution, :kind_of => String, :default => nil
-attribute :remove_files, :kind_of => [TrueClass, FalseClass], :default => false
-attribute :directory, :kind_of => String, :default => nil
-attribute :file, :kind_of => String, :default => nil
+attribute :name, kind_of: String, name_attribute: true
+attribute :repo, kind_of: String, default: nil
+attribute :component, kind_of: String, default: nil
+attribute :comment, kind_of: String, default: nil
+attribute :distribution, kind_of: String, default: nil
+attribute :remove_files, kind_of: [TrueClass, FalseClass], default: false
+attribute :directory, kind_of: String, default: nil
+attribute :file, kind_of: String, default: nil

@@ -26,9 +26,8 @@ def initialize(*args)
   @action = :create
 end
 
-attribute :name, :kind_of => String, :name_attribute => true
-attribute :source, :kind_of => [Array, String], :default => nil
-attribute :type, :kind_of => String, :default => nil
-attribute :prefix, :kind_of => String, :default => nil
-attribute :distribution, :kind_of => String, :default => nil
-
+attribute :name, kind_of: String, name_attribute: true
+attribute :source, kind_of: [Array, String], default: nil
+attribute :type, kind_of: String, default: nil
+attribute :prefix, kind_of: String, default: nil
+attribute :distribution, kind_of: String, default: nil

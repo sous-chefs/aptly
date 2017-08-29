@@ -24,7 +24,7 @@ def whyrun_supported?
 end
 
 def install_key(keyid, keyserver)
-  execute "Installing external repository key" do
+  execute 'Installing external repository key' do
     command "gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver #{keyserver} --recv-keys #{keyid}"
     user node['aptly']['user']
     group node['aptly']['group']
@@ -56,7 +56,7 @@ action :create do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    not_if %{ aptly mirror -raw list | grep ^#{new_resource.name}$ }
+    not_if %( aptly mirror -raw list | grep ^#{new_resource.name}$ )
   end
 end
 
@@ -66,7 +66,7 @@ action :update do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %{ aptly mirror -raw list | grep ^#{new_resource.name}$ }
+    only_if %( aptly mirror -raw list | grep ^#{new_resource.name}$ )
   end
 end
 
@@ -76,7 +76,6 @@ action :drop do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %{ aptly mirror -raw list | grep ^#{new_resource.name}$ }
+    only_if %( aptly mirror -raw list | grep ^#{new_resource.name}$ )
   end
 end
-

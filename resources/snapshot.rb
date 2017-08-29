@@ -26,15 +26,15 @@ def initialize(*args)
   @action = :create
 end
 
-attribute :name, :kind_of => String, :name_attribute => true
-attribute :from, :kind_of => String, :default => nil
-attribute :type, :kind_of => String, :default => nil
-attribute :empty, :kind_of => [TrueClass, FalseClass], :default => false
-attribute :source, :kind_of => String, :default => nil
-attribute :merge_source1, :kind_of => String, :default => nil
-attribute :merge_source2, :kind_of => String, :default => nil
-attribute :resource, :kind_of => String, :default => nil
-attribute :package, :kind_of => String, :default => nil
-attribute :deps, :kind_of => [TrueClass, FalseClass], :default => false
-attribute :remove, :kind_of => [TrueClass, FalseClass], :default => false
-attribute :latest, :kind_of => [TrueClass, FalseClass], :default => false
+attribute :name, kind_of: String, name_attribute: true
+attribute :from, kind_of: String, default: nil
+attribute :type, kind_of: String, default: nil
+attribute :empty, kind_of: [TrueClass, FalseClass], default: false
+attribute :source, kind_of: String, default: nil
+attribute :merge_source1, kind_of: String, default: nil
+attribute :merge_source2, kind_of: String, default: nil
+attribute :resource, kind_of: String, default: nil
+attribute :package, kind_of: String, default: nil
+attribute :deps, kind_of: [TrueClass, FalseClass], default: false
+attribute :remove, kind_of: [TrueClass, FalseClass], default: false
+attribute :latest, kind_of: [TrueClass, FalseClass], default: false

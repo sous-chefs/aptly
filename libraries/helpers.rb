@@ -20,7 +20,7 @@
 module Aptly
   module Helpers
     def aptly_env
-      { "HOME" => node['aptly']['rootdir'], "USER" => node['aptly']['user'] }
+      { 'HOME' => node['aptly']['rootdir'], 'USER' => node['aptly']['user'] }
     end
   end
 end

@@ -34,7 +34,7 @@ action :create do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    not_if %{ aptly repo list --raw | grep #{repo_name} }
+    not_if %( aptly repo list --raw | grep #{repo_name} )
   end
 end
 
@@ -45,14 +45,14 @@ action :drop do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %{ aptly repo list --raw | grep #{repo_name} }
+    only_if %( aptly repo list --raw | grep #{repo_name} )
   end
 end
 
 action :add do
   repo_name = new_resource.repo || new_resource.name
   if new_resource.file.nil?
-    if ::Dir.exist?("#{new_resource.directory}")
+    if ::Dir.exist?(new_resource.directory.to_s)
       execute "Adding packages from #{new_resource.directory}" do
         if new_resource.remove_files
           command "aptly repo add -remove-files #{repo_name} #{new_resource.directory}"
@@ -67,33 +67,32 @@ action :add do
       Chef::Log.info "#{new_resource.directory} is not a valid directory"
     end
   elsif new_resource.directory.nil?
-    if ::File.exists?("#{new_resource.file}")
-      pkg = ::File.basename("#{new_resource.file}")
+    if ::File.exist?(new_resource.file.to_s)
+      pkg = ::File.basename(new_resource.file.to_s)
       pk = pkg.split('.').first
       execute "Adding Package - #{pkg}" do
         command "aptly repo add #{repo_name} #{new_resource.file}"
         user node['aptly']['user']
         group node['aptly']['group']
         environment aptly_env
-        not_if %{ aptly repo show -with-packages #{repo_name} | grep #{pk} }
+        not_if %( aptly repo show -with-packages #{repo_name} | grep #{pk} )
       end
     else
       Chef::Log.info "#{new_resource.file} does not exist"
     end
   else
-      Chef::Log.info "You must specify a file OR a directory"
+    Chef::Log.info 'You must specify a file OR a directory'
   end
 end
 
 action :remove do
   repo_name = new_resource.repo || new_resource.name
-  pkg = ::File.basename("#{new_resource.file}").split('.').first
+  pkg = ::File.basename(new_resource.file.to_s).split('.').first
   execute "Removing Package - #{new_resource.file}" do
     command "aptly repo remove #{repo_name} #{pkg}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %{ aptly repo show -with-packages #{repo_name} | grep #{pkg} }
+    only_if %( aptly repo show -with-packages #{repo_name} | grep #{pkg} )
   end
 end
-

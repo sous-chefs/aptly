@@ -30,7 +30,7 @@ action :create do
       user node['aptly']['user']
       group node['aptly']['group']
       environment aptly_env
-      not_if %{ aptly snapshot -raw list | grep ^#{new_resource.name}$ }
+      not_if %( aptly snapshot -raw list | grep ^#{new_resource.name}$ )
     end
   else
     execute "Creating Snapshot - #{new_resource.name}" do
@@ -38,7 +38,7 @@ action :create do
       user node['aptly']['user']
       group node['aptly']['group']
       environment aptly_env
-      not_if %{ aptly snapshot -raw list | grep ^#{new_resource.name}$ }
+      not_if %( aptly snapshot -raw list | grep ^#{new_resource.name}$ )
     end
   end
 end
@@ -49,7 +49,7 @@ action :verify do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %{ aptly snapshot -raw list | grep ^#{new_resource.name}$ }
+    only_if %( aptly snapshot -raw list | grep ^#{new_resource.name}$ )
   end
 end
 
@@ -59,7 +59,7 @@ action :pull do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    not_if %{ aptly snapshot -raw list | grep ^#{new_resource.name}$ }
+    not_if %( aptly snapshot -raw list | grep ^#{new_resource.name}$ )
   end
 end
 
@@ -69,7 +69,7 @@ action :merge do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    not_if %{ aptly snapshot -raw list | grep ^#{new_resource.name}$ }
+    not_if %( aptly snapshot -raw list | grep ^#{new_resource.name}$ )
   end
 end
 
@@ -79,6 +79,6 @@ action :drop do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %{ aptly snapshot -raw list | grep ^#{new_resource.name}$ }
+    only_if %( aptly snapshot -raw list | grep ^#{new_resource.name}$ )
   end
 end
