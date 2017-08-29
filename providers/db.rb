@@ -24,8 +24,8 @@ def whyrun_supported?
 end
 
 action :cleanup do
-  execute "DB Cleanup" do
-    command "aptly db cleanup"
+  execute 'DB Cleanup' do
+    command 'aptly db cleanup'
     user node['aptly']['user']
     user node['aptly']['group']
     environment aptly_env
@@ -33,8 +33,8 @@ action :cleanup do
 end
 
 action :recover do
-  execute "DB Recover" do
-    command "aptly db recover"
+  execute 'DB Recover' do
+    command 'aptly db recover'
     user node['aptly']['user']
     user node['aptly']['group']
     environment aptly_env

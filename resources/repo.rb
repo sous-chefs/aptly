@@ -18,19 +18,13 @@
 #
 
 actions :create, :drop, :add, :remove
-default_action :create if defined?(default_action)
+default_action :create
 
-# Needed for Chef versions < 0.10.10
-def initialize(*args)
-  super
-  @action = :create
-end
-
-attribute :name, :kind_of => String, :name_attribute => true
-attribute :repo, :kind_of => String, :default => nil
-attribute :component, :kind_of => String, :default => nil
-attribute :comment, :kind_of => String, :default => nil
-attribute :distribution, :kind_of => String, :default => nil
-attribute :remove_files, :kind_of => [TrueClass, FalseClass], :default => false
-attribute :directory, :kind_of => String, :default => nil
-attribute :file, :kind_of => String, :default => nil
+attribute :name, kind_of: String, name_attribute: true
+attribute :repo, kind_of: String, default: nil
+attribute :component, kind_of: String, default: nil
+attribute :comment, kind_of: String, default: nil
+attribute :distribution, kind_of: String, default: nil
+attribute :remove_files, kind_of: [TrueClass, FalseClass], default: false
+attribute :directory, kind_of: String, default: nil
+attribute :file, kind_of: String, default: nil

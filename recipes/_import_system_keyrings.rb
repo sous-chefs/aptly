@@ -19,7 +19,7 @@
 
 keyring_files = Dir.glob('/usr/share/keyrings/*keyring.gpg').to_a
 keyring_files.each do |key|
-  name = File.basename("#{key}")
+  name = File.basename(key.to_s)
   execute "Importing System Keyring - #{name}" do
     user node['aptly']['user']
     group node['aptly']['group']

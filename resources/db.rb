@@ -18,12 +18,6 @@
 #
 
 actions :cleanup, :recover
-default_action :cleanup if defined?(default_action)
+default_action :cleanup
 
-# Needed for Chef versions < 0.10.10
-def initialize(*args)
-  super
-  @action = :cleanup
-end
-
-attribute :name, :kind_of => String, :name_attribute => true
+attribute :name, kind_of: String, name_attribute: true

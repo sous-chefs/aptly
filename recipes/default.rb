@@ -17,4 +17,4 @@
 # limitations under the License.
 #
 
-include_recipe "aptly::install"
+include_recipe 'aptly::install'
