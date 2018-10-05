@@ -1,0 +1,30 @@
+version: 2.1
+
+orbs:
+  kitchen: sous-chefs/kitchen@1.0.0
+
+workflows:
+  kitchen:
+    jobs:
+      - kitchen/lint:
+          name: lint
+      - kitchen/dokken-single:
+          name: default
+          suite: default
+          platform: ubuntu-16.04
+          requires: [ lint ]
+      - kitchen/dokken-single:
+          name: default
+          suite: default
+          platform: ubuntu-18.04
+          requires: [ lint ]
+      - kitchen/dokken-single:
+          name: default
+          suite: default
+          platform: debian-8
+          requires: [ lint ]
+      - kitchen/dokken-single:
+          name: default
+          suite: default
+          platform: debian-9
+          requires: [ lint ]
