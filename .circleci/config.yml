@@ -1,0 +1,14 @@
+version: 2.1
+
+orbs:
+  kitchen: sous-chefs/kitchen@1.0.0
+
+workflows:
+  kitchen:
+    jobs:
+      - kitchen/lint:
+          name: lint
+      - kitchen/dokken:
+          name: default
+          suite: default
+          requires: [ lint ]
