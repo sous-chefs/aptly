@@ -1,16 +1,16 @@
-name             'aptly'
-maintainer       'Heavy Water Operations, LLC'
+name 'aptly'
+maintainer 'Heavy Water Operations, LLC'
 maintainer_email 'aaronb@heavywater.io'
-license          'Apache-2.0'
-description      'Installs/Configures aptly'
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '0.3.0'
+license 'Apache-2.0'
+description 'Installs/Configures aptly'
+long_description 'Installs/Configures aptly'
+version '0.4.0'
+chef_version '>= 12.14' if respond_to?(:chef_version)
 
 supports 'ubuntu'
 supports 'debian'
 
-depends 'apt'
+# depends 'ark'
 
-source_url 'https://github.com/hw-cookbooks/aptly' if respond_to?(:source_url)
-issues_url 'https://github.com/hw-cookbooks/aptly/issues' if respond_to?(:issues_url)
-chef_version '>= 11' if respond_to?(:chef_version)
+issues_url 'https://github.com/sous-chef/aptly/issues'
+source_url 'https://github.com/sous-chef/aptly'
