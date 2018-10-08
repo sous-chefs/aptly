@@ -1,9 +1,0 @@
-name: rbenv
-title: rbenv profile
-maintainer: Sous Chefs
-copyright: Webb Agile Solutions Ltd.
-license: Apache-2.0
-summary: Verifies gems install correctly to the correct Ruby versions
-version: 1.0.0
-supports:
-  - os-family: linux

@@ -1,10 +1,15 @@
+---
 driver:
-  name: vagrant
+  name: dokken
+  privileged: true # because Docker and SystemD/Upstart
+  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
+
+transport:
+  name: dokken
 
 provisioner:
-  product_name: chef
-  product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
-  install_strategy: once
+  name: dokken
+#  policyfile: test/Policyfile.rb # comment out if you use Policyfile
   deprecations_as_errors: true
 
 verifier:
@@ -12,11 +17,28 @@ verifier:
 
 platforms:
   - name: ubuntu-16.04
+    driver:
+      image: dokken/ubuntu-16.04
+      pid_one_command: /bin/systemd
   - name: ubuntu-18.04
+    driver:
+      image: dokken/ubuntu-18.04
+      pid_one_command: /bin/systemd
   - name: debian-8
+    driver:
+      image: dokken/debian-8
+      pid_one_command: /sbin/init
   - name: debian-9
+    driver:
+      image: dokken/debian-9
+      pid_one_command: /bin/systemd
 
 suites:
   - name: default
-    run_list:
-      - recipe[test::default]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    run_list: # To comment if you use Policyfile
+    - recipe[aptly::default] # To comment if you use Policyfile
+    - recipe[aptly_test::default] # To comment if you use Policyfile
+    attributes:

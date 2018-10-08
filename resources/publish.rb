@@ -1,8 +1,7 @@
+# frozen_string_literal: true
 #
-# Cookbook Name:: aptly
+# Cookbook:: aptly
 # Resource:: publish
-#
-# Copyright 2014, Heavy Water Operations, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +16,48 @@
 # limitations under the License.
 #
 
-actions :create, :update, :drop
-default_action :create
+property :publish_name,  String, name_property: true
+property :type,          String, default: ''
+property :endpoint,      String, default: ''
+property :component,     Array, default: ['main']
+property :architectures, Array, default: ['amd64']
+property :prefix,        String, default: ''
+property :distribution,  String, default: ''
 
-attribute :name, kind_of: String, name_attribute: true
-attribute :source, kind_of: [Array, String], default: nil
-attribute :type, kind_of: String, default: nil
-attribute :prefix, kind_of: String, default: nil
-attribute :distribution, kind_of: String, default: nil
+action :create do
+  components = new_resource.component.join(',')
+  architectures = new_resource.architectures.join(',')
+  endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
+
+  execute "Publish #{new_resource.type} - #{new_resource.publish_name}" do
+    command "aptly publish #{new_resource.type} -batch -passphrase='#{node['aptly']['gpg']['passphrase']}' -component='#{components}' -architectures='#{architectures}' -distribution='#{new_resource.distribution}' -- #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
+    user node['aptly']['user']
+    group node['aptly']['group']
+    environment aptly_env
+    sensitive true
+    not_if %(aptly publish list | grep #{new_resource.publish_name})
+  end
+end
+
+action :update do
+  endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
+  execute "Updating distribution - #{new_resource.prefix} #{new_resource.publish_name}" do
+    command "aptly publish update -batch -passphrase='#{node['aptly']['gpg']['passphrase']}' #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
+    user node['aptly']['user']
+    group node['aptly']['group']
+    environment aptly_env
+  end
+end
+
+action :drop do
+  endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
+  prefix = new_resource.prefix.empty? ? './' : "#{new_resource.prefix}/"
+
+  execute "Stop publishing - #{prefix}#{new_resource.publish_name}" do
+    command "aptly publish drop #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
+    user node['aptly']['user']
+    group node['aptly']['group']
+    environment aptly_env
+    only_if %(aptly publish list | grep #{new_resource.publish_name})
+  end
+end

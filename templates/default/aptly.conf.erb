@@ -1,0 +1,24 @@
+<%=
+config = {
+  "rootDir": @rootDir,
+  "downloadConcurrency": @downloadConcurrency,
+  "downloadSpeedLimit": @downloadSpeedLimit,
+  "architectures": @architectures,
+  "dependencyFollowSuggests": @dependencyFollowSuggests,
+  "dependencyFollowRecommends": @dependencyFollowRecommends,
+  "dependencyFollowAllVariants": @dependencyFollowAllVariants,
+  "dependencyFollowSource": @dependencyFollowSource,
+  "gpgDisableSign": @gpgDisableSign,
+  "gpgDisableVerify": @gpgDisableVerify,
+  "gpgProvider": @gpgProvider,
+  "downloadSourcePackages": @downloadSourcePackages,
+  "skipLegacyPool": @skipLegacyPool,
+  "ppaDistributorID": @ppaDistributorID,
+  "ppaCodename": @ppaCodename,
+  "FileSystemPublishEndpoints": @FileSystemPublishEndpoints,
+  "S3PublishEndpoints": @S3PublishEndpoints,
+  "SwiftPublishEndpoints": @SwiftPublishEndpoints
+}
+
+JSON.pretty_generate(JSON.parse(config.to_json))
+%>

@@ -1,8 +1,7 @@
+# frozen_string_literal: true
 #
-# Cookbook Name:: aptly
+# Cookbook:: aptly
 # Resource:: db
-#
-# Copyright 2014, Heavy Water Operations, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +16,20 @@
 # limitations under the License.
 #
 
-actions :cleanup, :recover
-default_action :cleanup
+action :cleanup do
+  execute 'DB Cleanup' do
+    command 'aptly db cleanup'
+    user node['aptly']['user']
+    group node['aptly']['group']
+    environment aptly_env
+  end
+end
 
-attribute :name, kind_of: String, name_attribute: true
+action :recover do
+  execute 'DB Recover' do
+    command 'aptly db recover'
+    user node['aptly']['user']
+    group node['aptly']['group']
+    environment aptly_env
+  end
+end
