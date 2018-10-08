@@ -2,8 +2,6 @@
 # Cookbook Name:: aptly
 # Library:: helpers
 #
-# Copyright 2014, Heavy Water Operations, LLC
-#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -20,11 +18,19 @@
 module Aptly
   module Helpers
     def aptly_env
-      { 'HOME' => node['aptly']['rootdir'], 'USER' => node['aptly']['user'] }
+      { 'HOME' => node['aptly']['rootDir'], 'USER' => node['aptly']['user'] }
+    end
+
+    def gpg_command
+      case node['platform']
+      when 'debian'
+        node['platform_version'].to_i < 9 ? 'gpg' : 'gpg1'
+      when 'ubuntu'
+        node['platform_version'].to_f < 18.04 ? 'gpg' : 'gpg1'
+      end
     end
   end
 end
 
 Chef::Recipe.send(:include, ::Aptly::Helpers)
-Chef::Provider.send(:include, ::Aptly::Helpers)
 Chef::Resource.send(:include, ::Aptly::Helpers)
