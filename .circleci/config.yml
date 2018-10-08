@@ -17,7 +17,6 @@ orbs:
         docker: [ image: circleci/ruby ]
       chef:
         machine: true
-
     jobs:
       lint:
         executor: ruby
