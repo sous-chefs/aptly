@@ -2,6 +2,15 @@
 
 This file is used to list changes made in each version of the aptly cookbook.
 
+## 0.4.0
+
+- Big refacto
+- Update resource with latest usage of aptly
+- Create aptly_serve and aptly_api_serve resource
+- Create unit tests
+- Enhance integration test
+- Use Circle CI
+
 ## 0.3.0
 
 - Require at least Chef 11 and remove Chef 10 compatibility code
