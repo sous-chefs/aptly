@@ -24,7 +24,7 @@ apt_repository 'aptly' do
   sensitive true
 end
 
-pkgs = %w(screen aptly)
+pkgs = %w(screen aptly graphviz)
 pkgs = case node['platform']
        when 'debian'
          node['platform_version'].to_i < 9 ? %w(gnupg gpgv) + pkgs : %w(gnupg1 gpgv1) + pkgs
@@ -33,7 +33,6 @@ pkgs = case node['platform']
        end
 
 package pkgs
-# package 'graphviz'
 
 # Needed if you change home directory after user creation
 directory node['aptly']['rootDir'] do
