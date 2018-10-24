@@ -2,9 +2,9 @@
 
 This file is used to list changes made in each version of the aptly cookbook.
 
-## 0.4.0
+## v1.0.0 (24-10-2018)
 
-- Big refacto
+- Big refactoring
 - Update resource with latest usage of aptly
 - Create aptly_serve and aptly_api_serve resource
 - Create unit tests

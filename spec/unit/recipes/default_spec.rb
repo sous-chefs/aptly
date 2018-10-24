@@ -45,8 +45,8 @@ platforms.each do |platform, version|
         expect(chef_run).to add_apt_repository('aptly')
       end
 
-      packages = %w(gnupg1 gpgv1 screen aptly graphviz)
-      it 'installs the gnupg1, gpgv1, screen and aptly package' do
+      packages = %w(gnupg1 gpgv1 screen aptly graphviz haveged)
+      it 'installs the gnupg1, gpgv1, screen, aptly, graphviz and haveged package' do
         expect(chef_run).to install_package(packages)
       end
 

@@ -15,6 +15,9 @@ control 'Default actions' do
   describe package('graphviz') do
     it { should be_installed }
   end
+  describe package('haveged') do
+    it { should be_installed }
+  end
 
   os_name = os.name
   os_version = os.release
