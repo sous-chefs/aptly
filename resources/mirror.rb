@@ -28,10 +28,10 @@ property :filter,           String, default: ''
 property :filter_with_deps, [true, false], default: false
 
 filter_with_deps = if new_resource.filter_with_deps
-  '-filter-with-deps'
-else
-  ''
-end
+                     '-filter-with-deps'
+                   else
+                     ''
+                   end
 
 action :create do
   if !new_resource.cookbook.empty? && !new_resource.keyfile.empty?
