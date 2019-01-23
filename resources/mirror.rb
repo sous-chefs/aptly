@@ -27,10 +27,10 @@ property :keyfile,          String, default: ''
 property :filter,           String, default: ''
 property :filter_with_deps, [true, false], default: false
 
-if new_resource.filter_with_deps
-  filter_with_deps = '-filter-with-deps' 
+filter_with_deps = if new_resource.filter_with_deps
+  '-filter-with-deps'
 else
-  filter_with_deps = ''
+  ''
 end
 
 action :create do
