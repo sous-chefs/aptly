@@ -237,7 +237,7 @@ end
 
 ```ruby
 aptly_snapshot 'merged_snapshot' do
-  package_query 'curl_7.52.1-5+deb9u7_amd64.deb'
+  package_query 'curl_7.26.0-1+wheezy25+deb7u1_amd64.deb'
   source 'my_snapshot'
   destination 'new_my_snapshot'
   action :pull
