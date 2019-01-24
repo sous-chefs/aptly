@@ -1,67 +1,33 @@
 version: 2.1
-workflows:
-  build:
-    jobs:
-      - sous-chefs/lint:
-          name: Lint
-      - sous-chefs/dokken:
-          name: default
-          suite: default
-          requires:
-            - Lint
 
 orbs:
-  sous-chefs:
-    executors:
-      ruby:
-        docker: [ image: circleci/ruby ]
-      chef:
-        machine: true
+  kitchen: sous-chefs/kitchen@1.0.0
+
+workflows:
+  kitchen:
     jobs:
-      lint:
-        executor: ruby
-        parameters:
-          channel:
-            description: ChefDK channel stable or current
-            type: string
-            default: current
-        steps:
-          - checkout
-          - run:
-              name: Install Chef
-              command: curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -c <<parameters.channel>> -P chefdk
-          - run:
-              name: Unit Test
-              command: chef exec delivery local all
-      dokken:
-        executor: chef
-        parameters:
-          suite:
-            description: Test Kitchen suite name
-            type: string
-          channel:
-            description: ChefDK channel stable or current
-            type: string
-            default: current
-        environment:
-          KITCHEN_LOCAL_YAML: .kitchen.dokken.yml
-        steps:
-          - checkout
-          - run:
-              name: Launch Haveged container for entropy
-              command: docker run --privileged -d harbur/haveged:1.7c-1
-          - run:
-              name: Install Chef
-              command: curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -c <<parameters.channel>> -P chefdk
-          - run:
-              name: debian-8
-              command: kitchen test <<parameters.suite>>-debian-8
-          - run:
-              name: debian-9
-              command: kitchen test <<parameters.suite>>-debian-9
-          - run:
-              name: ubuntu-16.04
-              command: kitchen test <<parameters.suite>>-ubuntu-1604
-          - run:
-              name: ubuntu-18.04
-              command: kitchen test <<parameters.suite>>-ubuntu-1804
+      - kitchen/danger:
+          name: danger
+          context: Danger
+      - kitchen/lint:
+          name: lint
+      - kitchen/dokken-single:
+          suite: default
+          name: default-ubuntu-1604
+          platform: ubuntu-1604
+          requires: [lint, danger]
+      - kitchen/dokken-single:
+          suite: default
+          name: default-ubuntu-1804
+          platform: ubuntu-1804
+          requires: [lint, danger]
+      - kitchen/dokken-single:
+          suite: default
+          name: default-debian-8
+          platform: debian-8
+          requires: [lint, danger]
+      - kitchen/dokken-single:
+          suite: default
+          name: default-debian-9
+          platform: debian-9
+          requires: [lint, danger]
