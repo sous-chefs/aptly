@@ -27,12 +27,6 @@ property :keyfile,          String, default: ''
 property :filter,           String, default: ''
 property :filter_with_deps, [true, false], default: false
 
-filter_with_deps = if new_resource.filter_with_deps
-                     '-filter-with-deps'
-                   else
-                     ''
-                   end
-
 action :create do
   if !new_resource.cookbook.empty? && !new_resource.keyfile.empty?
     install_local_key(new_resource.keyfile, new_resource.cookbook)
@@ -50,7 +44,7 @@ action :create do
   end
 
   execute "Creating mirror - #{new_resource.mirror_name}" do
-    command "aptly mirror create -filter '#{new_resource.filter}' #{filter_with_deps} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
+    command "aptly mirror create -filter '#{new_resource.filter}' #{filter_with_deps(new_resource.filter_with_deps)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
