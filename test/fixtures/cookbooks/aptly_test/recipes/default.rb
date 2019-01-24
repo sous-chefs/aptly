@@ -92,13 +92,13 @@ aptly_repo 'my_repo' do
   action :add
 end
 
-remote_file '/tmp/curl_7.52.1-5+deb9u7_amd64.deb' do
-  source 'http://security.debian.org/debian-security/pool/updates/main/c/curl/curl_7.52.1-5+deb9u7_amd64.deb'
+remote_file '/tmp/curl_7.52.1-5+deb9u8_amd64.deb' do
+  source 'http://security.debian.org/debian-security/pool/updates/main/c/curl/curl_7.52.1-5+deb9u8_amd64.deb'
   backup 0
 end
 
 aptly_repo 'my_repo' do
-  file '/tmp/curl_7.52.1-5+deb9u7_amd64.deb'
+  file '/tmp/curl_7.52.1-5+deb9u8_amd64.deb'
   action :add
 end
 
@@ -117,7 +117,7 @@ aptly_snapshot 'my_snapshot' do
 end
 
 aptly_snapshot 'my_mirror_snapshot' do
-  package_query 'curl_7.52.1-5+deb9u7_amd64.deb'
+  package_query 'curl_7.52.1-5+deb9u8_amd64.deb'
   source 'my_snapshot'
   destination 'new_my_snapshot'
   action :pull
