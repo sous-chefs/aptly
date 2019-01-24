@@ -35,11 +35,11 @@ control 'Resources Tests' do
     its('exit_status') { should eq 0 }
   end
 
-  describe file('/tmp/curl_7.52.1-5+deb9u7_amd64.deb') do
+  describe file('/tmp/curl_7.52.1-5+deb9u8_amd64.deb') do
     it { should exist }
   end
 
-  describe command('aptly repo show -with-packages my_repo | grep curl_7.52.1-5+deb9u7_amd64') do
+  describe command('aptly repo show -with-packages my_repo | grep curl_7.52.1-5+deb9u8_amd64') do
     its('exit_status') { should eq 0 }
   end
 
