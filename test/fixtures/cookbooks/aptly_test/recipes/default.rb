@@ -15,6 +15,13 @@
 # limitations under the License.
 #
 
+package %w(haveged gnupg2)
+
+service 'haveged' do
+  supports [:status, :restart]
+  action :start
+end
+
 include_recipe 'aptly'
 
 aptly_repo 'my_repo' do
