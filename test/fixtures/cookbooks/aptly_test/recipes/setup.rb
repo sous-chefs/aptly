@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+apt_update 'update'
+
 package %w(haveged gnupg2)
 
 service 'haveged' do
