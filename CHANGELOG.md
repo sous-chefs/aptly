@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the aptly cookbook.
 
+## Unreleased
+
+- Migrate to circleci for testing
+
 ## v1.0.0 (24-10-2018)
 
 - Big refactoring
