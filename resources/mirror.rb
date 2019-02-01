@@ -16,15 +16,16 @@
 # limitations under the License.
 #
 
-property :mirror_name,  String, name_property: true
-property :component,    String, default: ''
-property :distribution, String, default: ''
-property :uri,          String, default: ''
-property :keyid,        String, default: ''
-property :keyserver,    String, default: 'keys.gnupg.net'
-property :cookbook,     String, default: ''
-property :keyfile,      String, default: ''
-property :filter,       String, default: ''
+property :mirror_name,      String, name_property: true
+property :component,        String, default: ''
+property :distribution,     String, default: ''
+property :uri,              String, default: ''
+property :keyid,            String, default: ''
+property :keyserver,        String, default: 'keys.gnupg.net'
+property :cookbook,         String, default: ''
+property :keyfile,          String, default: ''
+property :filter,           String, default: ''
+property :filter_with_deps, [true, false], default: false
 
 action :create do
   if !new_resource.cookbook.empty? && !new_resource.keyfile.empty?
@@ -43,7 +44,7 @@ action :create do
   end
 
   execute "Creating mirror - #{new_resource.mirror_name}" do
-    command "aptly mirror create -filter '#{new_resource.filter}' #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
+    command "aptly mirror create -filter '#{new_resource.filter}' #{filter_with_deps(new_resource.filter_with_deps)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env

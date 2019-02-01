@@ -142,18 +142,18 @@ Manage external mirror
 
 #### Properties
 
-Name           | Types  | Description                                  | Default          | Used with...
--------------- | ------ | -------------------------------------------- | ---------------- | ------------
-`mirror_name`  | String | Mirror name                                  | <resource_name>  | all
-`component`    | String | Repository component                         | ''               | :create
-`distribution` | String | Name of distribution repository              | ''               | :create
-`uri`          | String | Uri of remote repository                     | ''               | :create
-`keyid`        | String | Remote repository key ID                     | ''               | :create
-`keyserver`    | String | Keys server                                  | 'keys.gnupg.net' | :create
-`cookbook`     | String | Cookbook name where you've store the keyfile | ''               | :create
-`keyfile`      | String | Key file name                                | ''               | :create
-`filter`       | String | Mirror filter                                | ''               | :creates
-
+Name               | Types         | Description                                  | Default          | Used with...
+------------------ | ------------- | -------------------------------------------- | ---------------- | ------------
+`mirror_name`      | String        | Mirror name                                  | <resource_name>  | all
+`component`        | String        | Repository component                         | ''               | :create
+`distribution`     | String        | Name of distribution repository              | ''               | :create
+`uri`              | String        | Uri of remote repository                     | ''               | :create
+`keyid`            | String        | Remote repository key ID                     | ''               | :create
+`keyserver`        | String        | Keys server                                  | 'keys.gnupg.net' | :create
+`cookbook`         | String        | Cookbook name where you've store the keyfile | ''               | :create
+`keyfile`          | String        | Key file name                                | ''               | :create
+`filter`           | String        | Mirror filter                                | ''               | :creates
+`filter_with_deps` | [true, false] | Include dependencies of filtered packages    | false            | :creates
 
 #### Examples
 
