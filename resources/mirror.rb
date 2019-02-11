@@ -80,7 +80,7 @@ action_class do
       group node['aptly']['group']
       environment aptly_env
       retries 2
-      not_if %(#{gpg_command} --list-keys #{keyid})
+      not_if %(#{gpg_command} --keyring trustedkeys.gpg --list-keys #{keyid})
     end
   end
 

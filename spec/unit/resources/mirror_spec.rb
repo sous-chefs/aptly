@@ -50,8 +50,8 @@ platforms.each do |platform, version|
 
     context 'Create action test' do
       before do
-        stub_command('gpg --list-keys 437D05B5').and_return(false)
-        stub_command('gpg1 --list-keys 437D05B5').and_return(false)
+        stub_command('gpg --keyring trustedkeys.gpg --list-keys 437D05B5').and_return(false)
+        stub_command('gpg1 --keyring trustedkeys.gpg --list-keys 437D05B5').and_return(false)
         stub_command('aptly mirror -raw list | grep ^ubuntu-precise-main$').and_return(false)
       end
       it 'Run the custom resources' do
@@ -66,8 +66,8 @@ platforms.each do |platform, version|
 
     context 'Update and Drop action test' do
       before do
-        stub_command('gpg --list-keys 437D05B5').and_return(false)
-        stub_command('gpg1 --list-keys 437D05B5').and_return(false)
+        stub_command('gpg --keyring trustedkeys.gpg --list-keys 437D05B5').and_return(false)
+        stub_command('gpg1 --keyring trustedkeys.gpg --list-keys 437D05B5').and_return(false)
         stub_command('aptly mirror -raw list | grep ^ubuntu-precise-main$').and_return(true)
       end
       it 'Run the custom resources' do
