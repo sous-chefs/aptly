@@ -10,5 +10,5 @@ chef_version '>= 12.14' if respond_to?(:chef_version)
 supports 'ubuntu'
 supports 'debian'
 
-issues_url 'https://github.com/sous-chef/aptly/issues'
-source_url 'https://github.com/sous-chef/aptly'
+issues_url 'https://github.com/sous-chefs/aptly/issues'
+source_url 'https://github.com/sous-chefs/aptly'
