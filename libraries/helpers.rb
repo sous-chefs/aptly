@@ -29,6 +29,10 @@ module Aptly
         node['platform_version'].to_f < 18.04 ? 'gpg' : 'gpg1'
       end
     end
+
+    def filter_with_deps(a)
+      a == true ? '-filter-with-deps' : ''
+    end
   end
 end
 
