@@ -1,6 +1,7 @@
 # aptly Cookbook
+
 [![Cookbook Version](https://img.shields.io/cookbook/v/aptly.svg)](https://supermarket.chef.io/cookbooks/aptly)
-[![CircleCI](https://circleci.com/gh/sous-chefs/aptly.svg?style=svg)](https://circleci.com/gh/sous-chefs/aptly)
+[![Build Status](https://img.shields.io/circleci/project/github/sous-chefs/aptly/master.svg)](https://circleci.com/gh/sous-chefs/aptly)
 
 This cookbook installs and configures aptly (http://www.aptly.info)
 
