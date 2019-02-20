@@ -26,6 +26,7 @@ property :cookbook,         String, default: ''
 property :keyfile,          String, default: ''
 property :filter,           String, default: ''
 property :filter_with_deps, [true, false], default: false
+property :timeout,          Integer, default: 3600
 
 action :create do
   if !new_resource.cookbook.empty? && !new_resource.keyfile.empty?
@@ -58,6 +59,7 @@ action :update do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
+    timeout new_resource.timeout
     only_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
   end
 end

@@ -155,6 +155,7 @@ Name               | Types         | Description                                
 `keyfile`          | String        | Key file name                                | ''               | :create
 `filter`           | String        | Mirror filter                                | ''               | :creates
 `filter_with_deps` | [true, false] | Include dependencies of filtered packages    | false            | :creates
+`timeout`          | Integer       | Timeout in seconds                           | 3600             | :update
 
 #### Examples
 
@@ -258,15 +259,16 @@ Publish, remove or update a repo or a snapshot
 
 #### Properties
 
-Name            | Types  | Description                                     | Default          | Used with...
---------------- | ------ | ----------------------------------------------- | ---------------- | ----------------
-`publish_name`  | String | Publication name                                | <resource_name>  | all
-`type`          | String | Publish type (snapshot or repo)                 | ''               | :create
-`component`     | String | Component name to publish                       | []               | :create
-`distribution`  | String | Distribution name to publish                    | ''               | :create
-`architectures` | String | Only mentioned architectures would be published | ['amd64']        | :create
-`endpoint`      | String | An optional endpoint reference                  | ''               | :create, :update
-`prefix`        | String | An optional prefix for publishing               | ''               | :create, :update
+Name            | Types   | Description                                     | Default          | Used with...
+--------------- | ------- | ----------------------------------------------- | ---------------- | ----------------
+`publish_name`  | String  | Publication name                                | <resource_name>  | all
+`type`          | String  | Publish type (snapshot or repo)                 | ''               | :create
+`component`     | String  | Component name to publish                       | []               | :create
+`distribution`  | String  | Distribution name to publish                    | ''               | :create
+`architectures` | String  | Only mentioned architectures would be published | ['amd64']        | :create
+`endpoint`      | String  | An optional endpoint reference                  | ''               | :create, :update
+`prefix`        | String  | An optional prefix for publishing               | ''               | :create, :update
+`timeout`       | Integer | Timeout in seconds                              | 3600             | all
 
 
 #### Examples

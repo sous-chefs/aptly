@@ -23,6 +23,7 @@ property :component,     Array, default: []
 property :architectures, Array, default: ['amd64']
 property :prefix,        String, default: ''
 property :distribution,  String, default: ''
+property :timeout,       Integer, default: 3600
 
 action :create do
   components = new_resource.component.join(',')
@@ -35,6 +36,7 @@ action :create do
     group node['aptly']['group']
     environment aptly_env
     sensitive true
+    timeout new_resource.timeout
     not_if %(aptly publish list | grep #{new_resource.publish_name})
   end
 end
@@ -46,6 +48,7 @@ action :update do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
+    timeout new_resource.timeout
   end
 end
 
@@ -58,6 +61,7 @@ action :drop do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
+    timeout new_resource.timeout
     only_if %(aptly publish list | grep #{new_resource.publish_name})
   end
 end
