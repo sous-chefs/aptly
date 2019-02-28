@@ -60,8 +60,8 @@ end
 
 action :pull do
   opts = ''
-  opts << ' -no-deps' if new_resource.no_deps
-  opts << ' -no-remove' if new_resource.no_remove
+  opts += ' -no-deps' if new_resource.no_deps
+  opts += ' -no-remove' if new_resource.no_remove
 
   execute "Pull to - #{new_resource.snapshot_name}" do
     command "aptly snapshot pull#{opts} #{new_resource.snapshot_name} #{new_resource.source} #{new_resource.destination} #{new_resource.package_query}"
@@ -74,8 +74,8 @@ end
 
 action :merge do
   opts = ''
-  opts << ' -latest' if new_resource.latest
-  opts << ' -no-remove' if new_resource.no_remove
+  opts += ' -latest' if new_resource.latest
+  opts += ' -no-remove' if new_resource.no_remove
   flatten_sources = new_resource.merge_sources.join(' ')
 
   execute "Merge Snapshots #{flatten_sources} TO #{new_resource.snapshot_name}" do
