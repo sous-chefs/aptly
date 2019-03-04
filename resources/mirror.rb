@@ -26,6 +26,8 @@ property :cookbook,         String, default: ''
 property :keyfile,          String, default: ''
 property :filter,           String, default: ''
 property :filter_with_deps, [true, false], default: false
+property :architectures,    String, default: ''
+property :with_udebs,       [true, false], default: false
 property :timeout,          Integer, default: 3600
 
 action :create do
@@ -45,7 +47,7 @@ action :create do
   end
 
   execute "Creating mirror - #{new_resource.mirror_name}" do
-    command "aptly mirror create -filter '#{new_resource.filter}' #{filter_with_deps(new_resource.filter_with_deps)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
+    command "aptly mirror create #{with_udebs(new_resource.with_udebs)} #{architectures(new_resource.architectures)} -filter '#{new_resource.filter}' #{filter_with_deps(new_resource.filter_with_deps)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env

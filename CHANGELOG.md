@@ -9,6 +9,7 @@ This file is used to list changes made in each version of the aptly cookbook.
 - Fix broken `not_if` for in aptly_mirror resource
 - Migrate to circleci for testing
 - add support for aptly mirror `-filter-with-deps` argument
+- add support for aptly mirror `-with-udebs` and `-architectures` arguments
 
 ## v1.0.0 (24-10-2018)
 
