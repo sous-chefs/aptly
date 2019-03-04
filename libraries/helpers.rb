@@ -33,6 +33,14 @@ module Aptly
     def filter_with_deps(a)
       a == true ? '-filter-with-deps' : ''
     end
+
+    def with_udebs(u)
+      u == true ? '-with-udebs' : ''
+    end
+
+    def architectures(a)
+      a.empty? ? '' : "-architectures #{a}"
+    end
   end
 end
 

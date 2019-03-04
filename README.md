@@ -155,7 +155,11 @@ Name               | Types         | Description                                
 `keyfile`          | String        | Key file name                                | ''               | :create
 `filter`           | String        | Mirror filter                                | ''               | :creates
 `filter_with_deps` | [true, false] | Include dependencies of filtered packages    | false            | :creates
+`architectures`    | String        | Comma-separated list of archs                | ''               | :creates
+`with_udebs`       | [true, false] | Whether or not to download .udeb packages    | false            | :creates
 `timeout`          | Integer       | Timeout in seconds                           | 3600             | :update
+
+Note: The "architectures" property will use the global configuration (settable via node['aptly']['architectures']) if you do not provide it for a particular repository here. If you do not provide either of them, it will default to all available architectures for that particular mirror.
 
 #### Examples
 
