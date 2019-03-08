@@ -1,11 +1,11 @@
-name 'aptly'
-maintainer 'Heavy Water Operations, LLC'
-maintainer_email 'aaronb@heavywater.io'
-license 'Apache-2.0'
-description 'Installs/Configures aptly'
+name             'aptly'
+maintainer       'Sous Chefs'
+maintainer_email 'help@sous-chefs.org'
+license          'Apache-2.0'
+description      'Installs/Configures aptly'
 long_description 'Installs/Configures aptly'
-version '1.0.0'
-chef_version '>= 12.14' if respond_to?(:chef_version)
+version          '1.1.0'
+chef_version     '>= 13.0' if respond_to?(:chef_version)
 
 supports 'ubuntu'
 supports 'debian'
