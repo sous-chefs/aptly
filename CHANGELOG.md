@@ -4,12 +4,14 @@ This file is used to list changes made in each version of the aptly cookbook.
 
 ## Unreleased
 
-- Fix "can't modify frozen String" error caused by aptly_snapshot
+## v1.1.0 (08-03-2019)
+
 - Add timeout argument for some time consuming resources
+- Add support for aptly mirror `-filter-with-deps` argument
+- Add support for aptly mirror `-with-udebs` and `-architectures` arguments
+- Fix "can't modify frozen String" error caused by aptly_snapshot
 - Fix broken `not_if` for in aptly_mirror resource
 - Migrate to circleci for testing
-- add support for aptly mirror `-filter-with-deps` argument
-- add support for aptly mirror `-with-udebs` and `-architectures` arguments
 
 ## v1.0.0 (24-10-2018)
 
