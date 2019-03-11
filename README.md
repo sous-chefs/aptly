@@ -153,13 +153,13 @@ Name               | Types         | Description                                
 `keyserver`        | String        | Keys server                                  | 'keys.gnupg.net' | :create
 `cookbook`         | String        | Cookbook name where you've store the keyfile | ''               | :create
 `keyfile`          | String        | Key file name                                | ''               | :create
-`filter`           | String        | Mirror filter                                | ''               | :creates
-`filter_with_deps` | [true, false] | Include dependencies of filtered packages    | false            | :creates
-`architectures`    | String        | Comma-separated list of archs                | ''               | :creates
-`with_udebs`       | [true, false] | Whether or not to download .udeb packages    | false            | :creates
+`filter`           | String        | Mirror filter                                | ''               | :create
+`filter_with_deps` | [true, false] | Include dependencies of filtered packages    | false            | :create
+`architectures`    | Array         | List of architectures.                       | []               | :create
+`with_udebs`       | [true, false] | Whether or not to download .udeb packages    | false            | :create
 `timeout`          | Integer       | Timeout in seconds                           | 3600             | :update
 
-Note: The "architectures" property will use the global configuration (settable via node['aptly']['architectures']) if you do not provide it for a particular repository here. If you do not provide either of them, it will default to all available architectures for that particular mirror.
+Note: The "architectures" property will use the global configuration (settable via node['aptly']['architectures']) if you do not provide it for a particular repository here. If you do not provide either of them, it will default to all available architectures for that particular mirror. Note also that you need to `publish` with the architectures as well!
 
 #### Examples
 
@@ -269,11 +269,12 @@ Name            | Types   | Description                                     | De
 `type`          | String  | Publish type (snapshot or repo)                 | ''               | :create
 `component`     | String  | Component name to publish                       | []               | :create
 `distribution`  | String  | Distribution name to publish                    | ''               | :create
-`architectures` | String  | Only mentioned architectures would be published | ['amd64']        | :create
+`architectures` | Array   | Only mentioned architectures would be published | []               | :create
 `endpoint`      | String  | An optional endpoint reference                  | ''               | :create, :update
 `prefix`        | String  | An optional prefix for publishing               | ''               | :create, :update
 `timeout`       | Integer | Timeout in seconds                              | 3600             | all
 
+Note: The "architectures" property will use the global configuration (settable via node['aptly']['architectures']) if you do not provide it for a particular repository here.
 
 #### Examples
 

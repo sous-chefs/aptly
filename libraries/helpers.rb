@@ -38,8 +38,8 @@ module Aptly
       u == true ? '-with-udebs' : ''
     end
 
-    def architectures(a)
-      a.empty? ? '' : "-architectures #{a}"
+    def architectures(arr)
+      arr.empty? ? '' : "-architectures #{arr.join(',')}"
     end
   end
 end
