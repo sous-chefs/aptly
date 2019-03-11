@@ -3,7 +3,7 @@
 This file is used to list changes made in each version of the aptly cookbook.
 
 ## Unreleased
-- Change `architectures` argument in both mirror and publish resource for consistency.
+- Change `architectures` argument in both the mirror and publish resources for consistency.
 
 ## v1.1.0 (08-03-2019)
 
