@@ -26,7 +26,7 @@ property :cookbook,         String, default: ''
 property :keyfile,          String, default: ''
 property :filter,           String, default: ''
 property :filter_with_deps, [true, false], default: false
-property :architectures,    String, default: ''
+property :architectures,    Array, default: []
 property :with_udebs,       [true, false], default: false
 property :timeout,          Integer, default: 3600
 
