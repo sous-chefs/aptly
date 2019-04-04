@@ -34,6 +34,10 @@ module Aptly
       a == true ? '-filter-with-deps' : ''
     end
 
+    def with_installer(i)
+      i == true ? '-with-installer' : ''
+    end
+
     def with_udebs(u)
       u == true ? '-with-udebs' : ''
     end
