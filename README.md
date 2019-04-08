@@ -156,6 +156,7 @@ Name               | Types         | Description                                
 `filter`           | String        | Mirror filter                                | ''               | :create
 `filter_with_deps` | [true, false] | Include dependencies of filtered packages    | false            | :create
 `architectures`    | Array         | List of architectures.                       | []               | :create
+`with_installer`   | [true, false] | Whether to download installer files          | false            | :create
 `with_udebs`       | [true, false] | Whether or not to download .udeb packages    | false            | :create
 `timeout`          | Integer       | Timeout in seconds                           | 3600             | :update
 
