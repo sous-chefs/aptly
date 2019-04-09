@@ -4,7 +4,7 @@ This file is used to list changes made in each version of the aptly cookbook.
 
 ## Unreleased
 
-## v1.2.0 (09-04-2019)
+## v2.0.0 (09-04-2019)
 
 - Change `architectures` argument in both the mirror and publish resources for consistency
 - Add a `with_installer` parameter to the mirror resource
