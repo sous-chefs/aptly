@@ -4,7 +4,7 @@ maintainer_email 'help@sous-chefs.org'
 license          'Apache-2.0'
 description      'Installs/Configures aptly'
 long_description 'Installs/Configures aptly'
-version          '1.1.0'
+version          '2.0.0'
 chef_version     '>= 13.0' if respond_to?(:chef_version)
 
 supports 'ubuntu'
