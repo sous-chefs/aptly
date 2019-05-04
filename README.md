@@ -5,8 +5,7 @@
 
 This cookbook installs and configures aptly (http://www.aptly.info)
 
-Requirements
-------------
+## Requirements
 
 ### Platform
 
@@ -53,8 +52,8 @@ Attributes
 * `default['aptly']['gpg']['expire-date'] = 0`
 * `default['aptly']['gpg']['passphrase'] = 'GreatPassPhrase'`
 
-Recipes
--------
+## Recipes
+
 ### `default`
 
 Install and configure aptly
@@ -389,11 +388,10 @@ aptly_db 'recover' do
 end
 ```
 
-
-Usage
------
+## Usage
 
 ### include recipe in a wrapper cookbook and call resources if needed
+
 ```ruby
 include_recipe 'aptly'
 
@@ -416,9 +414,7 @@ end
 aptly_serve 'Aptly HTTP Service'
 ``` 
 
-
-Contributing
----------------
+## Contributing
 
 Please refer to each project's style guidelines and guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
 
@@ -430,8 +426,8 @@ Please refer to each project's style guidelines and guidelines for submitting pa
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
-Testing
--------
+## Testing
+
 
 Please contribute to keep unit and functional tests up to date.
 After modifications, please run the following commands to check if you break something:
@@ -443,9 +439,34 @@ NOTE: Available distro tests: `default-debian-8`, `default-debian-9`, `default-u
 
 NOTE2: if you want to use Policyfile, rename `Policyfile.rb.dist` to `Policyfile.rb` in root and test directories, then execute `chef update` in each folder. Look inside `.kitchen.yml` and `spec/spec_helper.rb` too.
 
- 
-License & Authors
------------------
+## Contributors
+
+This project exists thanks to all the people who contribute.
+<img src="https://opencollective.com/sous-chefs/contributors.svg?width=890&button=false" /></a>
+
+
+### Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/sous-chefs#backer)]
+<a href="https://opencollective.com/sous-chefs#backers" target="_blank"><img src="https://opencollective.com/sous-chefs/backers.svg?width=890"></a>
+
+### Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/sous-chefs#sponsor)]
+<a href="https://opencollective.com/sous-chefs/sponsor/0/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/sous-chefs/sponsor/1/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/sous-chefs/sponsor/2/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/sous-chefs/sponsor/3/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/sous-chefs/sponsor/4/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/sous-chefs/sponsor/5/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/sous-chefs/sponsor/6/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/sous-chefs/sponsor/7/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/sous-chefs/sponsor/8/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/sous-chefs/sponsor/9/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/9/avatar.svg"></a>
+
+
+## License & Authors
+
 - Author:: Aaron Baer (aaron@hw-ops.com)
 - Contributor:: Michael Lopez (mickael.lopez@gmail.com)
 
