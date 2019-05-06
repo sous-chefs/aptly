@@ -2,6 +2,9 @@
 
 [![Cookbook Version](https://img.shields.io/cookbook/v/aptly.svg)](https://supermarket.chef.io/cookbooks/aptly)
 [![Build Status](https://img.shields.io/circleci/project/github/sous-chefs/aptly/master.svg)](https://circleci.com/gh/sous-chefs/aptly)
+[![OpenCollective](https://opencollective.com/sous-chefs/backers/badge.svg)](#backers)
+[![OpenCollective](https://opencollective.com/sous-chefs/sponsors/badge.svg)](#sponsors)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This cookbook installs and configures aptly (http://www.aptly.info)
 
@@ -9,48 +12,50 @@ This cookbook installs and configures aptly (http://www.aptly.info)
 
 ### Platform
 
-* Debian 8
-* Debian 9
-* Ubuntu 16.04
-* Ubuntu 18.04
+- Debian 8
+- Debian 9
+- Ubuntu 16.04
+- Ubuntu 18.04
 
-Attributes
-----------
+## Attributes
 
 ### Repository attributes
-* `default['aptly']['repository']['uri'] = 'http://repo.aptly.info/'`
-* `default['aptly']['repository']['dist'] = 'squeeze'`
-* `default['aptly']['repository']['components'] = 'main'`
-* `default['aptly']['repository']['key'] = 'https://www.aptly.info/pubkey.txt'`
+
+- `default['aptly']['repository']['uri'] = 'http://repo.aptly.info/'`
+- `default['aptly']['repository']['dist'] = 'squeeze'`
+- `default['aptly']['repository']['components'] = 'main'`
+- `default['aptly']['repository']['key'] = 'https://www.aptly.info/pubkey.txt'`
 
 ### Global repository attributes
-* `default['aptly']['user'] = 'aptly'`
-* `default['aptly']['group'] = 'aptly'`
-* `default['aptly']['rootDir'] = '/opt/aptly'`
-* `default['aptly']['downloadConcurrency'] = 4`
-* `default['aptly']['downloadSpeedLimit'] = 0`
-* `default['aptly']['architectures'] = []`
-* `default['aptly']['dependencyFollowSuggests'] = false`
-* `default['aptly']['dependencyFollowRecommends'] = false`
-* `default['aptly']['dependencyFollowAllVariants'] = false`
-* `default['aptly']['dependencyFollowSource'] = false`
-* `default['aptly']['gpgDisableSign'] = false`
-* `default['aptly']['gpgDisableVerify'] = false`
-* `default['aptly']['gpgProvider'] = 'gpg'`
-* `default['aptly']['downloadSourcePackages'] = false`
-* `default['aptly']['skipLegacyPool'] = true`
-* `default['aptly']['ppaDistributorID'] = 'ubuntu'`
-* `default['aptly']['ppaCodename'] = ''`
-* `default['aptly']['FileSystemPublishEndpoints'] = {}`
-* `default['aptly']['S3PublishEndpoints'] = {}`
-* `default['aptly']['SwiftPublishEndpoints'] = {}`
+
+- `default['aptly']['user'] = 'aptly'`
+- `default['aptly']['group'] = 'aptly'`
+- `default['aptly']['rootDir'] = '/opt/aptly'`
+- `default['aptly']['downloadConcurrency'] = 4`
+- `default['aptly']['downloadSpeedLimit'] = 0`
+- `default['aptly']['architectures'] = []`
+- `default['aptly']['dependencyFollowSuggests'] = false`
+- `default['aptly']['dependencyFollowRecommends'] = false`
+- `default['aptly']['dependencyFollowAllVariants'] = false`
+- `default['aptly']['dependencyFollowSource'] = false`
+- `default['aptly']['gpgDisableSign'] = false`
+- `default['aptly']['gpgDisableVerify'] = false`
+- `default['aptly']['gpgProvider'] = 'gpg'`
+- `default['aptly']['downloadSourcePackages'] = false`
+- `default['aptly']['skipLegacyPool'] = true`
+- `default['aptly']['ppaDistributorID'] = 'ubuntu'`
+- `default['aptly']['ppaCodename'] = ''`
+- `default['aptly']['FileSystemPublishEndpoints'] = {}`
+- `default['aptly']['S3PublishEndpoints'] = {}`
+- `default['aptly']['SwiftPublishEndpoints'] = {}`
 
 ### GPG attributes
-* `default['aptly']['gpg']['name-real'] = 'Aptly'`
-* `default['aptly']['gpg']['name-comment'] = 'Aptly Key'`
-* `default['aptly']['gpg']['name-email'] = 'organisation@example.org'`
-* `default['aptly']['gpg']['expire-date'] = 0`
-* `default['aptly']['gpg']['passphrase'] = 'GreatPassPhrase'`
+
+- `default['aptly']['gpg']['name-real'] = 'Aptly'`
+- `default['aptly']['gpg']['name-comment'] = 'Aptly Key'`
+- `default['aptly']['gpg']['name-email'] = 'organisation@example.org'`
+- `default['aptly']['gpg']['expire-date'] = 0`
+- `default['aptly']['gpg']['passphrase'] = 'GreatPassPhrase'`
 
 ## Recipes
 
@@ -58,8 +63,7 @@ Attributes
 
 Install and configure aptly
 
-Resources
----------
+## Resources
 
 ### 'aptly_repo'
 
@@ -418,22 +422,21 @@ aptly_serve 'Aptly HTTP Service'
 
 Please refer to each project's style guidelines and guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
 
-1. **Fork** the repo on GitHub
-2. **Clone** the project to your own machine
-3. **Commit** changes to your own branch
-4. **Push** your work back up to your fork
-5. Submit a **Pull request** so that we can review your changes
+1. --Fork-- the repo on GitHub
+2. --Clone-- the project to your own machine
+3. --Commit-- changes to your own branch
+4. --Push-- your work back up to your fork
+5. Submit a --Pull request-- so that we can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Testing
 
-
 Please contribute to keep unit and functional tests up to date.
 After modifications, please run the following commands to check if you break something:
 
-   * chef exec rspec
-   * kitchen test default-ubuntu-1804
+- chef exec rspec
+- kitchen test default-ubuntu-1804
 
 NOTE: Available distro tests: `default-debian-8`, `default-debian-9`, `default-ubuntu-1604` and `default-ubuntu-1804`
 
@@ -441,48 +444,25 @@ NOTE2: if you want to use Policyfile, rename `Policyfile.rb.dist` to `Policyfile
 
 ## Contributors
 
-This project exists thanks to all the people who contribute.
-<img src="https://opencollective.com/sous-chefs/contributors.svg?width=890&button=false" /></a>
-
+This project exists thanks to all the people who [contribute.](https://opencollective.com/sous-chefs/contributors.svg?width=890&button=false)
 
 ### Backers
 
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/sous-chefs#backer)]
-<a href="https://opencollective.com/sous-chefs#backers" target="_blank"><img src="https://opencollective.com/sous-chefs/backers.svg?width=890"></a>
+Thank you to all our backers!
+
+![https://opencollective.com/sous-chefs#backers](https://opencollective.com/sous-chefs/backers.svg?width=600&avatarHeight=40)
 
 ### Sponsors
 
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/sous-chefs#sponsor)]
-<a href="https://opencollective.com/sous-chefs/sponsor/0/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/sous-chefs/sponsor/1/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/sous-chefs/sponsor/2/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/sous-chefs/sponsor/3/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/sous-chefs/sponsor/4/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/sous-chefs/sponsor/5/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/sous-chefs/sponsor/6/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/sous-chefs/sponsor/7/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/sous-chefs/sponsor/8/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/sous-chefs/sponsor/9/website" target="_blank"><img src="https://opencollective.com/sous-chefs/sponsor/9/avatar.svg"></a>
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website.
 
-
-## License & Authors
-
-- Author:: Aaron Baer (aaron@hw-ops.com)
-- Contributor:: Michael Lopez (mickael.lopez@gmail.com)
-
-```text
-Copyright 2014, Heavy Water Operations, LLC
-Copyright 2018, Michael Lopez
-
-Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
+![https://opencollective.com/sous-chefs/sponsor/0/website](https://opencollective.com/sous-chefs/sponsor/0/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/1/website](https://opencollective.com/sous-chefs/sponsor/1/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/2/website](https://opencollective.com/sous-chefs/sponsor/2/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/3/website](https://opencollective.com/sous-chefs/sponsor/3/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/4/website](https://opencollective.com/sous-chefs/sponsor/4/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/5/website](https://opencollective.com/sous-chefs/sponsor/5/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/6/website](https://opencollective.com/sous-chefs/sponsor/6/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/7/website](https://opencollective.com/sous-chefs/sponsor/7/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/8/website](https://opencollective.com/sous-chefs/sponsor/8/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/9/website](https://opencollective.com/sous-chefs/sponsor/9/avatar.svg?avatarHeight=100)
