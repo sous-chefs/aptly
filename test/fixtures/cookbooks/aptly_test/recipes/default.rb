@@ -73,13 +73,13 @@ aptly_repo 'my_repo' do
   action :add
 end
 
-remote_file '/tmp/curl_7.26.0-1+wheezy25+deb7u1_amd64.deb' do
-  source 'http://security-cdn.debian.org/debian-security/pool/updates/main/c/curl/curl_7.26.0-1+wheezy25+deb7u1_amd64.deb'
+remote_file '/tmp/chef_15.2.20-1_amd64.deb' do
+  source 'https://packages.chef.io/files/stable/chef/15.2.20/debian/8/chef_15.2.20-1_amd64.deb'
   backup 0
 end
 
 aptly_repo 'my_repo' do
-  file '/tmp/curl_7.26.0-1+wheezy25+deb7u1_amd64.deb'
+  file '/tmp/chef_15.2.20-1_amd64.deb'
   action :add
 end
 
@@ -98,7 +98,7 @@ aptly_snapshot 'my_snapshot' do
 end
 
 aptly_snapshot 'my_mirror_snapshot' do
-  package_query 'curl_7.26.0-1+wheezy25+deb7u1_amd64.deb'
+  package_query 'chef_15.2.20-1_amd64.deb'
   source 'my_snapshot'
   destination 'new_my_snapshot'
   action :pull
