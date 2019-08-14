@@ -16,8 +16,8 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ### Platform
 
-- Debian 8
 - Debian 9
+- Debian 10
 - Ubuntu 16.04
 - Ubuntu 18.04
 
@@ -258,7 +258,6 @@ aptly_snapshot 'merged_snapshot' do
 end
 ```
 
-
 ### 'aptly_publish'
 
 Publish, remove or update a repo or a snapshot
@@ -371,7 +370,7 @@ end
 
 ### 'aptly_db'
 
-Manage internal Aptly DB 
+Manage internal Aptly DB
 
 #### Actions
 
@@ -420,19 +419,7 @@ aptly_publish 'my_repo' do
 end
 
 aptly_serve 'Aptly HTTP Service'
-``` 
-
-## Contributing
-
-Please refer to each project's style guidelines and guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
-
-1. --Fork-- the repo on GitHub
-2. --Clone-- the project to your own machine
-3. --Commit-- changes to your own branch
-4. --Push-- your work back up to your fork
-5. Submit a --Pull request-- so that we can review your changes
-
-NOTE: Be sure to merge the latest from "upstream" before making a pull request!
+```
 
 ## Testing
 
