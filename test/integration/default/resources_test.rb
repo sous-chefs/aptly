@@ -35,11 +35,11 @@ control 'Resources Tests' do
     its('exit_status') { should eq 0 }
   end
 
-  describe file('/tmp/curl_7.26.0-1+wheezy25+deb7u1_amd64.deb') do
+  describe file('/tmp/chef_15.2.20-1_amd64.deb') do
     it { should exist }
   end
 
-  describe command('aptly repo show -with-packages my_repo | grep curl_7.26.0-1+wheezy25+deb7u1_amd64') do
+  describe command('aptly repo show -with-packages my_repo | grep chef_15.2.20-1_amd64.deb') do
     its('exit_status') { should eq 0 }
   end
 
