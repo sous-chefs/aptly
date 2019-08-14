@@ -31,7 +31,7 @@ control 'Resources Tests' do
   end
 
   describe command('aptly repo show -with-packages my_repo') do
-    its('stdout') { should match /wget_.*/ }
+    its('stdout') { should match /chef_.*/ }
     its('exit_status') { should eq 0 }
   end
 
@@ -39,7 +39,7 @@ control 'Resources Tests' do
     it { should exist }
   end
 
-  describe command('aptly repo show -with-packages my_repo | grep chef_15.2.20-1_amd64.deb') do
+  describe command('aptly repo show -with-packages my_repo | grep chef_15.2.20-1_amd64') do
     its('exit_status') { should eq 0 }
   end
 
