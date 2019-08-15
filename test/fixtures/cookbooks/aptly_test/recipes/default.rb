@@ -60,27 +60,8 @@ directory '/opt/aptly/pkgs' do
   group 'aptly'
 end
 
-pkg = nil
-pkg_url = nil
-
-case node['platform']
-when 'debian'
-  pkg = case node['platform_version'].to_i
-        when 8
-          'wget_1.16-1+deb8u5_amd64.deb'
-        when 9
-          'wget_1.18-5+deb9u2_amd64.deb'
-        end
-  pkg_url = "http://ftp.fr.debian.org/debian/pool/main/w/wget/#{pkg}"
-when 'ubuntu'
-  pkg = case node['platform_version']
-        when '16.04'
-          'wget_1.17.1-1ubuntu1.4_amd64.deb'
-        when '18.04'
-          'wget_1.19.4-1ubuntu2.1_amd64.deb'
-        end
-  pkg_url = "http://security.ubuntu.com/ubuntu/pool/main/w/wget/#{pkg}"
-end
+pkg = 'grafana_6.3.2_amd64.deb'
+pkg_url = 'https://dl.grafana.com/oss/release/grafana_6.3.2_amd64.deb'
 
 remote_file "/opt/aptly/pkgs/#{pkg}" do
   source pkg_url
@@ -92,13 +73,14 @@ aptly_repo 'my_repo' do
   action :add
 end
 
-remote_file '/tmp/curl_7.26.0-1+wheezy25+deb7u1_amd64.deb' do
-  source 'http://security-cdn.debian.org/debian-security/pool/updates/main/c/curl/curl_7.26.0-1+wheezy25+deb7u1_amd64.deb'
+# Note: If changed update in the resources_tests.rb inspec tests as well
+remote_file '/tmp/chef_15.2.20-1_amd64.deb' do
+  source 'https://packages.chef.io/files/stable/chef/15.2.20/debian/8/chef_15.2.20-1_amd64.deb'
   backup 0
 end
 
 aptly_repo 'my_repo' do
-  file '/tmp/curl_7.26.0-1+wheezy25+deb7u1_amd64.deb'
+  file '/tmp/chef_15.2.20-1_amd64.deb'
   action :add
 end
 
@@ -117,7 +99,7 @@ aptly_snapshot 'my_snapshot' do
 end
 
 aptly_snapshot 'my_mirror_snapshot' do
-  package_query 'curl_7.26.0-1+wheezy25+deb7u1_amd64.deb'
+  package_query 'chef_15.2.20-1_amd64.deb'
   source 'my_snapshot'
   destination 'new_my_snapshot'
   action :pull
