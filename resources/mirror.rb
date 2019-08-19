@@ -16,15 +16,20 @@
 # limitations under the License.
 #
 
-property :mirror_name,  String, name_property: true
-property :component,    String, default: ''
-property :distribution, String, default: ''
-property :uri,          String, default: ''
-property :keyid,        String, default: ''
-property :keyserver,    String, default: 'keys.gnupg.net'
-property :cookbook,     String, default: ''
-property :keyfile,      String, default: ''
-property :filter,       String, default: ''
+property :mirror_name,      String, name_property: true
+property :component,        String, default: ''
+property :distribution,     String, default: ''
+property :uri,              String, default: ''
+property :keyid,            String, default: ''
+property :keyserver,        String, default: 'keys.gnupg.net'
+property :cookbook,         String, default: ''
+property :keyfile,          String, default: ''
+property :filter,           String, default: ''
+property :filter_with_deps, [true, false], default: false
+property :architectures,    Array, default: []
+property :with_installer,   [true, false], default: false
+property :with_udebs,       [true, false], default: false
+property :timeout,          Integer, default: 3600
 
 action :create do
   if !new_resource.cookbook.empty? && !new_resource.keyfile.empty?
@@ -43,7 +48,7 @@ action :create do
   end
 
   execute "Creating mirror - #{new_resource.mirror_name}" do
-    command "aptly mirror create -filter '#{new_resource.filter}' #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
+    command "aptly mirror create #{with_installer(new_resource.with_installer)} #{with_udebs(new_resource.with_udebs)} #{architectures(new_resource.architectures)} -filter '#{new_resource.filter}' #{filter_with_deps(new_resource.filter_with_deps)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
@@ -57,6 +62,7 @@ action :update do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
+    timeout new_resource.timeout
     only_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
   end
 end
@@ -79,7 +85,7 @@ action_class do
       group node['aptly']['group']
       environment aptly_env
       retries 2
-      not_if %(#{gpg_command} --list-keys #{keyid})
+      not_if %(#{gpg_command} --keyring trustedkeys.gpg --list-keys #{keyid})
     end
   end
 

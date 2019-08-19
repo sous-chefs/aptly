@@ -29,6 +29,22 @@ module Aptly
         node['platform_version'].to_f < 18.04 ? 'gpg' : 'gpg1'
       end
     end
+
+    def filter_with_deps(a)
+      a == true ? '-filter-with-deps' : ''
+    end
+
+    def with_installer(i)
+      i == true ? '-with-installer' : ''
+    end
+
+    def with_udebs(u)
+      u == true ? '-with-udebs' : ''
+    end
+
+    def architectures(arr)
+      arr.empty? ? '' : "-architectures #{arr.join(',')}"
+    end
   end
 end
 

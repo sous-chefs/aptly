@@ -31,15 +31,15 @@ control 'Resources Tests' do
   end
 
   describe command('aptly repo show -with-packages my_repo') do
-    its('stdout') { should match /wget_.*/ }
+    its('stdout') { should match /chef_.*/ }
     its('exit_status') { should eq 0 }
   end
 
-  describe file('/tmp/curl_7.52.1-5+deb9u7_amd64.deb') do
+  describe file('/tmp/chef_15.2.20-1_amd64.deb') do
     it { should exist }
   end
 
-  describe command('aptly repo show -with-packages my_repo | grep curl_7.52.1-5+deb9u7_amd64') do
+  describe command('aptly repo show -with-packages my_repo | grep chef_15.2.20-1_amd64') do
     its('exit_status') { should eq 0 }
   end
 

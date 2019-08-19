@@ -1,67 +1,30 @@
+---
+lint_and_unit: &lint_and_unit
+  - delivery
+  - danger
+  - lint-yaml
+  - lint-markdown
+
 version: 2.1
+orbs:
+  kitchen: sous-chefs/kitchen@2
+
 workflows:
-  build:
+  kitchen:
     jobs:
-      - sous-chefs/lint:
-          name: Lint
-      - sous-chefs/dokken:
+      # Lint and Unit Test
+      - kitchen/yamllint:
+          name: lint-yaml
+      - kitchen/mdlint:
+          name: lint-markdown
+      - kitchen/danger:
+          name: danger
+          context: Danger
+      - kitchen/delivery:
+          name: delivery
+
+      - kitchen/dokken-single:
           name: default
           suite: default
           requires:
-            - Lint
-
-orbs:
-  sous-chefs:
-    executors:
-      ruby:
-        docker: [ image: circleci/ruby ]
-      chef:
-        machine: true
-    jobs:
-      lint:
-        executor: ruby
-        parameters:
-          channel:
-            description: ChefDK channel stable or current
-            type: string
-            default: current
-        steps:
-          - checkout
-          - run:
-              name: Install Chef
-              command: curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -c <<parameters.channel>> -P chefdk
-          - run:
-              name: Unit Test
-              command: chef exec delivery local all
-      dokken:
-        executor: chef
-        parameters:
-          suite:
-            description: Test Kitchen suite name
-            type: string
-          channel:
-            description: ChefDK channel stable or current
-            type: string
-            default: current
-        environment:
-          KITCHEN_LOCAL_YAML: .kitchen.dokken.yml
-        steps:
-          - checkout
-          - run:
-              name: Launch Haveged container for entropy
-              command: docker run --privileged -d harbur/haveged:1.7c-1
-          - run:
-              name: Install Chef
-              command: curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -c <<parameters.channel>> -P chefdk
-          - run:
-              name: debian-8
-              command: kitchen test <<parameters.suite>>-debian-8
-          - run:
-              name: debian-9
-              command: kitchen test <<parameters.suite>>-debian-9
-          - run:
-              name: ubuntu-16.04
-              command: kitchen test <<parameters.suite>>-ubuntu-1604
-          - run:
-              name: ubuntu-18.04
-              command: kitchen test <<parameters.suite>>-ubuntu-1804
+            *lint_and_unit

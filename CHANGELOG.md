@@ -2,6 +2,24 @@
 
 This file is used to list changes made in each version of the aptly cookbook.
 
+## Unreleased
+
+- Cookstyle fixes
+
+## v2.0.0 (09-04-2019)
+
+- Change `architectures` argument in both the mirror and publish resources for consistency
+- Add a `with_installer` parameter to the mirror resource
+
+## v1.1.0 (08-03-2019)
+
+- Add timeout argument for some time consuming resources
+- Add support for aptly mirror `-filter-with-deps` argument
+- Add support for aptly mirror `-with-udebs` and `-architectures` arguments
+- Fix "can't modify frozen String" error caused by aptly_snapshot
+- Fix broken `not_if` for in aptly_mirror resource
+- Migrate to circleci for testing
+
 ## v1.0.0 (24-10-2018)
 
 - Big refactoring

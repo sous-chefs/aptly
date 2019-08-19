@@ -14,8 +14,16 @@ verifier:
 platforms:
   - name: ubuntu-16.04
   - name: ubuntu-18.04
-  - name: debian-8
+  - name: debian-10
   - name: debian-9
 
 suites:
   - name: default
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    run_list:
+      - recipe[aptly_test::setup]
+      - recipe[aptly::default]
+      - recipe[aptly_test::default]
+    attributes:
