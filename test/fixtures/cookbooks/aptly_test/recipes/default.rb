@@ -74,13 +74,13 @@ aptly_repo 'my_repo' do
 end
 
 # Note: If changed update in the resources_tests.rb inspec tests as well
-remote_file '/tmp/chef_15.2.20-1_amd64.deb' do
+remote_file "#{Chef::Config[:file_cache_path]}/chef_15.2.20-1_amd64.deb" do
   source 'https://packages.chef.io/files/stable/chef/15.2.20/debian/8/chef_15.2.20-1_amd64.deb'
   backup 0
 end
 
 aptly_repo 'my_repo' do
-  file '/tmp/chef_15.2.20-1_amd64.deb'
+  file "#{Chef::Config[:file_cache_path]}/chef_15.2.20-1_amd64.deb"
   action :add
 end
 
