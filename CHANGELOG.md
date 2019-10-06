@@ -4,7 +4,7 @@ This file is used to list changes made in each version of the aptly cookbook.
 
 ## Unreleased
 
-- Cookstyle fixes
+- Latest Cookstyle changes in cookstyle 5.6.2
 
 ## v2.0.0 (09-04-2019)
 
