@@ -35,10 +35,6 @@ control 'Resources Tests' do
     its('exit_status') { should eq 0 }
   end
 
-  describe file('/tmp/chef_15.2.20-1_amd64.deb') do
-    it { should exist }
-  end
-
   describe command('aptly repo show -with-packages my_repo | grep chef_15.2.20-1_amd64') do
     its('exit_status') { should eq 0 }
   end
