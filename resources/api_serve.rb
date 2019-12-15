@@ -20,7 +20,7 @@ property :listen,  String, default: ''
 property :port,    [Integer, String], default: 8090
 property :user,    String, default: 'aptly'
 property :group,   String, default: 'aptly'
-property :no_lock, [true, false], default: false
+property :no_lock, [TrueClass, FalseClass], default: false
 
 action :run do
   no_lock = new_resource.no_lock ? ' -no-lock' : ''

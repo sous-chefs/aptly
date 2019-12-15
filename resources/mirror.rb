@@ -25,10 +25,10 @@ property :keyserver,        String, default: 'keys.gnupg.net'
 property :cookbook,         String, default: ''
 property :keyfile,          String, default: ''
 property :filter,           String, default: ''
-property :filter_with_deps, [true, false], default: false
+property :filter_with_deps, [TrueClass, FalseClass], default: false
 property :architectures,    Array, default: []
-property :with_installer,   [true, false], default: false
-property :with_udebs,       [true, false], default: false
+property :with_installer,   [TrueClass, FalseClass], default: false
+property :with_udebs,       [TrueClass, FalseClass], default: false
 property :timeout,          Integer, default: 3600
 
 action :create do
