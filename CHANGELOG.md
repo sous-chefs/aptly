@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## UNRELEASED
 
 - Use `true` and `false` in resources
-- Migrate to Github Actions
+- Migrate to Github Actions for testing
 
 ## 2.0.1 2019-10-19
 
