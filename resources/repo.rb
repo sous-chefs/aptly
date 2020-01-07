@@ -20,8 +20,8 @@ property :repo_name,     String, name_property: true
 property :component,     String, default: ''
 property :comment,       String, default: ''
 property :distribution,  String, default: ''
-property :remove_files,  [TrueClass, FalseClass], default: false
-property :force_replace, [TrueClass, FalseClass], default: false
+property :remove_files,  [true, false], default: false
+property :force_replace, [true, false], default: false
 property :directory,     String, default: ''
 property :file,          String, default: ''
 property :package_query, String, default: ''
