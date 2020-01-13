@@ -19,14 +19,14 @@
 property :snapshot_name, String, name_property: true
 property :from,          String, default: ''
 property :type,          String, default: ''
-property :empty,         [TrueClass, FalseClass], default: false
+property :empty,         [true, false], default: false
 property :source,        String, default: ''
 property :destination,   String, default: ''
 property :merge_sources, Array, default: []
 property :package_query, String, default: ''
-property :no_deps,       [TrueClass, FalseClass], default: false
-property :no_remove,     [TrueClass, FalseClass], default: false
-property :latest,        [TrueClass, FalseClass], default: false
+property :no_deps,       [true, false], default: false
+property :no_remove,     [true, false], default: false
+property :latest,        [true, false], default: false
 
 action :create do
   if new_resource.empty
