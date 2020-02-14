@@ -40,7 +40,7 @@ directory node['aptly']['rootDir'] do
   group node['aptly']['group']
   mode '0755'
   recursive true
-  only_if "getent #{node['aptly']['user']} passwd"
+  only_if "getent passwd #{node['aptly']['user']}"
 end
 
 group node['aptly']['group'] do
