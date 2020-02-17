@@ -92,8 +92,10 @@ bash 'Generate Aptly GPG Key pair' do
     TMP_REQUEST=$(mktemp /tmp/request.XXXXX)
     cat >$TMP_REQUEST <<EOF
 %echo Generating Aptly GPG key
-Key-Type: 1
-Subkey-Type: 1
+Key-Type: #{node['aptly']['gpg']['key-tpye']}
+Key-Length: #{node['aptly']['gpg']['key-length']}
+Subkey-Type: #{node['aptly']['gpg']['subkey-type']}
+Subkey-Length: #{node['aptly']['gpg']['subkey-length']}
 Name-Real: #{node['aptly']['gpg']['name-real']}
 Name-Comment: #{node['aptly']['gpg']['name-comment']}
 Name-Email: #{node['aptly']['gpg']['name-email']}
@@ -105,4 +107,5 @@ EOF
   #{gpg_command} --batch --gen-key $TMP_REQUEST
   EOH
   not_if { ::File.exist?("#{node['aptly']['rootDir']}/.gnupg/trustdb.gpg") }
+  rm -f $TMP_REQUEST
 end
