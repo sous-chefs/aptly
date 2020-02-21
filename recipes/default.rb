@@ -105,7 +105,7 @@ Passphrase: #{node['aptly']['gpg']['passphrase']}
 %echo done
 EOF
   #{gpg_command} --batch --gen-key $TMP_REQUEST
+  rm -f $TMP_REQUEST
   EOH
   not_if { ::File.exist?("#{node['aptly']['rootDir']}/.gnupg/trustdb.gpg") }
-  rm -f $TMP_REQUEST
 end
