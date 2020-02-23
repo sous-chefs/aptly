@@ -38,7 +38,7 @@ platforms.each do |platform, version|
       end
 
       before do
-        stub_command('getent aptly passwd').and_return(true)
+        stub_command('getent passwd aptly').and_return(true)
       end
 
       it 'Add aptly repository' do
