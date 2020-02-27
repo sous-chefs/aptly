@@ -47,6 +47,7 @@ action :update do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
+    sensitive true
     timeout new_resource.timeout
   end
 end

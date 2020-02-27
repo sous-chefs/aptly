@@ -55,6 +55,10 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ### GPG attributes
 
+- `default['aptly']['gpg']['key-tpye'] = 'RSA'`
+- `default['aptly']['gpg']['key-length'] = 4096`
+- `default['aptly']['gpg']['subkey-type'] = 'RSA'`
+- `default['aptly']['gpg']['subkey-length'] = 4096`
 - `default['aptly']['gpg']['name-real'] = 'Aptly'`
 - `default['aptly']['gpg']['name-comment'] = 'Aptly Key'`
 - `default['aptly']['gpg']['name-email'] = 'organisation@example.org'`
