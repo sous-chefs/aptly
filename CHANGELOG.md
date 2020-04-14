@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## UNRELEASED
 
+- resolved cookstyle error: libraries/helpers.rb:51:14 warning: `Lint/SendWithMixinArgument`
+- resolved cookstyle error: libraries/helpers.rb:52:16 warning: `Lint/SendWithMixinArgument`
 - Use `true` and `false` in resources
 - Migrate to Github Actions for testing
 
