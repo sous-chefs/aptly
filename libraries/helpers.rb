@@ -48,5 +48,5 @@ module Aptly
   end
 end
 
-Chef::Recipe.send(:include, ::Aptly::Helpers)
-Chef::Resource.send(:include, ::Aptly::Helpers)
+Chef::Recipe.include ::Aptly::Helpers
+Chef::Resource.include ::Aptly::Helpers
