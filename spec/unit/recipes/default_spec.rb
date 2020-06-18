@@ -17,7 +17,7 @@
 require 'spec_helper'
 
 platforms = {
-  'debian' => '9.5',
+  'debian' => '9',
   'ubuntu' => '18.04',
 }
 
