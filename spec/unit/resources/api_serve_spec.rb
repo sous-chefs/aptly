@@ -20,7 +20,7 @@ require 'spec_helper'
 require 'chefspec'
 
 platforms = {
-  'debian' => '9.5',
+  'debian' => '9',
   'ubuntu' => '18.04',
 }
 
