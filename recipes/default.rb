@@ -92,7 +92,7 @@ bash 'Generate Aptly GPG Key pair' do
     TMP_REQUEST=$(mktemp /tmp/request.XXXXX)
     cat >$TMP_REQUEST <<EOF
 %echo Generating Aptly GPG key
-Key-Type: #{node['aptly']['gpg']['key-tpye']}
+Key-Type: #{node['aptly']['gpg']['key-type']}
 Key-Length: #{node['aptly']['gpg']['key-length']}
 Subkey-Type: #{node['aptly']['gpg']['subkey-type']}
 Subkey-Length: #{node['aptly']['gpg']['subkey-length']}
