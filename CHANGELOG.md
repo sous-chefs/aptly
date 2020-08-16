@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+- Ability to edit existing mirror configuration
+- Added missing properties to aptly_mirror resource
+- Changed `aptly_mirror` resource's property `architectures` to use `node['aptly']['architectures']` rather than an empty list which was needed for idempotent mirror edits
+
 ## 2.2.0 (2020-08-20)
 
 ### Fixed
