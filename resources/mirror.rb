@@ -16,20 +16,41 @@
 # limitations under the License.
 #
 
-property :mirror_name,      String, name_property: true
-property :component,        String, default: ''
-property :distribution,     String, default: ''
-property :uri,              String, default: ''
-property :keyid,            String, default: ''
-property :keyserver,        String, default: 'keys.gnupg.net'
-property :cookbook,         String, default: ''
-property :keyfile,          String, default: ''
-property :filter,           String, default: ''
-property :filter_with_deps, [true, false], default: false
-property :architectures,    Array, default: []
-property :with_installer,   [true, false], default: false
-property :with_udebs,       [true, false], default: false
-property :timeout,          Integer, default: 3600
+property :mirror_name,       String, name_property: true
+property :component,         String, default: ''
+property :distribution,      String, default: ''
+property :uri,               String, default: ''
+property :keyid,             String, default: ''
+property :keyserver,         String, default: 'keys.gnupg.net'
+property :cookbook,          String, default: ''
+property :keyfile,           String, default: ''
+property :filter,            String, default: ''
+property :filter_with_deps,  [true, false], default: false
+property :architectures,     Array, default: []
+property :ignore_signatures, [true, false], default: false
+property :with_installer,    [true, false], default: false
+property :with_udebs,        [true, false], default: false
+property :timeout,           Integer, default: 3600
+
+load_current_value do |desired|
+  if shell_out("aptly mirror -raw list | grep ^#{desired.mirror_name}$",
+    user: node['aptly']['user'], environment: aptly_env).exitstatus == 0
+    # import the current config into the info hash
+    info = mirror_info(desired.mirror_name)
+    return if info.nil?
+    architectures info['architectures']
+    component info['components']
+    distribution info['distribution']
+    uri info['archive_root_url']
+    component info['components']
+    filter info['filter']
+    filter_with_deps info['filter_with_deps']
+    # ignoring these values because we cannot discover them or they're irrelevant
+    keyid desired.keyid
+    keyserver desired.keyserver
+    ignore_signatures desired.ignore_signatures
+  end
+end
 
 action :create do
   if !new_resource.cookbook.empty? && !new_resource.keyfile.empty?
@@ -47,12 +68,22 @@ action :create do
     not_if { ::File.exist?("#{node['aptly']['rootDir']}/.platform_keyring_imported") }
   end
 
-  execute "Creating mirror - #{new_resource.mirror_name}" do
-    command "aptly mirror create #{with_installer(new_resource.with_installer)} #{with_udebs(new_resource.with_udebs)} #{architectures(new_resource.architectures)} -filter '#{new_resource.filter}' #{filter_with_deps(new_resource.filter_with_deps)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
-    not_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
+  converge_if_changed do
+    # if the mirror already exists, edit the configuration, otherwise create it
+    execute "Editing mirror - #{new_resource.mirror_name}" do
+      command "aptly mirror edit#{with_installer(new_resource.with_installer)}#{with_udebs(new_resource.with_udebs)}#{architectures(new_resource.architectures)}#{filter(new_resource.filter)}#{filter_with_deps(new_resource.filter_with_deps)} #{new_resource.mirror_name}"
+      user node['aptly']['user']
+      group node['aptly']['group']
+      environment aptly_env
+      only_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
+    end
+    execute "Creating mirror - #{new_resource.mirror_name}" do
+      command "aptly mirror create#{with_installer(new_resource.with_installer)}#{with_udebs(new_resource.with_udebs)}#{architectures(new_resource.architectures)}#{filter(new_resource.filter)}#{filter_with_deps(new_resource.filter_with_deps)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
+      user node['aptly']['user']
+      group node['aptly']['group']
+      environment aptly_env
+      not_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
+    end
   end
 end
 

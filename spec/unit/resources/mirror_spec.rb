@@ -48,6 +48,15 @@ platforms.each do |platform, version|
     # end
     # end
 
+    stubs_for_provider('aptly_mirror[ubuntu-precise-main]') do |provider|
+      allow(provider).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$')
+    end
+
+    stubs_for_resource('aptly_mirror[ubuntu-precise-main]') do |resource|
+      allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$')
+      allow(resource).to receive_shell_out('aptly mirror show ubuntu-precise-main').and_return(mock_shell_out(0, mirror_show_after_create_stdout, ''))
+    end
+
     context 'Create action test' do
       before do
         stub_command('gpg --keyring trustedkeys.gpg --list-keys 437D05B5').and_return(false)
