@@ -38,6 +38,46 @@ module Aptly
       f == true ? ' -filter-with-deps' : ''
     end
 
+    def dep_follow_all_variants(d)
+      d == true ? ' -dep-follow-all-variants' : ''
+    end
+
+    def dep_follow_recommends(d)
+      d == true ? ' -dep-follow-recommends' : ''
+    end
+
+    def dep_follow_source(d)
+      d == true ? ' -dep-follow-source' : ''
+    end
+
+    def dep_follow_suggests(d)
+      d == true ? ' -dep-follow-suggests' : ''
+    end
+
+    def dep_verbose_resolve(d)
+      d == true ? ' -dep-verbose-resolve' : ''
+    end
+
+    def ignore_checksums(s)
+      s == true ? ' -ignore-checksums' : ''
+    end
+
+    def ignore_signatures(s)
+      s == true ? ' -ignore-signatures' : ''
+    end
+
+    def download_limit(l)
+      l > 0 ? " -download-limit #{l}" : ''
+    end
+
+    def max_tries(m)
+      m > 1 ? " -max-tries #{m}" : ''
+    end
+
+    def skip_existing_packages(s)
+      s == true ? ' -skip-existing-packages' : ''
+    end
+
     def with_installer(i)
       i == true ? ' -with-installer' : ''
     end

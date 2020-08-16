@@ -86,17 +86,17 @@ Manage local repositories
 
 #### Properties
 
-Name            | Types         | Description                                                       | Default         | Used with...
-----------------| ------------- | ----------------------------------------------------------------- | --------------- | ------------
-`repo_name`     | String        | Name of the repository                                            | <resource_name> | all
-`component`     | String        | Repository component                                              | ''              | :create
-`comment`       | String        | Repository's comment                                              | ''              | :create
-`distribution`  | String        | Name of distribution repository                                   | ''              | :create
-`remove_files`  | [true, false] | Remove files that have been imported successfully into repository | false           | :add
-`force_replace` | [true, false] | Remove/override existing package when exists                      | false           | :add
-`directory`     | String        | Look in this directory to add multiple packages                   | ''              | :add
-`file`          | String        | Specify a package file to add to the repository                   | ''              | :add
-`package_query` | String        | Package name to remove from repository                            | ''              | :remove
+| Name            | Types         | Description                                                       | Default         | Used with... |
+|-----------------|---------------|-------------------------------------------------------------------|-----------------|--------------|
+| `repo_name`     | String        | Name of the repository                                            | <resource_name> | all          |
+| `component`     | String        | Repository component                                              | ''              | :create      |
+| `comment`       | String        | Repository's comment                                              | ''              | :create      |
+| `distribution`  | String        | Name of distribution repository                                   | ''              | :create      |
+| `remove_files`  | [true, false] | Remove files that have been imported successfully into repository | false           | :add         |
+| `force_replace` | [true, false] | Remove/override existing package when exists                      | false           | :add         |
+| `directory`     | String        | Look in this directory to add multiple packages                   | ''              | :add         |
+| `file`          | String        | Specify a package file to add to the repository                   | ''              | :add         |
+| `package_query` | String        | Package name to remove from repository                            | ''              | :remove      |
 
 #### Examples
 
@@ -154,22 +154,32 @@ Manage external mirror
 
 #### Properties
 
-Name               | Types         | Description                                  | Default          | Used with...
------------------- | ------------- | -------------------------------------------- | ---------------- | ------------
-`mirror_name`      | String        | Mirror name                                  | <resource_name>  | all
-`component`        | String        | Repository component                         | ''               | :create
-`distribution`     | String        | Name of distribution repository              | ''               | :create
-`uri`              | String        | Uri of remote repository                     | ''               | :create
-`keyid`            | String        | Remote repository key ID                     | ''               | :create
-`keyserver`        | String        | Keys server                                  | 'keys.gnupg.net' | :create
-`cookbook`         | String        | Cookbook name where you've store the keyfile | ''               | :create
-`keyfile`          | String        | Key file name                                | ''               | :create
-`filter`           | String        | Mirror filter                                | ''               | :create
-`filter_with_deps` | [true, false] | Include dependencies of filtered packages    | false            | :create
-`architectures`    | Array         | List of architectures.                       | []               | :create
-`with_installer`   | [true, false] | Whether to download installer files          | false            | :create
-`with_udebs`       | [true, false] | Whether or not to download .udeb packages    | false            | :create
-`timeout`          | Integer       | Timeout in seconds                           | 3600             | :update
+| Name                      | Types         | Description                                                                            | Default          | Used with...     |
+|---------------------------|---------------|----------------------------------------------------------------------------------------|------------------|------------------|
+| `mirror_name`             | String        | Mirror name                                                                            | <resource_name>  | all              |
+| `component`               | String        | Repository component                                                                   | ''               | :create          |
+| `distribution`            | String        | Name of distribution repository                                                        | ''               | :create          |
+| `uri`                     | String        | Uri of remote repository                                                               | ''               | :create          |
+| `keyid`                   | String        | Remote repository key ID                                                               | ''               | :create          |
+| `keyserver`               | String        | Keys server                                                                            | 'keys.gnupg.net' | :create          |
+| `cookbook`                | String        | Cookbook name where you've store the keyfile                                           | ''               | :create          |
+| `keyfile`                 | String        | Key file name                                                                          | ''               | :create          |
+| `filter`                  | String        | Mirror filter                                                                          | ''               | :create          |
+| `filter_with_deps`        | [true, false] | Include dependencies of filtered packages                                              | false            | :create          |
+| `dep_follow_all_variants` | [true, false] | When processing dependencies, follow _a_ & _b_ if dependency is '`a|b`'                | false            | :create, :update |
+| `dep_follow_recommends`   | [true, false] | When processing dependencies, follow _Recommends_                                      | false            | :create, :update |
+| `dep_follow_source`       | [true, false] | When processing dependencies, follow from binary to Source packages                    | false            | :create, :update |
+| `dep_follow_suggests`     | [true, false] | When processing dependencies, follow _Suggests_                                        | false            | :create, :update |
+| `dep_verbose_resolve`     | [true, false] | When processing dependencies, print detailed logs                                      | false            | :create, :update |
+| `ignore_checksums`        | [true, false] | Ignore checksum mismatches while downloading package files and metadata                | false            | :update          |
+| `ignore_signatures`       | [true, false] | Disable verification of Release file signatures (**WARNING**: Not Recommended)         | false            | :create, :update |
+| `architectures`           | Array         | List of architectures                                                                  | []               | :create          |
+| `with_installer`          | [true, false] | Whether to download installer files                                                    | false            | :create          |
+| `with_udebs`              | [true, false] | Whether or not to download .udeb packages                                              | false            | :create          |
+| `download_limit`          | Integer       | Limit download speed (kbytes/sec)                                                      | 0                | :update          |
+| `max_tries`               | Integer       | Max download tries till process fails with download error                              | 1                | :update          |
+| `skip_existing_packages`  | [true, false] | Do not check file existence for packages listed in the internal database of the mirror | false            | :update          |
+| `timeout`                 | Integer       | Timeout in seconds                                                                     | 3600             | :update          |
 
 Note: The "architectures" property will use the global configuration (settable via node['aptly']['architectures']) if you do not provide it for a particular repository here. If you do not provide either of them, it will default to all available architectures for that particular mirror. Note also that you need to `publish` with the architectures as well!
 
@@ -211,19 +221,19 @@ Manage aptly snapshots
 
 #### Properties
 
-Name            | Types         | Description                                              | Default         | Used with...
---------------- | ------------- | -------------------------------------------------------- | --------------- | --------------
-`snapshot_name` | String        | Snapshot name                                            | <resource_name> | all
-`from`          | String        | Name of mirror or repo to snapshot                       | ''              | :create
-`type`          | String        | Type of snapshot source (repo, mirror or snapshot)       | ''              | :create
-`empty`         | [true, false] | Create an empty snapshot                                 | false           | :create
-`source`        | String        | Snapshot name where packages would be searched           | ''              | :pull
-`destination`   | String        | Name of the snapshot that would be created               | ''              | :pull
-`package_query` | String        | Query/package name to be pulled from                     | ''              | :pull
-`no_deps`       | [true, false] | Don’t process dependencies                               | false           | :pull
-`no_remove`     | [true, false] | Don’t remove other package versions when pulling package | false           | :pull, :merge
-`merge_sources` | Array         | Array of snapshot names to merge                         | ''              | :merge
-`latest`        | [true, false] | Use only the latest version of each package              | false           | :merge
+| Name            | Types         | Description                                              | Default         | Used with...  |
+|-----------------|---------------|----------------------------------------------------------|-----------------|---------------|
+| `snapshot_name` | String        | Snapshot name                                            | <resource_name> | all           |
+| `from`          | String        | Name of mirror or repo to snapshot                       | ''              | :create       |
+| `type`          | String        | Type of snapshot source (repo, mirror or snapshot)       | ''              | :create       |
+| `empty`         | [true, false] | Create an empty snapshot                                 | false           | :create       |
+| `source`        | String        | Snapshot name where packages would be searched           | ''              | :pull         |
+| `destination`   | String        | Name of the snapshot that would be created               | ''              | :pull         |
+| `package_query` | String        | Query/package name to be pulled from                     | ''              | :pull         |
+| `no_deps`       | [true, false] | Don’t process dependencies                               | false           | :pull         |
+| `no_remove`     | [true, false] | Don’t remove other package versions when pulling package | false           | :pull, :merge |
+| `merge_sources` | Array         | Array of snapshot names to merge                         | ''              | :merge        |
+| `latest`        | [true, false] | Use only the latest version of each package              | false           | :merge        |
 
 #### Examples
 
@@ -274,16 +284,16 @@ Publish, remove or update a repo or a snapshot
 
 #### Properties
 
-Name            | Types   | Description                                     | Default          | Used with...
---------------- | ------- | ----------------------------------------------- | ---------------- | ----------------
-`publish_name`  | String  | Publication name                                | <resource_name>  | all
-`type`          | String  | Publish type (snapshot or repo)                 | ''               | :create
-`component`     | String  | Component name to publish                       | []               | :create
-`distribution`  | String  | Distribution name to publish                    | ''               | :create
-`architectures` | Array   | Only mentioned architectures would be published | []               | :create
-`endpoint`      | String  | An optional endpoint reference                  | ''               | :create, :update
-`prefix`        | String  | An optional prefix for publishing               | ''               | :create, :update
-`timeout`       | Integer | Timeout in seconds                              | 3600             | all
+| Name            | Types   | Description                                     | Default         | Used with...     |
+|-----------------|---------|-------------------------------------------------|-----------------|------------------|
+| `publish_name`  | String  | Publication name                                | <resource_name> | all              |
+| `type`          | String  | Publish type (snapshot or repo)                 | ''              | :create          |
+| `component`     | String  | Component name to publish                       | []              | :create          |
+| `distribution`  | String  | Distribution name to publish                    | ''              | :create          |
+| `architectures` | Array   | Only mentioned architectures would be published | []              | :create          |
+| `endpoint`      | String  | An optional endpoint reference                  | ''              | :create, :update |
+| `prefix`        | String  | An optional prefix for publishing               | ''              | :create, :update |
+| `timeout`       | Integer | Timeout in seconds                              | 3600            | all              |
 
 Note: The "architectures" property will use the global configuration (settable via node['aptly']['architectures']) if you do not provide it for a particular repository here.
 
@@ -330,12 +340,12 @@ Serve an HTTP Service
 
 #### Properties
 
-Name     | Types             | Description                              | Default             | Used with...
--------- | ----------------- | ---------------------------------------- | ------------------- | ----------------
-`listen` | String            | Specify IP address about HTTP listening  | '' (all interfaces) | :run
-`port`   | [Integer, String] | Publish type (snapshot or repo)          | 8080                | :run
-`user`   | String            | Run command as user                      | 'aptly'             | :run
-`group`  | String            | Run command as group                     | 'aptly'             | :run
+| Name     | Types             | Description                             | Default             | Used with... |
+|----------|-------------------|-----------------------------------------|---------------------|--------------|
+| `listen` | String            | Specify IP address about HTTP listening | '' (all interfaces) | :run         |
+| `port`   | [Integer, String] | Publish type (snapshot or repo)         | 8080                | :run         |
+| `user`   | String            | Run command as user                     | 'aptly'             | :run         |
+| `group`  | String            | Run command as group                    | 'aptly'             | :run         |
 
 #### Examples
 
@@ -355,13 +365,13 @@ Serve an API Service
 
 #### Properties
 
-Name      | Types             | Description                              | Default             | Used with...
---------- | ----------------- | ---------------------------------------- | ------------------- | ----------------
-`listen`  | String            | Specify IP address about HTTP listening  | '' (all interfaces) | :run
-`port`    | [Integer, String] | Publish type (snapshot or repo)          | 8080                | :run
-`user`    | String            | Run command as user                      | 'aptly'             | :run
-`group`   | String            | Run command as group                     | 'aptly'             | :run
-`no_lock` | [true, false]     | Don’t lock the database                  | false               | :run
+| Name      | Types             | Description                             | Default             | Used with... |
+|-----------|-------------------|-----------------------------------------|---------------------|--------------|
+| `listen`  | String            | Specify IP address about HTTP listening | '' (all interfaces) | :run         |
+| `port`    | [Integer, String] | Publish type (snapshot or repo)         | 8080                | :run         |
+| `user`    | String            | Run command as user                     | 'aptly'             | :run         |
+| `group`   | String            | Run command as group                    | 'aptly'             | :run         |
+| `no_lock` | [true, false]     | Don’t lock the database                 | false               | :run         |
 
 #### Examples
 
