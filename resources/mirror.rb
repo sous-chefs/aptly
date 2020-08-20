@@ -31,7 +31,7 @@ property :dep_follow_recommends,   [true, false], default: false
 property :dep_follow_source,       [true, false], default: false
 property :dep_follow_suggests,     [true, false], default: false
 property :dep_verbose_resolve,     [true, false], default: false
-property :architectures,           Array, default: []
+property :architectures,           Array, default: lazy { node['aptly']['architectures'] }
 property :ignore_checksums,        [true, false], default: false
 property :ignore_signatures,       [true, false], default: false
 property :with_installer,          [true, false], default: false
@@ -47,7 +47,9 @@ load_current_value do |desired|
     # import the current config into the info hash
     info = mirror_info(desired.mirror_name)
     return if info.nil?
-    architectures info['architectures']
+    # architectures defaults to the set in the Release file when empty, so if
+    # the provided value is empty, then disregard loading the current value
+    architectures desired.architectures.empty? ? desired.architectures : info['architectures']
     component info['components']
     distribution info['distribution']
     uri info['archive_root_url']
