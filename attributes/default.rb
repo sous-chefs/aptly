@@ -43,7 +43,7 @@ default['aptly']['FileSystemPublishEndpoints'] = {}
 default['aptly']['S3PublishEndpoints'] = {}
 default['aptly']['SwiftPublishEndpoints'] = {}
 
-default['aptly']['gpg']['key-tpye'] = 'RSA'
+default['aptly']['gpg']['key-type'] = 'RSA'
 default['aptly']['gpg']['key-length'] = 4096
 default['aptly']['gpg']['subkey-type'] = 'RSA'
 default['aptly']['gpg']['subkey-length'] = 4096
