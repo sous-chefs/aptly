@@ -11,14 +11,6 @@ end
 
 # at_exit { ChefSpec::Coverage.report! }
 
-def mock_shell_out(exitstatus, stdout, stderr)
-  shell_out = double('mixlib_shell_out')
-  allow(shell_out).to receive(:exitstatus).and_return(exitstatus)
-  allow(shell_out).to receive(:stdout).and_return(stdout)
-  allow(shell_out).to receive(:stderr).and_return(stderr)
-  shell_out
-end
-
 def mirror_show_after_create_stdout
   <<~EOF
 Name: ubuntu-precise-main

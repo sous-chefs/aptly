@@ -90,9 +90,13 @@ module Aptly
       arr.empty? ? '' : " -architectures #{arr.join(',')}"
     end
 
-    def mirror_info(m)
-      return unless shell_out("aptly mirror -raw list | grep ^#{m}$",
+    def mirror_exists?(m)
+      shell_out("aptly mirror -raw list | grep ^#{m}$",
         user: node['aptly']['user'], environment: aptly_env).exitstatus == 0
+    end
+
+    def mirror_info(m)
+      return unless mirror_exists?(m)
       cmd = shell_out("aptly mirror show #{m}", user: node['aptly']['user'], environment: aptly_env)
       # the output of aptly mirror show is broken into sections delimited
       # by a blank line. We're only interested in the first section
@@ -119,5 +123,6 @@ module Aptly
   end
 end
 
+Chef::Provider.include ::Aptly::Helpers
 Chef::Recipe.include ::Aptly::Helpers
 Chef::Resource.include ::Aptly::Helpers

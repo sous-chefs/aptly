@@ -42,8 +42,7 @@ property :skip_existing_packages,  [true, false], default: false
 property :timeout,                 Integer, default: 3600
 
 load_current_value do |desired|
-  if shell_out("aptly mirror -raw list | grep ^#{desired.mirror_name}$",
-    user: node['aptly']['user'], environment: aptly_env).exitstatus == 0
+  if mirror_exists?(desired.mirror_name)
     # import the current config into the info hash
     info = mirror_info(desired.mirror_name)
     return if info.nil?
@@ -87,19 +86,17 @@ action :create do
 
   converge_if_changed do
     # if the mirror already exists, edit the configuration, otherwise create it
-    execute "Editing mirror - #{new_resource.mirror_name}" do
-      command "aptly mirror edit#{with_installer(new_resource.with_installer)}#{with_udebs(new_resource.with_udebs)}#{architectures(new_resource.architectures)}#{filter(new_resource.filter)}#{filter_with_deps(new_resource.filter_with_deps)}#{dep_follow_all_variants(new_resource.dep_follow_all_variants)}#{dep_follow_recommends(new_resource.dep_follow_recommends)}#{dep_follow_source(new_resource.dep_follow_source)}#{dep_follow_suggests(new_resource.dep_follow_suggests)}#{dep_verbose_resolve(new_resource.dep_verbose_resolve)} #{new_resource.mirror_name}"
-      user node['aptly']['user']
-      group node['aptly']['group']
-      environment aptly_env
-      only_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
-    end
+    mirror_command = if mirror_exists?(new_resource.mirror_name)
+                       "aptly mirror edit#{with_installer(new_resource.with_installer)}#{with_udebs(new_resource.with_udebs)}#{architectures(new_resource.architectures)}#{filter(new_resource.filter)}#{filter_with_deps(new_resource.filter_with_deps)}#{dep_follow_all_variants(new_resource.dep_follow_all_variants)}#{dep_follow_recommends(new_resource.dep_follow_recommends)}#{dep_follow_source(new_resource.dep_follow_source)}#{dep_follow_suggests(new_resource.dep_follow_suggests)}#{dep_verbose_resolve(new_resource.dep_verbose_resolve)}#{ignore_signatures(new_resource.ignore_signatures)} #{new_resource.mirror_name}"
+                     else
+                       "aptly mirror create#{with_installer(new_resource.with_installer)}#{with_udebs(new_resource.with_udebs)}#{architectures(new_resource.architectures)}#{filter(new_resource.filter)}#{filter_with_deps(new_resource.filter_with_deps)}#{dep_follow_all_variants(new_resource.dep_follow_all_variants)}#{dep_follow_recommends(new_resource.dep_follow_recommends)}#{dep_follow_source(new_resource.dep_follow_source)}#{dep_follow_suggests(new_resource.dep_follow_suggests)}#{dep_verbose_resolve(new_resource.dep_verbose_resolve)}#{ignore_signatures(new_resource.ignore_signatures)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
+                     end
+
     execute "Creating mirror - #{new_resource.mirror_name}" do
-      command "aptly mirror create#{with_installer(new_resource.with_installer)}#{with_udebs(new_resource.with_udebs)}#{architectures(new_resource.architectures)}#{filter(new_resource.filter)}#{filter_with_deps(new_resource.filter_with_deps)}#{dep_follow_all_variants(new_resource.dep_follow_all_variants)}#{dep_follow_recommends(new_resource.dep_follow_recommends)}#{dep_follow_source(new_resource.dep_follow_source)}#{dep_follow_suggests(new_resource.dep_follow_suggests)}#{dep_verbose_resolve(new_resource.dep_verbose_resolve)}#{ignore_signatures(new_resource.ignore_signatures)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
+      command mirror_command
       user node['aptly']['user']
       group node['aptly']['group']
       environment aptly_env
-      not_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
     end
   end
 end
@@ -111,7 +108,7 @@ action :update do
     group node['aptly']['group']
     environment aptly_env
     timeout new_resource.timeout
-    only_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
+    only_if { mirror_exists?(new_resource.mirror_name) }
   end
 end
 
@@ -121,7 +118,7 @@ action :drop do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
+    only_if { mirror_exists?(new_resource.mirror_name) }
   end
 end
 
