@@ -97,7 +97,7 @@ RSpec.describe Aptly::Helpers do
         ignore_checksums: false,
         ignore_signatures: false,
         with_installer: false,
-        with_udebs: false,
+        with_udebs: false
       )
       @new_resource_existing = double(
         mirror_name: 'ubuntu-precise-main',
@@ -115,7 +115,7 @@ RSpec.describe Aptly::Helpers do
         ignore_checksums: false,
         ignore_signatures: false,
         with_installer: false,
-        with_udebs: false,
+        with_udebs: false
       )
       allow(subject).to receive(:[]).with('aptly').and_return(aptly)
       # existing mirror config
