@@ -85,15 +85,8 @@ action :create do
   end
 
   converge_if_changed do
-    # if the mirror already exists, edit the configuration, otherwise create it
-    mirror_command = if mirror_exists?(new_resource.mirror_name)
-                       "aptly mirror edit#{with_installer(new_resource.with_installer)}#{with_udebs(new_resource.with_udebs)}#{architectures(new_resource.architectures)}#{filter(new_resource.filter)}#{filter_with_deps(new_resource.filter_with_deps)}#{dep_follow_all_variants(new_resource.dep_follow_all_variants)}#{dep_follow_recommends(new_resource.dep_follow_recommends)}#{dep_follow_source(new_resource.dep_follow_source)}#{dep_follow_suggests(new_resource.dep_follow_suggests)}#{dep_verbose_resolve(new_resource.dep_verbose_resolve)}#{ignore_signatures(new_resource.ignore_signatures)} #{new_resource.mirror_name}"
-                     else
-                       "aptly mirror create#{with_installer(new_resource.with_installer)}#{with_udebs(new_resource.with_udebs)}#{architectures(new_resource.architectures)}#{filter(new_resource.filter)}#{filter_with_deps(new_resource.filter_with_deps)}#{dep_follow_all_variants(new_resource.dep_follow_all_variants)}#{dep_follow_recommends(new_resource.dep_follow_recommends)}#{dep_follow_source(new_resource.dep_follow_source)}#{dep_follow_suggests(new_resource.dep_follow_suggests)}#{dep_verbose_resolve(new_resource.dep_verbose_resolve)}#{ignore_signatures(new_resource.ignore_signatures)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
-                     end
-
     execute "Creating mirror - #{new_resource.mirror_name}" do
-      command mirror_command
+      command mirror_command(new_resource)
       user node['aptly']['user']
       group node['aptly']['group']
       environment aptly_env

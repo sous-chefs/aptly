@@ -79,6 +79,76 @@ RSpec.describe Aptly::Helpers do
     end
   end
 
+  describe '#mirror_command(resource)' do
+    before do
+      @new_resource_missing = double(
+        mirror_name: 'missing-repo-mirror',
+        component: 'mirror',
+        distribution: 'repo',
+        uri: 'http://repo.example.com/missing',
+        filter: '',
+        filter_with_deps: false,
+        dep_follow_all_variants: false,
+        dep_follow_recommends: false,
+        dep_follow_source: false,
+        dep_follow_suggests: false,
+        dep_verbose_resolve: false,
+        architectures: ['amd64'],
+        ignore_checksums: false,
+        ignore_signatures: false,
+        with_installer: false,
+        with_udebs: false,
+      )
+      @new_resource_existing = double(
+        mirror_name: 'ubuntu-precise-main',
+        component: 'main',
+        distribution: 'precise',
+        uri: 'http://ubuntu.osuosl.org/ubuntu/',
+        filter: '',
+        filter_with_deps: false,
+        dep_follow_all_variants: false,
+        dep_follow_recommends: false,
+        dep_follow_source: false,
+        dep_follow_suggests: false,
+        dep_verbose_resolve: false,
+        architectures: ['amd64'],
+        ignore_checksums: false,
+        ignore_signatures: false,
+        with_installer: false,
+        with_udebs: false,
+      )
+      allow(subject).to receive(:[]).with('aptly').and_return(aptly)
+      # existing mirror config
+      allow(subject).to receive(:mirror_exists?).with('ubuntu-precise-main').and_call_original
+      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
+      # missing mirror config
+      allow(subject).to receive(:mirror_exists?).with('missing-repo-mirror').and_call_original
+      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^missing-repo-mirror$', exitstatus: 1)
+    end
+
+    let(:aptly) { { 'rootDir' => '/opt/aptly', 'user' => 'aptly' } }
+
+    context 'creates missing mirror' do
+      let(:command) { %(aptly mirror create -architectures amd64 missing-repo-mirror http://repo.example.com/missing repo mirror) }
+
+      it 'missing-repo-mirror' do
+        cmd = subject.mirror_command(@new_resource_missing)
+        expect(cmd).to eq command
+        expect(cmd).not_to match /\sedit\s/
+      end
+    end
+
+    context 'edits existening mirror' do
+      let(:command) { %(aptly mirror edit -architectures amd64 ubuntu-precise-main) }
+
+      it 'ubuntu-precise-main' do
+        cmd = subject.mirror_command(@new_resource_existing)
+        expect(cmd).to eq command
+        expect(cmd).not_to match /\screate\s/
+      end
+    end
+  end
+
   describe '#aptly_env' do
     before do
       allow(subject).to receive(:[]).with('aptly').and_return(aptly)
