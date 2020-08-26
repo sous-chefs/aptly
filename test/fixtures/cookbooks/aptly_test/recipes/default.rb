@@ -37,10 +37,29 @@ aptly_mirror 'nginx-bionic-main' do
   keyid '7BD9BF62'
   keyserver 'keyserver.ubuntu.com'
   uri 'http://nginx.org/packages/ubuntu/'
+  filter 'nginx (>= 1.16.1)'
 end
 
 aptly_mirror 'nginx-bionic-main' do
   action :update
+end
+
+aptly_mirror 'nginx-bionic-main-to_edit' do
+  distribution 'bionic'
+  component 'nginx'
+  keyid '7BD9BF62'
+  keyserver 'keyserver.ubuntu.com'
+  uri 'http://nginx.org/packages/ubuntu/'
+end
+
+aptly_mirror 'nginx-bionic-main-to_edit2' do
+  mirror_name 'nginx-bionic-main-to_edit'
+  distribution 'bionic'
+  component 'nginx'
+  keyid '7BD9BF62'
+  keyserver 'keyserver.ubuntu.com'
+  uri 'http://nginx.org/packages/ubuntu/'
+  filter 'nginx (>= 1.16.1)'
 end
 
 aptly_mirror 'nginx-bionic-main-to_delete' do

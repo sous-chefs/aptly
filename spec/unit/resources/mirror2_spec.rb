@@ -41,10 +41,21 @@ platforms.each do |platform, version|
     # end
     # end
 
+    stubs_for_provider('aptly_mirror[ubuntu-precise-main]') do |provider|
+      allow(provider).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', timeout: 3600.0, environment: { 'HOME' => '/opt/aptly', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)
+    end
+
+    stubs_for_resource('aptly_mirror[ubuntu-precise-main]') do |resource|
+      allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)
+      allow(resource).to receive_shell_out('aptly mirror show ubuntu-precise-main', exitstatus: 1)
+    end
+
+    stubs_for_resource() do |resource|
+      allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'USER' => 'aptly' } }, stdout: 'ubuntu-precise-main')
+      allow(resource).to receive_shell_out('aptly mirror show ubuntu-precise-main', stdout: mirror_show_after_create_stdout)
+    end
+
     context 'Create action test with keyfile' do
-      before do
-        stub_command('aptly mirror -raw list | grep ^ubuntu-precise-main$').and_return(false)
-      end
       it 'Run the custom resources' do
         expect(chef_run).to create_aptly_mirror('ubuntu-precise-main').with(component: 'main', distribution: 'precise', cookbook: 'aptly_spec', keyfile: 'gpg_keyfile', filter: 'my_awesome_package')
       end

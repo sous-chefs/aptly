@@ -16,20 +16,57 @@
 # limitations under the License.
 #
 
-property :mirror_name,      String, name_property: true
-property :component,        String, default: ''
-property :distribution,     String, default: ''
-property :uri,              String, default: ''
-property :keyid,            String, default: ''
-property :keyserver,        String, default: 'keys.gnupg.net'
-property :cookbook,         String, default: ''
-property :keyfile,          String, default: ''
-property :filter,           String, default: ''
-property :filter_with_deps, [true, false], default: false
-property :architectures,    Array, default: []
-property :with_installer,   [true, false], default: false
-property :with_udebs,       [true, false], default: false
-property :timeout,          Integer, default: 3600
+property :mirror_name,             String, name_property: true
+property :component,               String, default: ''
+property :distribution,            String, default: ''
+property :uri,                     String, default: ''
+property :keyid,                   String, default: ''
+property :keyserver,               String, default: 'keys.gnupg.net'
+property :cookbook,                String, default: ''
+property :keyfile,                 String, default: ''
+property :filter,                  String, default: ''
+property :filter_with_deps,        [true, false], default: false
+property :dep_follow_all_variants, [true, false], default: false
+property :dep_follow_recommends,   [true, false], default: false
+property :dep_follow_source,       [true, false], default: false
+property :dep_follow_suggests,     [true, false], default: false
+property :dep_verbose_resolve,     [true, false], default: false
+property :architectures,           Array, default: lazy { node['aptly']['architectures'] }
+property :ignore_checksums,        [true, false], default: false
+property :ignore_signatures,       [true, false], default: false
+property :with_installer,          [true, false], default: false
+property :with_udebs,              [true, false], default: false
+property :download_limit,          Integer, default: 0
+property :max_tries,               Integer, default: 1
+property :skip_existing_packages,  [true, false], default: false
+property :timeout,                 Integer, default: 3600
+
+load_current_value do |desired|
+  if mirror_exists?(desired.mirror_name)
+    # import the current config into the info hash
+    info = mirror_info(desired.mirror_name)
+    return if info.nil?
+    # architectures defaults to the set in the Release file when empty, so if
+    # the provided value is empty, then disregard loading the current value
+    architectures desired.architectures.empty? ? desired.architectures : info['architectures']
+    component info['components']
+    distribution info['distribution']
+    uri info['archive_root_url']
+    component info['components']
+    filter info['filter']
+    filter_with_deps info['filter_with_deps']
+    # ignoring these values because we cannot discover them or they're irrelevant
+    keyid desired.keyid
+    keyserver desired.keyserver
+    ignore_checksums desired.ignore_checksums
+    ignore_signatures desired.ignore_signatures
+    dep_follow_all_variants desired.dep_follow_all_variants
+    dep_follow_recommends desired.dep_follow_recommends
+    dep_follow_source desired.dep_follow_source
+    dep_follow_suggests desired.dep_follow_suggests
+    dep_verbose_resolve desired.dep_verbose_resolve
+  end
+end
 
 action :create do
   if !new_resource.cookbook.empty? && !new_resource.keyfile.empty?
@@ -47,23 +84,24 @@ action :create do
     not_if { ::File.exist?("#{node['aptly']['rootDir']}/.platform_keyring_imported") }
   end
 
-  execute "Creating mirror - #{new_resource.mirror_name}" do
-    command "aptly mirror create #{with_installer(new_resource.with_installer)} #{with_udebs(new_resource.with_udebs)} #{architectures(new_resource.architectures)} -filter '#{new_resource.filter}' #{filter_with_deps(new_resource.filter_with_deps)} #{new_resource.mirror_name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
-    not_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
+  converge_if_changed do
+    execute "Creating mirror - #{new_resource.mirror_name}" do
+      command mirror_command(new_resource)
+      user node['aptly']['user']
+      group node['aptly']['group']
+      environment aptly_env
+    end
   end
 end
 
 action :update do
   execute "Updating mirror - #{new_resource.mirror_name}" do
-    command "aptly mirror update #{new_resource.mirror_name}"
+    command "aptly mirror update#{dep_follow_all_variants(new_resource.dep_follow_all_variants)}#{dep_follow_recommends(new_resource.dep_follow_recommends)}#{dep_follow_source(new_resource.dep_follow_source)}#{dep_follow_suggests(new_resource.dep_follow_suggests)}#{dep_verbose_resolve(new_resource.dep_verbose_resolve)}#{ignore_checksums(new_resource.ignore_checksums)}#{ignore_signatures(new_resource.ignore_signatures)}#{download_limit(new_resource.download_limit)}#{max_tries(new_resource.max_tries)}#{skip_existing_packages(new_resource.skip_existing_packages)} #{new_resource.mirror_name}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
     timeout new_resource.timeout
-    only_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
+    only_if { mirror_exists?(new_resource.mirror_name) }
   end
 end
 
@@ -73,7 +111,7 @@ action :drop do
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
-    only_if %(aptly mirror -raw list | grep ^#{new_resource.mirror_name}$)
+    only_if { mirror_exists?(new_resource.mirror_name) }
   end
 end
 

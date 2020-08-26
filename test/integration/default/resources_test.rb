@@ -24,6 +24,17 @@ control 'Resources Tests' do
     its('exit_status') { should eq 0 }
   end
 
+  describe command('aptly mirror -raw list') do
+    its('stdout') { should match /nginx-bionic-main-to_edit/ }
+    its('exit_status') { should eq 0 }
+  end
+
+  describe command('aptly mirror show nginx-bionic-main-to_edit') do
+    its('stdout') { should match /Name: nginx-bionic-main-to_edit/ }
+    its('stdout') { should match /Filter: nginx \(\>= 1.16.1\)/ }
+    its('exit_status') { should eq 0 }
+  end
+
   describe directory('/opt/aptly/pkgs') do
     it { should exist }
     its('owner') { should eq 'aptly' }
