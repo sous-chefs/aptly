@@ -95,9 +95,13 @@ module Aptly
         user: node['aptly']['user'], environment: aptly_env).exitstatus == 0
     end
 
+    def mirror_show(m)
+      shell_out("aptly mirror show #{m}", user: node['aptly']['user'], environment: aptly_env)
+    end
+
     def mirror_info(m)
       return unless mirror_exists?(m)
-      cmd = shell_out("aptly mirror show #{m}", user: node['aptly']['user'], environment: aptly_env)
+      cmd = mirror_show(m)
       # the output of aptly mirror show is broken into sections delimited
       # by a blank line. We're only interested in the first section
       output = cmd.stdout.split(/\n\n/).first

@@ -45,6 +45,39 @@ RSpec.describe Aptly::Helpers do
       allow(subject).to receive(:[]).with('aptly').and_return(aptly)
       # existing mirror config
       allow(subject).to receive(:mirror_exists?).with('ubuntu-precise-main').and_call_original
+      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
+      allow(subject).to receive_shell_out('aptly mirror show ubuntu-precise-main', stdout: mirror_show_after_create_stdout)
+      # missing mirror config
+      allow(subject).to receive(:mirror_exists?).with('missing-repo-mirror').and_call_original
+      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^missing-repo-mirror$', exitstatus: 1)
+      allow(subject).to receive_shell_out('aptly mirror show missing-repo-mirror', exitstatus: 1)
+    end
+
+    let(:aptly) { { 'rootDir' => '/opt/aptly', 'user' => 'aptly' } }
+
+    context 'show mirror info' do
+      let(:mirror) { 'ubuntu-precise-main' }
+
+      it 'ubuntu-precise-main' do
+        expect(subject.mirror_show(mirror).stdout).to match /Name:\subuntu-precise-main/
+        expect(subject.mirror_show(mirror).stdout).not_to eq ''
+      end
+    end
+
+    context 'return error on non-existent mirror' do
+      let(:mirror) { 'missing-repo-mirror' }
+
+      it 'missing-repo-mirror' do
+        expect(subject.mirror_show(mirror).exitstatus).not_to eq 0
+      end
+    end
+  end
+
+  describe '#mirror_info(mirror)' do
+    before do
+      allow(subject).to receive(:[]).with('aptly').and_return(aptly)
+      # existing mirror config
+      allow(subject).to receive(:mirror_exists?).with('ubuntu-precise-main').and_call_original
       allow(subject).to receive(:mirror_info).with('ubuntu-precise-main').and_call_original
       allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
       allow(subject).to receive_shell_out('aptly mirror show ubuntu-precise-main', stdout: mirror_show_after_create_stdout)
