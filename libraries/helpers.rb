@@ -135,6 +135,5 @@ module Aptly
   end
 end
 
-Chef::Provider.include ::Aptly::Helpers
-Chef::Recipe.include ::Aptly::Helpers
+Chef::DSL::Recipe.include ::Aptly::Helpers
 Chef::Resource.include ::Aptly::Helpers
