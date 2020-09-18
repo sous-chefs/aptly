@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+- resolved cookstyle error: spec/libraries/helpers_spec.rb:2:18 convention: `Style/RedundantFileExtensionInRequire`
+- resolved cookstyle error: test/integration/default/default_test.rb:1:1 convention: `Style/Encoding`
+- resolved cookstyle error: test/integration/default/resources_test.rb:1:1 convention: `Style/Encoding`
+
 ## 2.3.1 (2020-09-16)
 
 ### Fixed

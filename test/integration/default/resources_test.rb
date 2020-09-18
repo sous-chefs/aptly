@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 control 'Resources Tests' do
   impact 1.0
   desc 'Ensure that resources are working well'

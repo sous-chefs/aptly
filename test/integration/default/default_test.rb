@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 control 'Default actions' do
   impact 1.0
   desc 'Ensure that the repository, packages and necessary default config are executed'
