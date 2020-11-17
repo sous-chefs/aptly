@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- resolved cookstyle error: test/fixtures/cookbooks/aptly_test/recipes/default.rb:95:3 convention: `Style/CommentAnnotation`
 - resolved cookstyle error: spec/libraries/helpers_spec.rb:2:18 convention: `Style/RedundantFileExtensionInRequire`
 - resolved cookstyle error: test/integration/default/default_test.rb:1:1 convention: `Style/Encoding`
 - resolved cookstyle error: test/integration/default/resources_test.rb:1:1 convention: `Style/Encoding`
