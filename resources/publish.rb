@@ -24,13 +24,14 @@ property :architectures, Array, default: []
 property :prefix,        String, default: ''
 property :distribution,  String, default: ''
 property :timeout,       Integer, default: 3600
+property :gpg_passphrase, String, default: lazy { node['aptly']['gpg']['passphrase'] }
 
 action :create do
   components = new_resource.component.join(',')
   endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
 
   execute "Publish #{new_resource.type} - #{new_resource.publish_name}" do
-    command "aptly publish #{new_resource.type} -batch -passphrase='#{node['aptly']['gpg']['passphrase']}' -component='#{components}' #{architectures(new_resource.architectures)} -distribution='#{new_resource.distribution}' -- #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
+    command "aptly publish #{new_resource.type} -batch -passphrase='#{new_resource.gpg_passphrase}' -component='#{components}' #{architectures(new_resource.architectures)} -distribution='#{new_resource.distribution}' -- #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
@@ -42,8 +43,9 @@ end
 
 action :update do
   endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
+
   execute "Updating distribution - #{new_resource.prefix} #{new_resource.publish_name}" do
-    command "aptly publish update -batch -passphrase='#{node['aptly']['gpg']['passphrase']}' #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
+    command "aptly publish update -batch -passphrase='#{new_resource.gpg_passphrase}' #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
