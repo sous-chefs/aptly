@@ -34,6 +34,7 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 - `default['aptly']['user'] = 'aptly'`
 - `default['aptly']['group'] = 'aptly'`
+- `default['aptly']['tmpDir'] = '/tmp'`
 - `default['aptly']['rootDir'] = '/opt/aptly'`
 - `default['aptly']['downloadConcurrency'] = 4`
 - `default['aptly']['downloadSpeedLimit'] = 0`
