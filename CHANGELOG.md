@@ -2,8 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## Unreleased
+
+- [CI] Update ActionsHub actions to point at main
+- [CI] Update GitHub Actions checkout to v2
+- Move resource documentation into the documentation folder
 
 ## 2.3.2 (2020-11-16)
 
@@ -28,8 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.2.0 (2020-08-20)
 
-### Fixed
-
 - Changed the `node['aptly']['gpg']['key-tpye']` attribute to `node['aptly']['gpg']['key-type']`. **WARNING**: This change may break existing cookbooks! Please adjust as needed.
 
 ## 2.1.2 (2020-06-18)
@@ -38,89 +39,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.1.1 2020-05-05
 
-### Fixed
-
 - resolved cookstyle error: libraries/helpers.rb:51:14 warning: `Lint/SendWithMixinArgument`
 - resolved cookstyle error: libraries/helpers.rb:52:16 warning: `Lint/SendWithMixinArgument`
 - Use `true` and `false` in resources
-
-### Added
-
 - Migrate to Github Actions for testing
 
 ## 2.1.0 2020-02-17
 
-### Added
-
 - Extended Batch file and associated attributes
-
-### Fixed
-
 - Batch file is deleted from /tmp after successful application
 - Publish resource :update has been extended with "sensetive true" parameters. So that the output of the assphrase during the chef-client run will be suppressed
 
-### Deprecated
-
-### Removed
-
 ## 2.0.2 2020-02-14
 
-### Added
-
 - Migrate to Github Actions for testing
-
-### Fixed
-
-- Changed usage of getent <user> passwd to getent passwd <user>
+- Changed usage of getent `<user>` passwd to getent passwd `<user>`
 - Use `true` and `false` in resources
-
-### Deprecated
-
-### Removed
 
 ## 2.0.1 2019-10-19
 
-### Added
-
-### Fixed
-
 - Latest Cookstyle changes in cookstyle 5.6.2
-
-### Deprecated
-
-### Removed
 
 ## [2.0.0] - 2019-09-04
 
-### Added
-
 - Add a `with_installer` parameter to the mirror resource
-
-### Fixed
-
 - Change `architectures` argument in both the mirror and publish resources for consistency
 
-### Deprecated
-
-### Removed
-
 ## [1.1.0] - 2019-08-03
-
-### Added
 
 - Add timeout argument for some time consuming resources
 - Add support for aptly mirror `-filter-with-deps` argument
 - Add support for aptly mirror `-with-udebs` and `-architectures` arguments
-
-### Fixed
-
 - Fix "can't modify frozen String" error caused by aptly_snapshot
 - Fix broken `not_if` for in aptly_mirror resource
 - Migrate to circleci for testing
-
-### Deprecated
-
-### Removed
 
 ## v1.0.0 (24-10-2018)
 
