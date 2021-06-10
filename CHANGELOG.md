@@ -3,6 +3,8 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
 ## 2.4.0 - *2021-06-10*
 
 ## 2.3.3 - *2021-06-09*
