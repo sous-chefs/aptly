@@ -18,7 +18,7 @@
 module Aptly
   module Helpers
     def aptly_env
-      { 'HOME' => node['aptly']['rootDir'], 'USER' => node['aptly']['user'] }
+      { 'HOME' => node['aptly']['rootDir'], 'USER' => node['aptly']['user'], 'TMPDIR' => node['aptly']['tmpDir'] }
     end
 
     def gpg_command
