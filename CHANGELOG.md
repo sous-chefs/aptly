@@ -3,7 +3,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2.4.0 - *2021-06-10*
 
 ## 2.3.3 - *2021-06-09*
 
@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - [CI] Update GitHub Actions checkout to v2
 - Move resource documentation into the documentation folder
 
-## Unreleased
+## 2.4.0 - *2021-06-10*
 
 - Added ability to specify TMPDIR
 
