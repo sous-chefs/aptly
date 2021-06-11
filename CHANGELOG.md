@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Set unified_mode to true for Chef 17 support
+- Set minium Chef version to 15.3 for unified_mode
+
 ## 2.4.0 - *2021-06-10*
+
+- Make TMPDIR configurable
 
 ## 2.3.3 - *2021-06-09*
 
