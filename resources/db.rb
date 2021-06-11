@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+unified_mode true
 action :cleanup do
   execute 'DB Cleanup' do
     command 'aptly db cleanup'
