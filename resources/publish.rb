@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+unified_mode true
 property :publish_name,  String, name_property: true
 property :type,          String, default: ''
 property :endpoint,      String, default: ''

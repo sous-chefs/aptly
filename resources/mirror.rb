@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+unified_mode true
 property :mirror_name,             String, name_property: true
 property :component,               String, default: ''
 property :distribution,            String, default: ''
