@@ -1,4 +1,4 @@
-name 'aptly_test'
+name 'test'
 maintainer 'Test Cookbook'
 maintainer_email 'no-reply@example.com'
 license 'Apache-2.0'

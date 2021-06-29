@@ -41,8 +41,8 @@ jobs:
         os:
           - "debian-10"
           - "debian-9"
-          - "ubuntu-1604"
           - "ubuntu-1804"
+          - "ubuntu-2004"
         suite:
           - "default"
       fail-fast: false
@@ -65,5 +65,5 @@ jobs:
     needs: [dokken]
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+      - name: Echo
+        run: echo "Finished"

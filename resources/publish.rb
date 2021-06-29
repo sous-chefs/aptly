@@ -1,40 +1,36 @@
-# frozen_string_literal: true
-#
-# Cookbook:: aptly
-# Resource:: publish
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+unified_mode true
+use 'partial/_user'
+use 'partial/_root_dir'
 
-property :publish_name,  String, name_property: true
-property :type,          String, default: ''
-property :endpoint,      String, default: ''
-property :component,     Array, default: []
-property :architectures, Array, default: []
-property :prefix,        String, default: ''
-property :distribution,  String, default: ''
-property :timeout,       Integer, default: 3600
+property :publish_name,   String, name_property: true
+property :type,           String, default: ''
+property :endpoint,       String, default: ''
+property :component,      Array, default: []
+property :architectures,  Array, default: []
+property :prefix,         String, default: ''
+property :distribution,   String, default: ''
+property :timeout,        Integer, default: 3600
+property :gpg_passphrase, String
+property :gpg_provider,   String, default: 'gpg1'
 
 action :create do
   components = new_resource.component.join(',')
   endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
+  # -batch
+  cmd = "aptly publish #{new_resource.type}"
+  # cmd << " -passphrase='#{new_resource.gpg_passphrase}'" unless new_resource.gpg_passphrase.nil?
+  cmd << " -component='#{components}'" unless new_resource.component.empty?
+  cmd << " -architectures #{architectures.join(',')}" unless new_resource.architectures.empty?
+  cmd << " -distribution='#{new_resource.distribution}'"
+  cmd << " -gpg-provider='#{new_resource.gpg_provider}'"
+  cmd << " -- #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
 
   execute "Publish #{new_resource.type} - #{new_resource.publish_name}" do
-    command "aptly publish #{new_resource.type} -batch -passphrase='#{node['aptly']['gpg']['passphrase']}' -component='#{components}' #{architectures(new_resource.architectures)} -distribution='#{new_resource.distribution}' -- #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
-    sensitive true
+    command cmd
+    user new_resource.user
+    group new_resource.group
+    environment aptly_env(new_resource)
+    sensitive false
     timeout new_resource.timeout
     not_if %(aptly publish list | grep #{new_resource.publish_name})
   end
@@ -42,11 +38,13 @@ end
 
 action :update do
   endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
+  passphrase = new_resource.gpg_passphrase.empty? ? '' : "-passphrase='#{new_resource.gpg_passphrase}'"
+
   execute "Updating distribution - #{new_resource.prefix} #{new_resource.publish_name}" do
-    command "aptly publish update -batch -passphrase='#{node['aptly']['gpg']['passphrase']}' #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    command "aptly publish update -batch #{passphrase} #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
+    user new_resource.user
+    group new_resource.group
+    environment aptly_env(new_resource)
     sensitive true
     timeout new_resource.timeout
   end
@@ -58,9 +56,9 @@ action :drop do
 
   execute "Stop publishing - #{prefix}#{new_resource.publish_name}" do
     command "aptly publish drop #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment aptly_env(new_resource)
     timeout new_resource.timeout
     only_if %(aptly publish list | grep #{new_resource.publish_name})
   end

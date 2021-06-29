@@ -27,15 +27,7 @@ platforms.each do |platform, version|
   describe 'Test repo resource' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_repo']).converge('aptly_spec::repo2')
-      # ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_repo']).converge('aptly::default')
     end
-
-    # recipe do
-    #  aptly_repo 'my_repo' do
-    #    directory '/tmp/packages'
-    #    action :add
-    #  end
-    # end
 
     context 'Add action with directory' do
       before do

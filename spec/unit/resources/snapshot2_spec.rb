@@ -27,15 +27,7 @@ platforms.each do |platform, version|
   describe 'Test publish resource' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_snapshot']).converge('aptly_spec::snapshot2')
-      # ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_snapshot']).converge('aptly::default')
     end
-
-    # recipe do
-    #  aptly_snapshot 'my_snapshot' do
-    #   empty: true
-    #   action :create
-    # end
-    # end
 
     context 'Create an empty snapshot' do
       before do

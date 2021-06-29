@@ -18,58 +18,8 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 - Debian 9
 - Debian 10
-- Ubuntu 16.04
 - Ubuntu 18.04
-
-## Attributes
-
-### Repository attributes
-
-- `default['aptly']['repository']['uri'] = 'http://repo.aptly.info/'`
-- `default['aptly']['repository']['dist'] = 'squeeze'`
-- `default['aptly']['repository']['components'] = 'main'`
-- `default['aptly']['repository']['key'] = 'https://www.aptly.info/pubkey.txt'`
-
-### Global repository attributes
-
-- `default['aptly']['user'] = 'aptly'`
-- `default['aptly']['group'] = 'aptly'`
-- `default['aptly']['rootDir'] = '/opt/aptly'`
-- `default['aptly']['downloadConcurrency'] = 4`
-- `default['aptly']['downloadSpeedLimit'] = 0`
-- `default['aptly']['architectures'] = []`
-- `default['aptly']['dependencyFollowSuggests'] = false`
-- `default['aptly']['dependencyFollowRecommends'] = false`
-- `default['aptly']['dependencyFollowAllVariants'] = false`
-- `default['aptly']['dependencyFollowSource'] = false`
-- `default['aptly']['gpgDisableSign'] = false`
-- `default['aptly']['gpgDisableVerify'] = false`
-- `default['aptly']['gpgProvider'] = 'gpg'`
-- `default['aptly']['downloadSourcePackages'] = false`
-- `default['aptly']['skipLegacyPool'] = true`
-- `default['aptly']['ppaDistributorID'] = 'ubuntu'`
-- `default['aptly']['ppaCodename'] = ''`
-- `default['aptly']['FileSystemPublishEndpoints'] = {}`
-- `default['aptly']['S3PublishEndpoints'] = {}`
-- `default['aptly']['SwiftPublishEndpoints'] = {}`
-
-### GPG attributes
-
-- `default['aptly']['gpg']['key-type'] = 'RSA'`
-- `default['aptly']['gpg']['key-length'] = 4096`
-- `default['aptly']['gpg']['subkey-type'] = 'RSA'`
-- `default['aptly']['gpg']['subkey-length'] = 4096`
-- `default['aptly']['gpg']['name-real'] = 'Aptly'`
-- `default['aptly']['gpg']['name-comment'] = 'Aptly Key'`
-- `default['aptly']['gpg']['name-email'] = 'organisation@example.org'`
-- `default['aptly']['gpg']['expire-date'] = 0`
-- `default['aptly']['gpg']['passphrase'] = 'GreatPassPhrase'`
-
-## Recipes
-
-### `default`
-
-Install and configure aptly
+- Ubuntu 20.04
 
 ## Resources
 

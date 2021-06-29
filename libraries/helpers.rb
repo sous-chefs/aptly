@@ -17,17 +17,16 @@
 
 module Aptly
   module Helpers
-    def aptly_env
-      { 'HOME' => node['aptly']['rootDir'], 'USER' => node['aptly']['user'] }
+    def aptly_env(res)
+      { 'HOME' => res.root_dir, 'USER' => res.user }
+    end
+
+    def tty
+      shell_out('tty')
     end
 
     def gpg_command
-      case node['platform']
-      when 'debian'
-        node['platform_version'].to_i < 9 ? 'gpg' : 'gpg1'
-      when 'ubuntu'
-        node['platform_version'].to_f < 18.04 ? 'gpg' : 'gpg1'
-      end
+      'gpg1'
     end
 
     def filter(f)
@@ -90,18 +89,18 @@ module Aptly
       arr.empty? ? '' : " -architectures #{arr.join(',')}"
     end
 
-    def mirror_exists?(m)
-      shell_out("aptly mirror -raw list | grep ^#{m}$",
-        user: node['aptly']['user'], environment: aptly_env).exitstatus == 0
+    def mirror_exists?(res)
+      shell_out("aptly mirror -raw list | grep ^#{res.mirror_name}$",
+        user: res.user, environment: aptly_env(res)).exitstatus == 0
     end
 
-    def mirror_show(m)
-      shell_out("aptly mirror show #{m}", user: node['aptly']['user'], environment: aptly_env)
+    def mirror_show(res)
+      shell_out("aptly mirror show #{res.mirror_name}", user: res.user, environment: aptly_env(res))
     end
 
-    def mirror_info(m)
-      return unless mirror_exists?(m)
-      cmd = mirror_show(m)
+    def mirror_info(res)
+      return unless mirror_exists?(res)
+      cmd = mirror_show(res)
       # the output of aptly mirror show is broken into sections delimited
       # by a blank line. We're only interested in the first section
       output = cmd.stdout.split(/\n\n/).first
@@ -126,11 +125,24 @@ module Aptly
     end
 
     def mirror_command(res)
-      if mirror_exists?(res.mirror_name)
+      if mirror_exists?(res)
         "aptly mirror edit#{with_installer(res.with_installer)}#{with_udebs(res.with_udebs)}#{architectures(res.architectures)}#{filter(res.filter)}#{filter_with_deps(res.filter_with_deps)}#{dep_follow_all_variants(res.dep_follow_all_variants)}#{dep_follow_recommends(res.dep_follow_recommends)}#{dep_follow_source(res.dep_follow_source)}#{dep_follow_suggests(res.dep_follow_suggests)}#{dep_verbose_resolve(res.dep_verbose_resolve)}#{ignore_signatures(res.ignore_signatures)} #{res.mirror_name}"
       else
         "aptly mirror create#{with_installer(res.with_installer)}#{with_udebs(res.with_udebs)}#{architectures(res.architectures)}#{filter(res.filter)}#{filter_with_deps(res.filter_with_deps)}#{dep_follow_all_variants(res.dep_follow_all_variants)}#{dep_follow_recommends(res.dep_follow_recommends)}#{dep_follow_source(res.dep_follow_source)}#{dep_follow_suggests(res.dep_follow_suggests)}#{dep_verbose_resolve(res.dep_verbose_resolve)}#{ignore_signatures(res.ignore_signatures)} #{res.mirror_name} #{res.uri} #{res.distribution} #{res.component}"
       end
+    end
+
+    def key_exists(new_resource)
+      gpg_check = "#{gpg_command} --list-keys | grep '#{new_resource.gpg_name_real}'"
+
+      cmd = Mixlib::ShellOut.new(
+        gpg_check,
+        user: new_resource.user,
+        group: new_resource.group
+      )
+
+      cmd.run_command
+      cmd.exitstatus == 0
     end
   end
 end

@@ -27,36 +27,7 @@ platforms.each do |platform, version|
   describe 'Test repo resource' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_repo']).converge('aptly_spec::repo')
-      # ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_repo']).converge('aptly::default')
     end
-
-    # recipe do
-    #  aptly_repo 'my_repo' do
-    #    comment 'A repository of packages'
-    #    component 'main'
-    #    distribution 'Ubuntu'
-    #    action :create
-    #  end
-
-    #  aptly_repo 'my_repo' do
-    #    action :drop
-    #  end
-
-    #  aptly_repo 'my_repo' do
-    #    file '/tmp/package-1.0.1.deb'
-    #    action :add
-    #  end
-
-    #  aptly_repo 'my_repo' do
-    #    directory '/tmp/packages'
-    #    action :add
-    #  end
-
-    #  aptly_repo 'my_repo' do
-    #    package_query 'package-1.0.1.deb'
-    #    action :remove
-    #  end
-    # end
 
     context 'Create action test' do
       before do

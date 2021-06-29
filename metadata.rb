@@ -6,7 +6,7 @@ description       'Installs/Configures aptly'
 issues_url        'https://github.com/sous-chefs/aptly/issues'
 source_url        'https://github.com/sous-chefs/aptly'
 version           '2.3.3'
-chef_version      '>= 13.0'
+chef_version      '>= 16.0'
 
 supports 'ubuntu'
 supports 'debian'

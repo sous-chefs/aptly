@@ -28,14 +28,7 @@ platforms.each do |platform, version|
   describe 'Test api_serve resource' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_api_serve']).converge('aptly_spec::api_serve')
-      # ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_api_serve']).converge('aptly::default')
     end
-
-    # recipe do
-    #  aptly_api_serve 'Start API HTTP Service' do
-    #    port 9090
-    #  end
-    # end
 
     before do
       stub_command('getent aptly passwd').and_return(true)

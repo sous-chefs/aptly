@@ -27,34 +27,7 @@ platforms.each do |platform, version|
   describe 'Test snapshot resource' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_snapshot']).converge('aptly_spec::snapshot')
-      # ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_snapshot']).converge('aptly::default')
     end
-
-    # recipe do
-    #  aptly_snapshot 'my_snapshot' do
-    #   from 'my_repo'
-    #   type 'repo'
-    #   action :create
-    # end
-    # aptly_snapshot 'my_snapshot' do
-    #   action :drop
-    # end
-    # aptly_snapshot 'merged-snapshot' do
-    #   merge_source1 'snap1'
-    #   merge_source2 'snap2'
-    #   action :merge
-    # end
-    # aptly_snapshot 'merged-snapshot' do
-    #   action :verify
-    # end
-    # aptly_snapshot 'merged-snapshot' do
-    #   no_deps false
-    #   no_remove false
-    #   package '/etc/hosts'
-    #   source 'snap2'
-    #   action :pull
-    # end
-    # end
 
     context 'Create non empty snapshot with Merge and Pull actions' do
       before do

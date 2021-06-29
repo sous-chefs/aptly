@@ -27,17 +27,7 @@ platforms.each do |platform, version|
   describe 'Test db resource' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_db']).converge('aptly_spec::db')
-      # ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_db']).converge('aptly::default')
     end
-
-    # recipe do
-    #  aptly_db 'cleanup' do
-    #    action :cleanup
-    #  end
-    #  aptly_db 'recover' do
-    #    action :recover
-    #  end
-    # end
 
     it 'Run the custom resources' do
       expect(chef_run).to cleanup_aptly_db('cleanup')

@@ -9,7 +9,10 @@ Manage internal Aptly DB
 
 ## Properties
 
-None
+| Name    | Types  | Description          | Default |
+| ------- | ------ | -------------------- | ------- |
+| `user`  | String | Mirror name          | aptly   |
+| `group` | String | Repository component | aptly   |
 
 ## Examples
 
