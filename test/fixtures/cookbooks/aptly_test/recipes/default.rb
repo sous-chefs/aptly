@@ -113,6 +113,11 @@ aptly_snapshot 'my_mirror_snapshot' do
   type 'mirror'
 end
 
+aptly_snapshot 'my_switch_snapshot' do
+  from 'nginx-bionic-main'
+  type 'mirror'
+end
+
 aptly_snapshot 'my_snapshot' do
   action :verify
 end
@@ -146,6 +151,20 @@ end
 aptly_publish 'bionic' do
   prefix 'mirror'
   action :drop
+end
+
+aptly_publish 'my_snapshot_for_switch' do
+  publish_name 'my_mirror_snapshot'
+  type 'snapshot'
+  prefix 'switch'
+  not_if %(aptly publish list -raw | egrep '^switch bionic$')
+end
+
+aptly_publish 'my_switch_snapshot' do
+  type 'snapshot'
+  distribution 'bionic'
+  prefix 'switch'
+  action :switch
 end
 
 aptly_db 'Cleanup'

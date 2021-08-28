@@ -6,20 +6,21 @@ Publish, remove or update a repo or a snapshot
 
 - `create` - (default) Publish a repo or a snapshot
 - `drop` - Drop a publication
+- `switch` - Switch published snapshot to a new snapshot
 - `update` - Update publication
 
 ## Properties
 
-| Name            | Types   | Description                                     | Default         | Used with...     |
-| --------------- | ------- | ----------------------------------------------- | --------------- | ---------------- |
-| `publish_name`  | String  | Publication name                                | <resource_name> | all              |
-| `type`          | String  | Publish type (snapshot or repo)                 | ''              | :create          |
-| `component`     | String  | Component name to publish                       | []              | :create          |
-| `distribution`  | String  | Distribution name to publish                    | ''              | :create          |
-| `architectures` | Array   | Only mentioned architectures would be published | []              | :create          |
-| `endpoint`      | String  | An optional endpoint reference                  | ''              | :create, :update |
-| `prefix`        | String  | An optional prefix for publishing               | ''              | :create, :update |
-| `timeout`       | Integer | Timeout in seconds                              | 3600            | all              |
+| Name            | Types   | Description                                     | Default         | Used with...              |
+| --------------- | ------- | ----------------------------------------------- | --------------- | ------------------------- |
+| `publish_name`  | String  | Publication name                                | <resource_name> | all                       |
+| `type`          | String  | Publish type (snapshot or repo)                 | ''              | :create                   |
+| `component`     | String  | Component name to publish                       | []              | :create, :switch          |
+| `distribution`  | String  | Distribution name to publish                    | ''              | :create, :switch          |
+| `architectures` | Array   | Only mentioned architectures would be published | []              | :create                   |
+| `endpoint`      | String  | An optional endpoint reference                  | ''              | :create, :switch, :update |
+| `prefix`        | String  | An optional prefix for publishing               | ''              | :create, :switch, :update |
+| `timeout`       | Integer | Timeout in seconds                              | 3600            | all                       |
 
 Note: The "architectures" property will use the global configuration (settable via node['aptly']['architectures']) if you do not provide it for a particular repository here.
 
@@ -53,6 +54,21 @@ end
 aptly_publish 'my_snapshot' do
   prefix 'snap'
   action :drop
+end
+```
+
+```ruby
+aptly_publish 'my_snapshot' do
+  type 'snapshot'
+  prefix 'snap'
+  action :create
+end
+
+aptly_publish 'my_new_snapshot' do
+  type 'snapshot'
+  prefix 'snap'
+  distribution 'bionic' # distribution must be provided with :switch
+  action :switch
 end
 ```
 

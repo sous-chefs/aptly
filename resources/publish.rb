@@ -40,6 +40,19 @@ action :create do
   end
 end
 
+action :switch do
+  endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
+  component = new_resource.component.empty? ? '' : "-component=#{new_resource.component.join(',')}"
+  execute "Switching distribution - #{new_resource.prefix}/#{new_resource.distribution} #{new_resource.publish_name}" do
+    command "aptly publish switch -batch -passphrase='#{node['aptly']['gpg']['passphrase']}' #{component} #{new_resource.distribution} #{endpoint}#{new_resource.prefix} #{new_resource.publish_name}"
+    user node['aptly']['user']
+    group node['aptly']['group']
+    environment aptly_env
+    sensitive true
+    timeout new_resource.timeout
+  end
+end
+
 action :update do
   endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
   execute "Updating distribution - #{new_resource.prefix} #{new_resource.publish_name}" do
