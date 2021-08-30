@@ -5,7 +5,11 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Standardise files with files in sous-chefs/repo-management
+
 ## 2.4.0 - *2021-06-10*
+
+- Make tmpdir configurable
 
 ## 2.3.3 - *2021-06-09*
 
