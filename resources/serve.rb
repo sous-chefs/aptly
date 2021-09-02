@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+unified_mode true
 property :listen, String, default: ''
 property :port,   [Integer, String], default: 8080
 property :user,   String, default: 'aptly'

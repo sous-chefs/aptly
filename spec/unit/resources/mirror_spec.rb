@@ -53,13 +53,11 @@ platforms.each do |platform, version|
     end
 
     stubs_for_resource('aptly_mirror[ubuntu-precise-main]') do |resource|
-      allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)
-      allow(resource).to receive_shell_out('aptly mirror show ubuntu-precise-main', exitstatus: 1)
+      allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'TMPDIR' => '/tmp', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)
     end
 
     stubs_for_resource() do |resource|
-      allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'USER' => 'aptly' } }, stdout: 'ubuntu-precise-main')
-      allow(resource).to receive_shell_out('aptly mirror show ubuntu-precise-main', stdout: mirror_show_after_create_stdout)
+      allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'TMPDIR' => '/tmp', 'USER' => 'aptly' } }, stdout: 'ubuntu-precise-main')
     end
 
     context 'Create action test' do

@@ -7,6 +7,7 @@ provisioner:
   product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
   install_strategy: once
   deprecations_as_errors: true
+  multiple_converge: 2
 
 verifier:
   name: inspec

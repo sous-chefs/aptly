@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Set unified_mode to true for Chef 17 support
+- Set minium Chef version to 15.3 for unified_mode
+
 ## 2.4.1 - *2021-08-30*
 
 - Standardise files with files in sous-chefs/repo-management
