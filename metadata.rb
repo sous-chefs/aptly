@@ -5,7 +5,7 @@ license           'Apache-2.0'
 description       'Installs/Configures aptly'
 issues_url        'https://github.com/sous-chefs/aptly/issues'
 source_url        'https://github.com/sous-chefs/aptly'
-version           '2.4.1'
+version           '3.0.0'
 chef_version      '>= 13.0'
 
 supports 'ubuntu'
