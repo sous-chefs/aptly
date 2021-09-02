@@ -3,6 +3,8 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
 ## 3.0.0 - *2021-09-02*
 
 - Set unified_mode to true for Chef 17 support
