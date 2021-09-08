@@ -87,9 +87,7 @@ After modifications, please run the following commands to check if you break som
 - chef exec rspec
 - kitchen test default-ubuntu-1804
 
-NOTE: Available distro tests: `default-debian-8`, `default-debian-9`, `default-ubuntu-1604`, `default-ubuntu-1804` and `default-ubuntu-2004`
-
-NOTE2: if you want to use Policyfile, rename `Policyfile.rb.dist` to `Policyfile.rb` in root and test directories, then execute `chef update` in each folder. Look inside `.kitchen.yml` and `spec/spec_helper.rb` too.
+NOTE: if you want to use Policyfile, rename `Policyfile.rb.dist` to `Policyfile.rb` in root and test directories, then execute `chef update` in each folder. Look inside `.kitchen.yml` and `spec/spec_helper.rb` too.
 
 ## Contributors
 
