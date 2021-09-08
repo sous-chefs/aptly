@@ -3,7 +3,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 3.1.0 - *2021-09-08*
 
 - Add `switch` action to `aptly_publish` resource
 - Add Ubuntu 20.04 to testing matrix; remove Ubuntu 16.04
