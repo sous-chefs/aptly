@@ -70,6 +70,8 @@ control 'Resources Tests' do
 
   describe command('aptly publish list') do
     its('stdout') { should match %r{snap/bionic} }
+    its('stdout') { should match %r{switch/bionic.*my_switch_snapshot} }
+    its('stdout') { should_not match %r{switch/bionic.*my_mirror_snapshot} }
     its('exit_status') { should eq 0 }
   end
 
