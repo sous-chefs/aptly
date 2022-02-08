@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Remove delivery
+
 ## 3.1.0 - *2021-09-08*
 
 - Add `switch` action to `aptly_publish` resource
