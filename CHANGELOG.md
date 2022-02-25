@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/config.json:2:14 convention: `Style/StringLiterals`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/config.json:4:13 convention: `Style/StringLiterals`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/config.json:5:5 convention: `Style/TrailingCommaInHashLiteral`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/config.json:5:13 convention: `Style/StringLiterals`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/config.json:9:7 convention: `Style/TrailingCommaInHashLiteral`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/config.json:10:5 convention: `Style/TrailingCommaInHashLiteral`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/config.json:14:5 convention: `Style/TrailingCommaInHashLiteral`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/config.json:14:16 convention: `Style/StringLiterals`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/config.json:16:3 convention: `Style/TrailingCommaInHashLiteral`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/project.toml:15:8 convention: `Style/StringLiterals`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/project.toml:16:8 convention: `Style/StringLiterals`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/project.toml:21:10 convention: `Style/StringLiterals`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/project.toml:22:13 convention: `Style/StringLiterals`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/project.toml:23:10 convention: `Style/StringLiterals`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/project.toml:24:9 convention: `Style/StringLiterals`
+- resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/project.toml:28:11 convention: `Style/StringLiterals`
 - Remove delivery
 
 ## 3.1.0 - *2021-09-08*
