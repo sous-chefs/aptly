@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Update workflows to 2.0.1
+- Remove mdl and replace with markdownlint-cli2
+
 ## 3.1.1 - *2023-02-14*
 
 - Remove delivery
