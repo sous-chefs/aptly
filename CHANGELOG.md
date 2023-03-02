@@ -3,7 +3,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 3.1.3 - *2023-03-02*
 
 ## 3.1.2 - *2023-03-01*
 
