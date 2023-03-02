@@ -27,4 +27,3 @@ suites:
       - recipe[aptly_test::setup]
       - recipe[aptly::default]
       - recipe[aptly_test::default]
-    attributes:
