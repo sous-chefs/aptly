@@ -3,7 +3,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 3.2.0 - *2023-09-29*
 
 ## 3.1.9 - *2023-09-28*
 
@@ -58,7 +58,7 @@ Standardise files with files in sous-chefs/repo-management
 
 - Added ability to specify TMPDIR
 
-## Unreleased
+## 3.2.0 - *2023-09-29*
 
 - Allow specifying GPG passphrase explicitly in the publish resource
 
