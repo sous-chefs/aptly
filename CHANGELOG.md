@@ -58,6 +58,10 @@ Standardise files with files in sous-chefs/repo-management
 
 - Added ability to specify TMPDIR
 
+## Unreleased
+
+- Allow specifying GPG passphrase explicitly in the publish resource
+
 ## 2.3.2 (2020-11-16)
 
 - resolved cookstyle error: test/fixtures/cookbooks/aptly_test/recipes/default.rb:95:3 convention: `Style/CommentAnnotation`
