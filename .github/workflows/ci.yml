@@ -4,37 +4,20 @@ name: ci
 "on":
   pull_request:
   push:
-    branches: [master, main]
+    branches: [main]
 
 jobs:
-  delivery:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Run Chef Delivery
-        uses: actionshub/chef-delivery@main
-        env:
-          CHEF_LICENSE: accept-no-persist
-
-  yamllint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Run yaml Lint
-        uses: actionshub/yamllint@main
-
-  mdl:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Run Markdown Lint
-        uses: actionshub/markdownlint@main
+  lint-unit:
+    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@3.1.1
+    permissions:
+      actions: write
+      checks: write
+      pull-requests: write
+      statuses: write
+      issues: write
 
   integration:
-    needs: [mdl, yamllint, delivery]
+    needs: "lint-unit"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -49,11 +32,11 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4 # v4
       - name: Install Chef
-        uses: actionshub/chef-install@main
+        uses: actionshub/chef-install@3.0.0
       - name: Dokken
-        uses: actionshub/test-kitchen@main
+        uses: actionshub/test-kitchen@3.0.0
         env:
           CHEF_LICENSE: accept-no-persist
           KITCHEN_LOCAL_YAML: kitchen.dokken.yml

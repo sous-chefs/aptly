@@ -21,6 +21,36 @@ All notable changes to this project will be documented in this file.
 - resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/project.toml:23:10 convention: `Style/StringLiterals`
 - resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/project.toml:24:9 convention: `Style/StringLiterals`
 - resolved cookstyle error: spec/fixtures/cookbooks/aptly_spec/.delivery/project.toml:28:11 convention: `Style/StringLiterals`
+
+## 3.2.2 - *2024-05-02*
+
+## 3.2.1 - *2024-05-02*
+
+## 3.2.0 - *2023-09-29*
+
+## 3.1.9 - *2023-09-28*
+
+## 3.1.8 - *2023-09-04*
+
+## 3.1.7 - *2023-09-04*
+
+## 3.1.6 - *2023-06-08*
+
+## 3.1.5 - *2023-06-08*
+
+## 3.1.4 - *2023-06-08*
+
+Standardise files with files in sous-chefs/repo-management
+
+## 3.1.3 - *2023-03-02*
+
+## 3.1.2 - *2023-03-01*
+
+- Update workflows to 2.0.1
+- Remove mdl and replace with markdownlint-cli2
+
+## 3.1.1 - *2023-02-14*
+
 - Remove delivery
 
 ## 3.1.0 - *2021-09-08*
@@ -50,6 +80,10 @@ All notable changes to this project will be documented in this file.
 ## 2.4.0 - *2021-06-10*
 
 - Added ability to specify TMPDIR
+
+## 3.2.0 - *2023-09-29*
+
+- Allow specifying GPG passphrase explicitly in the publish resource
 
 ## 2.3.2 (2020-11-16)
 
