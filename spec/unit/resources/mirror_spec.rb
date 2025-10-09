@@ -56,7 +56,7 @@ platforms.each do |platform, version|
       allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'TMPDIR' => '/tmp', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)
     end
 
-    stubs_for_resource() do |resource|
+    stubs_for_resource do |resource|
       allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'TMPDIR' => '/tmp', 'USER' => 'aptly' } }, stdout: 'ubuntu-precise-main')
     end
 
