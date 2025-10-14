@@ -1,9 +1,15 @@
-
 # Changelog
 
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
+## [3.2.4](https://github.com/sous-chefs/aptly/compare/3.2.3...v3.2.4) (2025-10-14)
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#141](https://github.com/sous-chefs/aptly/issues/141)) ([cc51246](https://github.com/sous-chefs/aptly/commit/cc512466aa11c25edd7b8054d2bc4f175a43f1e6))
 
 ## 3.2.3 - *2025-09-04*
 
