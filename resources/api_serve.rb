@@ -18,7 +18,7 @@
 unified_mode true
 use '_partials/_common'
 
-property :listen,  String, default: ''
+property :listen,  String
 property :port,    [Integer, String], default: 8090
 property :no_lock, [true, false], default: false
 

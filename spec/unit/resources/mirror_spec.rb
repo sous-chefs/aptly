@@ -19,8 +19,8 @@
 require 'spec_helper'
 
 platforms = [
-  ['debian', '11'],
-  ['debian', '12'],
+  %w(debian 11),
+  %w(debian 12),
   ['ubuntu', '22.04'],
   ['ubuntu', '24.04'],
 ]
@@ -31,7 +31,6 @@ platforms.each do |platform, version|
       ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_mirror']).converge('aptly_spec::mirror')
       # ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_mirror']).converge('aptly::default')
     end
-
 
     stubs_for_provider('aptly_mirror[ubuntu-precise-main]') do |provider|
       allow(provider).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', timeout: 3600.0, environment: { 'HOME' => '/opt/aptly', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)

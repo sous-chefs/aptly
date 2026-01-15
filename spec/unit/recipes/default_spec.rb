@@ -17,8 +17,8 @@
 require 'spec_helper'
 
 platforms = [
-  ['debian', '11'],
-  ['debian', '12'],
+  %w(debian 11),
+  %w(debian 12),
   ['ubuntu', '22.04'],
   ['ubuntu', '24.04'],
 ]
@@ -51,7 +51,11 @@ platforms.each do |platform, version|
                  when 'debian'
                    version.to_i < 9 ? %w(gnupg gpgv) : %w(gnupg1 gpgv1)
                  when 'ubuntu'
-                   version.to_f < 18.04 ? %w(gnupg gpgv) : version.to_f < 22.04 ? %w(gnupg1 gpgv1) : %w(gnupg gpgv)
+                   if version.to_f < 18.04
+                     %w(gnupg gpgv)
+                   else
+                     version.to_f < 22.04 ? %w(gnupg1 gpgv1) : %w(gnupg gpgv)
+                   end
                  end
       packages += %w(screen aptly graphviz haveged)
       it 'installs the gnupg, gpgv, screen, aptly, graphviz and haveged package' do

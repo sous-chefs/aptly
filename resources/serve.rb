@@ -18,7 +18,7 @@
 unified_mode true
 use '_partials/_common'
 
-property :listen, String, default: ''
+property :listen, String
 property :port,   [Integer, String], default: 8080
 
 action :run do

@@ -19,14 +19,14 @@ unified_mode true
 use '_partials/_common'
 
 property :repo_name,     String, name_property: true
-property :component,     String, default: ''
-property :comment,       String, default: ''
-property :distribution,  String, default: ''
+property :component,     String
+property :comment,       String
+property :distribution,  String
 property :remove_files,  [true, false], default: false
 property :force_replace, [true, false], default: false
 property :directory,     String
 property :file,          String
-property :package_query, String, default: ''
+property :package_query, String
 
 action :create do
   opts = ''

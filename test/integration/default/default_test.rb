@@ -24,13 +24,21 @@ control 'Default actions' do
               when 'debian'
                 os_version.to_i < 9 ? 'gnupg' : 'gnupg1'
               when 'ubuntu'
-                os_version.to_f < 18.04 ? 'gnupg' : os_version.to_f < 22.04 ? 'gnupg1' : 'gnupg'
+                if os_version.to_f < 18.04
+                  'gnupg'
+                else
+                  os_version.to_f < 22.04 ? 'gnupg1' : 'gnupg'
+                end
               end
   gpgv_pkg = case os_name
              when 'debian'
                os_version.to_i < 9 ? 'gpgv' : 'gpgv1'
              when 'ubuntu'
-               os_version.to_f < 18.04 ? 'gpgv' : os_version.to_f < 22.04 ? 'gpgv1' : 'gpgv'
+               if os_version.to_f < 18.04
+                 'gpgv'
+               else
+                 os_version.to_f < 22.04 ? 'gpgv1' : 'gpgv'
+               end
              end
 
   describe package(gnupg_pkg) do

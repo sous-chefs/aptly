@@ -11,7 +11,7 @@ Manage external mirror
 ## Properties
 
 | Name                      | Types         | Description                                                                            | Default          | Used with...     |
-| ------------------------- | ------------- | -------------------------------------------------------------------------------------- | ---------------- | ---------------- |
+|---------------------------|---------------|----------------------------------------------------------------------------------------|------------------|------------------|
 | `mirror_name`             | String        | Mirror name                                                                            | <resource_name>  | all              |
 | `component`               | String        | Repository component                                                                   | ''               | :create          |
 | `distribution`            | String        | Name of distribution repository                                                        | ''               | :create          |
@@ -22,7 +22,7 @@ Manage external mirror
 | `keyfile`                 | String        | Key file name                                                                          | ''               | :create          |
 | `filter`                  | String        | Mirror filter                                                                          | ''               | :create          |
 | `filter_with_deps`        | [true, false] | Include dependencies of filtered packages                                              | false            | :create          |
-| `dep_follow_all_variants` | [true, false] | When processing dependencies, follow _a_ & _b_ if dependency is '`a|b`'                | false            | :create, :update |
+| `dep_follow_all_variants` | [true, false] | When processing dependencies, follow _a_ & _b_ if dependency is '`a\|b`'               | false            | :create, :update |
 | `dep_follow_recommends`   | [true, false] | When processing dependencies, follow _Recommends_                                      | false            | :create, :update |
 | `dep_follow_source`       | [true, false] | When processing dependencies, follow from binary to Source packages                    | false            | :create, :update |
 | `dep_follow_suggests`     | [true, false] | When processing dependencies, follow _Suggests_                                        | false            | :create, :update |
@@ -78,7 +78,7 @@ Manage aptly snapshots
 #### Properties
 
 | Name            | Types         | Description                                              | Default         | Used with...  |
-| --------------- | ------------- | -------------------------------------------------------- | --------------- | ------------- |
+|-----------------|---------------|----------------------------------------------------------|-----------------|---------------|
 | `snapshot_name` | String        | Snapshot name                                            | <resource_name> | all           |
 | `from`          | String        | Name of mirror or repo to snapshot                       | ''              | :create       |
 | `type`          | String        | Type of snapshot source (repo, mirror or snapshot)       | ''              | :create       |
