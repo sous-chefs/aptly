@@ -27,7 +27,13 @@ end
 pkgs = %w(screen aptly graphviz haveged)
 pkgs = case node['platform']
        when 'debian'
-         node['platform_version'].to_i < 9 ? %w(gnupg gpgv) + pkgs : %w(gnupg1 gpgv1) + pkgs
+         if node['platform_version'].to_i < 9
+           %w(gnupg gpgv) + pkgs
+         elsif node['platform_version'].to_i < 12
+           %w(gnupg1 gpgv1) + pkgs
+         else
+           %w(gnupg gpgv) + pkgs
+         end
        when 'ubuntu'
          if node['platform_version'].to_f < 18.04
            %w(gnupg gpgv) + pkgs

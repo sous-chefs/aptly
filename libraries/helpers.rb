@@ -24,7 +24,13 @@ module Aptly
     def gpg_command
       case node['platform']
       when 'debian'
-        node['platform_version'].to_i < 9 ? 'gpg' : 'gpg1'
+        if node['platform_version'].to_i < 9
+          'gpg'
+        elsif node['platform_version'].to_i < 12
+          'gpg1'
+        else
+          'gpg'
+        end
       when 'ubuntu'
         if node['platform_version'].to_f < 18.04
           'gpg'

@@ -30,9 +30,9 @@ property :package_query, String
 
 action :create do
   opts = ''
-  opts += " -comment='#{new_resource.comment}'" unless new_resource.comment.empty?
-  opts += " -component='#{new_resource.component}'" unless new_resource.component.empty?
-  opts += " -distribution='#{new_resource.distribution}'" unless new_resource.distribution.empty?
+  opts += " -comment='#{new_resource.comment}'" unless new_resource.comment.nil? || new_resource.comment.empty?
+  opts += " -component='#{new_resource.component}'" unless new_resource.component.nil? || new_resource.component.empty?
+  opts += " -distribution='#{new_resource.distribution}'" unless new_resource.distribution.nil? || new_resource.distribution.empty?
 
   execute "Creating Repo - #{new_resource.repo_name}" do
     command "aptly repo create#{opts} #{new_resource.repo_name}"
