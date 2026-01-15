@@ -16,15 +16,17 @@
 # limitations under the License.
 #
 unified_mode true
-property :publish_name,  String, name_property: true
-property :type,          String, default: ''
-property :endpoint,      String, default: ''
-property :component,     Array, default: []
-property :architectures, Array, default: []
-property :prefix,        String, default: ''
-property :distribution,  String, default: ''
-property :timeout,       Integer, default: 3600
-property :gpg_passphrase, String, default: lazy { node['aptly']['gpg']['passphrase'] }
+use '_partials/_common'
+
+property :publish_name,   String, name_property: true
+property :type,           String, default: ''
+property :endpoint,       String, default: ''
+property :component,      Array, default: []
+property :architectures,  Array, default: []
+property :prefix,         String, default: ''
+property :distribution,   String, default: ''
+property :timeout,        Integer, default: 3600
+property :gpg_passphrase, String, default: '', sensitive: true
 
 action :create do
   components = new_resource.component.join(',')
@@ -32,9 +34,9 @@ action :create do
 
   execute "Publish #{new_resource.type} - #{new_resource.publish_name}" do
     command "aptly publish #{new_resource.type} -batch -passphrase='#{new_resource.gpg_passphrase}' -component='#{components}' #{architectures(new_resource.architectures)} -distribution='#{new_resource.distribution}' -- #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     sensitive true
     timeout new_resource.timeout
     not_if %(aptly publish list | grep #{new_resource.publish_name})
@@ -45,10 +47,10 @@ action :switch do
   endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
   component = new_resource.component.empty? ? '' : "-component=#{new_resource.component.join(',')}"
   execute "Switching distribution - #{new_resource.prefix}/#{new_resource.distribution} #{new_resource.publish_name}" do
-    command "aptly publish switch -batch -passphrase='#{node['aptly']['gpg']['passphrase']}' #{component} #{new_resource.distribution} #{endpoint}#{new_resource.prefix} #{new_resource.publish_name}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    command "aptly publish switch -batch -passphrase='#{new_resource.gpg_passphrase}' #{component} #{new_resource.distribution} #{endpoint}#{new_resource.prefix} #{new_resource.publish_name}"
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     sensitive true
     timeout new_resource.timeout
   end
@@ -59,9 +61,9 @@ action :update do
 
   execute "Updating distribution - #{new_resource.prefix} #{new_resource.publish_name}" do
     command "aptly publish update -batch -passphrase='#{new_resource.gpg_passphrase}' #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     sensitive true
     timeout new_resource.timeout
   end
@@ -73,10 +75,16 @@ action :drop do
 
   execute "Stop publishing - #{prefix}#{new_resource.publish_name}" do
     command "aptly publish drop #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     timeout new_resource.timeout
     only_if %(aptly publish list | grep #{new_resource.publish_name})
+  end
+end
+
+action_class do
+  def resource_env
+    { 'HOME' => new_resource.root_dir, 'USER' => new_resource.user, 'TMPDIR' => new_resource.tmp_dir }
   end
 end

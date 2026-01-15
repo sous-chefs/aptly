@@ -21,11 +21,23 @@ aptly_mirror 'ubuntu-precise-main' do
   keyserver 'keys.gnupg.net'
   uri 'http://ubuntu.osuosl.org/ubuntu/'
   filter 'my_awesome_package'
+  user 'aptly'
+  group 'aptly'
+  root_dir '/opt/aptly'
+  tmp_dir '/tmp'
   action :create
 end
 aptly_mirror 'ubuntu-precise-main' do
+  user 'aptly'
+  group 'aptly'
+  root_dir '/opt/aptly'
+  tmp_dir '/tmp'
   action :update
 end
 aptly_mirror 'ubuntu-precise-main' do
+  user 'aptly'
+  group 'aptly'
+  root_dir '/opt/aptly'
+  tmp_dir '/tmp'
   action :drop
 end

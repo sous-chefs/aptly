@@ -16,14 +16,16 @@
 # limitations under the License.
 #
 unified_mode true
+use '_partials/_common'
+
 property :repo_name,     String, name_property: true
 property :component,     String, default: ''
 property :comment,       String, default: ''
 property :distribution,  String, default: ''
 property :remove_files,  [true, false], default: false
 property :force_replace, [true, false], default: false
-property :directory,     String, default: ''
-property :file,          String, default: ''
+property :directory,     String
+property :file,          String
 property :package_query, String, default: ''
 
 action :create do
@@ -34,9 +36,9 @@ action :create do
 
   execute "Creating Repo - #{new_resource.repo_name}" do
     command "aptly repo create#{opts} #{new_resource.repo_name}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     not_if %(aptly repo list --raw | grep #{new_resource.repo_name})
   end
 end
@@ -44,9 +46,9 @@ end
 action :drop do
   execute "Droping Repo - #{new_resource.repo_name}" do
     command "aptly repo drop #{new_resource.repo_name}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     only_if %(aptly repo list --raw | grep #{new_resource.repo_name})
   end
 end
@@ -56,26 +58,26 @@ action :add do
   opts += ' -force-replace' if new_resource.force_replace
   opts += ' -remove-files' if new_resource.remove_files
 
-  if new_resource.file.empty?
+  if new_resource.directory && !new_resource.file
     if ::Dir.exist?(new_resource.directory)
       execute "Adding packages from #{new_resource.directory}" do
         command "aptly repo add#{opts} #{new_resource.repo_name} #{new_resource.directory}"
-        user node['aptly']['user']
-        group node['aptly']['group']
-        environment aptly_env
+        user new_resource.user
+        group new_resource.group
+        environment resource_env
       end
     else
       Chef::Log.info "#{new_resource.directory} is not a valid directory"
     end
-  elsif new_resource.directory.empty?
+  elsif new_resource.file && !new_resource.directory
     if ::File.exist?(new_resource.file)
       pkg = ::File.basename(new_resource.file)
       pk = pkg.split('.').first
       execute "Adding Package - #{pkg}" do
         command "aptly repo add#{opts} #{new_resource.repo_name} #{new_resource.file}"
-        user node['aptly']['user']
-        group node['aptly']['group']
-        environment aptly_env
+        user new_resource.user
+        group new_resource.group
+        environment resource_env
         not_if %(aptly repo show -with-packages #{new_resource.repo_name} | grep #{pk})
       end
     else
@@ -89,9 +91,15 @@ end
 action :remove do
   execute "Removing Package - #{new_resource.package_query}" do
     command "aptly repo remove #{new_resource.repo_name} #{new_resource.package_query}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     only_if %(aptly repo show -with-packages #{new_resource.repo_name} | grep #{new_resource.package_query})
+  end
+end
+
+action_class do
+  def resource_env
+    { 'HOME' => new_resource.root_dir, 'USER' => new_resource.user, 'TMPDIR' => new_resource.tmp_dir }
   end
 end

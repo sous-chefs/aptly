@@ -238,6 +238,15 @@ RSpec.describe Aptly::Helpers do
         expect(subject.gpg_command).to eq 'gpg1'
       end
     end
+
+    context 'on ubuntu 22.04' do
+      let(:platform) { 'ubuntu' }
+      let(:platform_version) { '22.04' }
+
+      it 'returns gpg' do
+        expect(subject.gpg_command).to eq 'gpg'
+      end
+    end
   end
 
   describe '#filter' do

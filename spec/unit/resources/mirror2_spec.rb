@@ -18,10 +18,12 @@
 
 require 'spec_helper'
 
-platforms = {
-  'debian' => '9',
-  'ubuntu' => '18.04',
-}
+platforms = [
+  ['debian', '11'],
+  ['debian', '12'],
+  ['ubuntu', '22.04'],
+  ['ubuntu', '24.04']
+]
 
 platforms.each do |platform, version|
   describe 'Test mirror resource' do
@@ -30,16 +32,6 @@ platforms.each do |platform, version|
       # ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_mirror']).converge('aptly::default')
     end
 
-    # recipe do
-    # aptly_mirror 'ubuntu-precise-main' do
-    #   distribution 'precise'
-    #   component 'main'
-    #   cookbook 'aptly_spec'
-    #   keyfile 'gpg_keyfile'
-    #   filter 'my_awesome_package'
-    #   action :create
-    # end
-    # end
 
     stubs_for_provider('aptly_mirror[ubuntu-precise-main]') do |provider|
       allow(provider).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', timeout: 3600.0, environment: { 'HOME' => '/opt/aptly', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)
@@ -60,7 +52,7 @@ platforms.each do |platform, version|
       it 'Steps of resource' do
         expect(chef_run).to run_execute('Import system platform keyring')
         expect(chef_run).to create_if_missing_cookbook_file("#{Chef::Config['file_cache_path']}/gpg_keyfile")
-        expect(chef_run).to run_execute('Installing external repository key from gpg_keyfile')
+        expect(chef_run).to run_execute('Import GPG key from gpg_keyfile')
       end
     end
   end
