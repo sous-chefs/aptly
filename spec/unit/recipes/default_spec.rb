@@ -47,19 +47,12 @@ platforms.each do |platform, version|
         expect(chef_run).to add_apt_repository('aptly')
       end
 
-      packages = case platform
-                 when 'debian'
-                   version.to_i < 9 ? %w(gnupg gpgv) : %w(gnupg1 gpgv1)
-                 when 'ubuntu'
-                   if version.to_f < 18.04
-                     %w(gnupg gpgv)
-                   else
-                     version.to_f < 22.04 ? %w(gnupg1 gpgv1) : %w(gnupg gpgv)
-                   end
-                 end
-      packages += %w(screen aptly graphviz haveged)
-      it 'installs the gnupg, gpgv, screen, aptly, graphviz and haveged package' do
-        expect(chef_run).to install_package(packages)
+      it 'installs gpg using gpg_install resource' do
+        expect(chef_run).to install_gpg_install('gpg')
+      end
+
+      it 'installs the screen, aptly and graphviz packages' do
+        expect(chef_run).to install_package(%w(screen aptly graphviz))
       end
 
       it 'Create aptly group' do
@@ -81,7 +74,7 @@ platforms.each do |platform, version|
       end
 
       it 'Generate GPG Keys' do
-        expect(chef_run).to run_bash('Generate Aptly GPG Key pair')
+        expect(chef_run).to generate_gpg_key('aptly')
       end
 
       it 'converges successfully' do

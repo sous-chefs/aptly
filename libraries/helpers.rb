@@ -21,27 +21,6 @@ module Aptly
       { 'HOME' => node['aptly']['rootDir'], 'USER' => node['aptly']['user'], 'TMPDIR' => node['aptly']['tmpDir'] }
     end
 
-    def gpg_command
-      case node['platform']
-      when 'debian'
-        if node['platform_version'].to_i < 9
-          'gpg'
-        elsif node['platform_version'].to_i < 12
-          'gpg1'
-        else
-          'gpg'
-        end
-      when 'ubuntu'
-        if node['platform_version'].to_f < 18.04
-          'gpg'
-        elsif node['platform_version'].to_f < 22.04
-          'gpg1'
-        else
-          'gpg'
-        end
-      end
-    end
-
     def filter(f)
       f.empty? ? '' : " -filter '#{f}'"
     end

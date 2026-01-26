@@ -24,27 +24,11 @@ apt_repository 'aptly' do
   sensitive true
 end
 
-pkgs = %w(screen aptly graphviz haveged)
-pkgs = case node['platform']
-       when 'debian'
-         if node['platform_version'].to_i < 9
-           %w(gnupg gpgv) + pkgs
-         elsif node['platform_version'].to_i < 12
-           %w(gnupg1 gpgv1) + pkgs
-         else
-           %w(gnupg gpgv) + pkgs
-         end
-       when 'ubuntu'
-         if node['platform_version'].to_f < 18.04
-           %w(gnupg gpgv) + pkgs
-         elsif node['platform_version'].to_f < 22.04
-           %w(gnupg1 gpgv1) + pkgs
-         else
-           %w(gnupg gpgv) + pkgs
-         end
-       end
+# Install gpg and haveged using the gpg cookbook
+gpg_install 'gpg'
 
-package pkgs
+# Install additional packages needed by aptly
+package %w(screen aptly graphviz)
 
 # Needed if you change home directory after user creation
 directory node['aptly']['rootDir'] do
@@ -91,33 +75,16 @@ template '/etc/aptly.conf' do
             SwiftPublishEndpoints: node['aptly']['SwiftPublishEndpoints'])
 end
 
-user_environment = {
-  'USER' => node['aptly']['user'],
-  'HOME' => node['aptly']['rootDir'],
-}
-
-bash 'Generate Aptly GPG Key pair' do
+gpg_key 'aptly' do
   user node['aptly']['user']
   group node['aptly']['group']
-  environment user_environment
-  code <<-EOH
-    TMP_REQUEST=$(mktemp /tmp/request.XXXXX)
-    cat >$TMP_REQUEST <<EOF
-%echo Generating Aptly GPG key
-Key-Type: #{node['aptly']['gpg']['key-type']}
-Key-Length: #{node['aptly']['gpg']['key-length']}
-Subkey-Type: #{node['aptly']['gpg']['subkey-type']}
-Subkey-Length: #{node['aptly']['gpg']['subkey-length']}
-Name-Real: #{node['aptly']['gpg']['name-real']}
-Name-Comment: #{node['aptly']['gpg']['name-comment']}
-Name-Email: #{node['aptly']['gpg']['name-email']}
-Expire-Date: #{node['aptly']['gpg']['expire-date']}
-Passphrase: #{node['aptly']['gpg']['passphrase']}
-%commit
-%echo done
-EOF
-  #{gpg_command} --batch --gen-key $TMP_REQUEST
-  rm -f $TMP_REQUEST
-  EOH
-  not_if { ::File.exist?("#{node['aptly']['rootDir']}/.gnupg/trustdb.gpg") }
+  key_type node['aptly']['gpg']['key-type']
+  key_length node['aptly']['gpg']['key-length'].to_s
+  name_real node['aptly']['gpg']['name-real']
+  name_comment node['aptly']['gpg']['name-comment']
+  name_email node['aptly']['gpg']['name-email']
+  expire_date node['aptly']['gpg']['expire-date'].to_s
+  passphrase node['aptly']['gpg']['passphrase']
+  home_dir "#{node['aptly']['rootDir']}/.gnupg"
+  action :generate
 end

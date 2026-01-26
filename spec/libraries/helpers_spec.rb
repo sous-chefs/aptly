@@ -197,58 +197,6 @@ RSpec.describe Aptly::Helpers do
     end
   end
 
-  describe '#gpg_command' do
-    before do
-      allow(subject).to receive(:[]).with('platform').and_return(platform)
-      allow(subject).to receive(:[]).with('platform_version').and_return(platform_version)
-    end
-
-    context 'on debian 8' do
-      let(:platform) { 'debian' }
-      let(:platform_version) { '8' }
-
-      it 'returns gpg' do
-        expect(subject.gpg_command).to eq 'gpg'
-      end
-    end
-
-    context 'on debian 9' do
-      let(:platform) { 'debian' }
-      let(:platform_version) { '9' }
-
-      it 'returns gpg1' do
-        expect(subject.gpg_command).to eq 'gpg1'
-      end
-    end
-
-    context 'on ubuntu 16.04' do
-      let(:platform) { 'ubuntu' }
-      let(:platform_version) { '16.04' }
-
-      it 'returns gpg' do
-        expect(subject.gpg_command).to eq 'gpg'
-      end
-    end
-
-    context 'on ubuntu 18.04' do
-      let(:platform) { 'ubuntu' }
-      let(:platform_version) { '18.04' }
-
-      it 'returns gpg1' do
-        expect(subject.gpg_command).to eq 'gpg1'
-      end
-    end
-
-    context 'on ubuntu 22.04' do
-      let(:platform) { 'ubuntu' }
-      let(:platform_version) { '22.04' }
-
-      it 'returns gpg' do
-        expect(subject.gpg_command).to eq 'gpg'
-      end
-    end
-  end
-
   describe '#filter' do
     before do
       allow(subject).to receive(:[]).with('f').and_return(filter_string)
