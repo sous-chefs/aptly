@@ -15,8 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+provides :aptly_serve
 unified_mode true
-use '_partials/_common'
+use '_partial/_common'
 
 property :listen, String
 property :port,   [Integer, String], default: 8080

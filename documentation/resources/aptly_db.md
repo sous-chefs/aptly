@@ -30,7 +30,7 @@ end
 ### include recipe in a wrapper cookbook and call resources if needed
 
 ```ruby
-include_recipe 'aptly'
+aptly_install 'default'
 
 aptly_repo 'my_repo' do
   comment 'A repository of packages'

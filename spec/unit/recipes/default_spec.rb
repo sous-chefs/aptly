@@ -1,19 +1,3 @@
-#
-# Cookbook:: aptly
-# Spec:: default
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 require 'spec_helper'
 
 platforms = [
@@ -24,23 +8,10 @@ platforms = [
 ]
 
 platforms.each do |platform, version|
-  describe 'Test aptly default recipe' do
+  describe 'aptly_install' do
     context "when all attributes are default, on #{platform} #{version}" do
       let(:chef_run) do
-        # for a complete list of available platforms and versions see:
-        # https://github.com/customink/fauxhai/blob/master/PLATFORMS.md
-        runner = ChefSpec::ServerRunner.new(platform: platform, version: version) do |node|
-          # node.override['aptly'] = {
-          #  'user' => 'my_user',
-          #  'group' => 'my_group',
-          #  'rootDir' => '/data/aptly',
-          # }
-        end
-        runner.converge('aptly::default')
-      end
-
-      before do
-        stub_command('getent passwd aptly').and_return(true)
+        ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_install']).converge('aptly_spec::install')
       end
 
       it 'Add aptly repository' do
@@ -78,7 +49,7 @@ platforms.each do |platform, version|
       end
 
       it 'converges successfully' do
-        expect { chef_run }.to_not raise_error
+        expect { chef_run }.not_to raise_error
       end
     end
   end

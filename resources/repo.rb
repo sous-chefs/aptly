@@ -15,8 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+provides :aptly_repo
 unified_mode true
-use '_partials/_common'
+use '_partial/_common'
 
 property :repo_name,     String, name_property: true
 property :component,     String

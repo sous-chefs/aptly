@@ -15,8 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+provides :aptly_snapshot
 unified_mode true
-use '_partials/_common'
+use '_partial/_common'
 
 property :snapshot_name, String, name_property: true
 property :from,          String, default: ''

@@ -6,7 +6,7 @@ description       'Installs/Configures aptly'
 issues_url        'https://github.com/sous-chefs/aptly/issues'
 source_url        'https://github.com/sous-chefs/aptly'
 version           '3.2.4'
-chef_version      '>= 13.0'
+chef_version      '>= 15.3'
 
 depends 'gpg', '>= 1.0'
 

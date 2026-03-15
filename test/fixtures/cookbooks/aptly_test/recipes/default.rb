@@ -1,27 +1,18 @@
-#
-# Cookbook:: aptly_test
-# Recipe:: default
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
-include_recipe 'aptly'
+# frozen_string_literal: true
 
 aptly_user = 'aptly'
 aptly_group = 'aptly'
 aptly_root_dir = '/opt/aptly'
 aptly_tmp_dir = '/tmp'
 aptly_gpg_passphrase = 'GreatPassPhrase'
+
+aptly_install 'default' do
+  user aptly_user
+  group aptly_group
+  root_dir aptly_root_dir
+  tmp_dir aptly_tmp_dir
+  gpg_passphrase aptly_gpg_passphrase
+end
 
 aptly_repo 'my_repo' do
   comment 'A repository of packages'
@@ -209,8 +200,11 @@ end
 
 aptly_publish 'my_repo' do
   type 'repo'
+  component ['main']
+  distribution 'bionic'
   prefix 'ubuntu'
   gpg_passphrase aptly_gpg_passphrase
+  skip_signing true
   user aptly_user
   group aptly_group
   root_dir aptly_root_dir
@@ -219,8 +213,11 @@ end
 
 aptly_publish 'my_snapshot' do
   type 'snapshot'
+  component ['main']
+  distribution 'bionic'
   prefix 'snap'
   gpg_passphrase aptly_gpg_passphrase
+  skip_signing true
   user aptly_user
   group aptly_group
   root_dir aptly_root_dir
@@ -229,8 +226,11 @@ end
 
 aptly_publish 'my_mirror_snapshot' do
   type 'snapshot'
+  component ['main']
+  distribution 'bionic'
   prefix 'mirror'
   gpg_passphrase aptly_gpg_passphrase
+  skip_signing true
   user aptly_user
   group aptly_group
   root_dir aptly_root_dir
@@ -249,8 +249,11 @@ end
 aptly_publish 'my_snapshot_for_switch' do
   publish_name 'my_mirror_snapshot'
   type 'snapshot'
+  component ['main']
+  distribution 'bionic'
   prefix 'switch'
   gpg_passphrase aptly_gpg_passphrase
+  skip_signing true
   user aptly_user
   group aptly_group
   root_dir aptly_root_dir
@@ -260,9 +263,11 @@ end
 
 aptly_publish 'my_switch_snapshot' do
   type 'snapshot'
+  component ['main']
   distribution 'bionic'
   prefix 'switch'
   gpg_passphrase aptly_gpg_passphrase
+  skip_signing true
   user aptly_user
   group aptly_group
   root_dir aptly_root_dir

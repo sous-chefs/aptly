@@ -1,24 +1,13 @@
-#
-# Cookbook:: aptly
-# Library:: helpers
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+# frozen_string_literal: true
 
 module Aptly
   module Helpers
-    def aptly_env
-      { 'HOME' => node['aptly']['rootDir'], 'USER' => node['aptly']['user'], 'TMPDIR' => node['aptly']['tmpDir'] }
+    def aptly_env(resource = nil)
+      {
+        'HOME' => aptly_value(resource, :root_dir, 'rootDir'),
+        'USER' => aptly_value(resource, :user, 'user'),
+        'TMPDIR' => aptly_value(resource, :tmp_dir, 'tmpDir') || '/tmp',
+      }
     end
 
     def filter(f)
@@ -81,27 +70,31 @@ module Aptly
       arr.empty? ? '' : " -architectures #{arr.join(',')}"
     end
 
-    def mirror_exists?(m)
-      shell_out("aptly mirror -raw list | grep ^#{m}$",
-        user: node['aptly']['user'], environment: aptly_env).exitstatus == 0
+    def mirror_exists?(mirror_name, resource = nil)
+      shell_out("aptly mirror -raw list | grep ^#{mirror_name}$",
+        user: aptly_value(resource, :user, 'user'),
+        environment: aptly_env(resource)).exitstatus == 0
     end
 
-    def mirror_show(m)
-      shell_out("aptly mirror show #{m}", user: node['aptly']['user'], environment: aptly_env)
+    def mirror_show(mirror_name, resource = nil)
+      shell_out("aptly mirror show #{mirror_name}",
+        user: aptly_value(resource, :user, 'user'),
+        environment: aptly_env(resource))
     end
 
-    def mirror_info(m)
-      return unless mirror_exists?(m)
-      cmd = mirror_show(m)
+    def mirror_info(mirror_name, resource = nil)
+      return unless resource.nil? ? mirror_exists?(mirror_name) : mirror_exists?(mirror_name, resource)
+
+      cmd = resource.nil? ? mirror_show(mirror_name) : mirror_show(mirror_name, resource)
       # the output of aptly mirror show is broken into sections delimited
       # by a blank line. We're only interested in the first section
-      output = cmd.stdout.split(/\n\n/).first
+      output = cmd.stdout.split("\n\n").first
       # convert the output of the aptly mirror show command into a hash
-      info = output.split(/\n/).map do |x|
+      info = output.split("\n").map do |x|
         # the hash keys have spaces and hyphens replaced with underscore,
         # and periods are removed.
         k, v = x.split(/:\s*/, 2)
-        [k.downcase().gsub('.', '').gsub(/(\s+|-)/, '_'), v]
+        [k.downcase.gsub('.', '').gsub(/(\s+|-)/, '_'), v]
       end.compact.to_h
       # convert the architectures to an array
       if info.key?('architectures')
@@ -117,14 +110,25 @@ module Aptly
     end
 
     def mirror_command(res)
-      if mirror_exists?(res.mirror_name)
+      if mirror_resource?(res) ? mirror_exists?(res.mirror_name, res) : mirror_exists?(res.mirror_name)
         "aptly mirror edit#{with_installer(res.with_installer)}#{with_udebs(res.with_udebs)}#{architectures(res.architectures)}#{filter(res.filter)}#{filter_with_deps(res.filter_with_deps)}#{dep_follow_all_variants(res.dep_follow_all_variants)}#{dep_follow_recommends(res.dep_follow_recommends)}#{dep_follow_source(res.dep_follow_source)}#{dep_follow_suggests(res.dep_follow_suggests)}#{dep_verbose_resolve(res.dep_verbose_resolve)}#{ignore_signatures(res.ignore_signatures)} #{res.mirror_name}"
       else
         "aptly mirror create#{with_installer(res.with_installer)}#{with_udebs(res.with_udebs)}#{architectures(res.architectures)}#{filter(res.filter)}#{filter_with_deps(res.filter_with_deps)}#{dep_follow_all_variants(res.dep_follow_all_variants)}#{dep_follow_recommends(res.dep_follow_recommends)}#{dep_follow_source(res.dep_follow_source)}#{dep_follow_suggests(res.dep_follow_suggests)}#{dep_verbose_resolve(res.dep_verbose_resolve)}#{ignore_signatures(res.ignore_signatures)} #{res.mirror_name} #{res.uri} #{res.distribution} #{res.component}"
       end
     end
+
+    def aptly_value(resource, property_name, legacy_key)
+      return resource.public_send(property_name) if resource && resource.respond_to?(property_name)
+      return public_send(property_name) if respond_to?(property_name)
+
+      config = self['aptly'] if respond_to?(:[])
+      config&.[](legacy_key)
+    end
+
+    def mirror_resource?(resource)
+      resource.respond_to?(:root_dir) && resource.respond_to?(:user) && resource.respond_to?(:tmp_dir)
+    end
   end
 end
 
-Chef::DSL::Recipe.include ::Aptly::Helpers
 Chef::Resource.include ::Aptly::Helpers

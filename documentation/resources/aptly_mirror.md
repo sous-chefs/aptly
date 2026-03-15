@@ -37,7 +37,7 @@ Manage external mirror
 | `skip_existing_packages`  | [true, false] | Do not check file existence for packages listed in the internal database of the mirror | false            | :update          |
 | `timeout`                 | Integer       | Timeout in seconds                                                                     | 3600             | :update          |
 
-Note: The "architectures" property will use the global configuration (settable via node['aptly']['architectures']) if you do not provide it for a particular repository here. If you do not provide either of them, it will default to all available architectures for that particular mirror. Note also that you need to `publish` with the architectures as well!
+Note: The `architectures` property can inherit from the global configuration on `aptly_install` when you omit it here. If you omit it in both places, aptly defaults to the architectures advertised by the upstream mirror.
 
 ## Examples
 

@@ -20,9 +20,10 @@ Publish, remove or update a repo or a snapshot
 | `architectures` | Array   | Only mentioned architectures would be published | []              | :create                   |
 | `endpoint`      | String  | An optional endpoint reference                  | ''              | :create, :switch, :update |
 | `prefix`        | String  | An optional prefix for publishing               | ''              | :create, :switch, :update |
+| `skip_signing`  | Boolean | Skip GPG signing for publish operations         | false           | :create, :switch, :update |
 | `timeout`       | Integer | Timeout in seconds                              | 3600            | all                       |
 
-Note: The "architectures" property will use the global configuration (settable via node['aptly']['architectures']) if you do not provide it for a particular repository here.
+Note: The "architectures" property will use the value configured by `aptly_install` if you do not provide it for a particular publication here.
 
 ## Examples
 

@@ -16,68 +16,25 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ### Platform
 
-- Debian 9
-- Debian 10
-- Ubuntu 16.04
-- Ubuntu 18.04
+- Debian 11
+- Debian 12
+- Ubuntu 22.04
+- Ubuntu 24.04
 
-## Attributes
+## Installation
 
-### Repository attributes
-
-- `default['aptly']['repository']['uri'] = 'http://repo.aptly.info/'`
-- `default['aptly']['repository']['dist'] = 'squeeze'`
-- `default['aptly']['repository']['components'] = 'main'`
-- `default['aptly']['repository']['key'] = 'https://www.aptly.info/pubkey.txt'`
-
-### Global repository attributes
-
-- `default['aptly']['user'] = 'aptly'`
-- `default['aptly']['group'] = 'aptly'`
-- `default['aptly']['tmpDir'] = '/tmp'`
-- `default['aptly']['rootDir'] = '/opt/aptly'`
-- `default['aptly']['downloadConcurrency'] = 4`
-- `default['aptly']['downloadSpeedLimit'] = 0`
-- `default['aptly']['architectures'] = []`
-- `default['aptly']['dependencyFollowSuggests'] = false`
-- `default['aptly']['dependencyFollowRecommends'] = false`
-- `default['aptly']['dependencyFollowAllVariants'] = false`
-- `default['aptly']['dependencyFollowSource'] = false`
-- `default['aptly']['gpgDisableSign'] = false`
-- `default['aptly']['gpgDisableVerify'] = false`
-- `default['aptly']['gpgProvider'] = 'gpg'`
-- `default['aptly']['downloadSourcePackages'] = false`
-- `default['aptly']['skipLegacyPool'] = true`
-- `default['aptly']['ppaDistributorID'] = 'ubuntu'`
-- `default['aptly']['ppaCodename'] = ''`
-- `default['aptly']['FileSystemPublishEndpoints'] = {}`
-- `default['aptly']['S3PublishEndpoints'] = {}`
-- `default['aptly']['SwiftPublishEndpoints'] = {}`
-
-### GPG attributes
-
-- `default['aptly']['gpg']['key-type'] = 'RSA'`
-- `default['aptly']['gpg']['key-length'] = 4096`
-- `default['aptly']['gpg']['subkey-type'] = 'RSA'`
-- `default['aptly']['gpg']['subkey-length'] = 4096`
-- `default['aptly']['gpg']['name-real'] = 'Aptly'`
-- `default['aptly']['gpg']['name-comment'] = 'Aptly Key'`
-- `default['aptly']['gpg']['name-email'] = 'organisation@example.org'`
-- `default['aptly']['gpg']['expire-date'] = 0`
-- `default['aptly']['gpg']['passphrase'] = 'GreatPassPhrase'`
-
-## Recipes
-
-### `default`
-
-Install and configure aptly
+Use the `aptly_install` custom resource to install and configure aptly. Configuration that previously lived in cookbook attributes must now be passed explicitly as resource properties.
 
 ## Resources
 
+- [`aptly_install`](documentation/resources/aptly_install.md)
 - [`aptly_db`](documentation/resources/aptly_db.md)
+- [`aptly_api_serve`](documentation/resources/aptly_api_serve.md)
 - [`aptly_mirror`](documentation/resources/aptly_mirror.md)
 - [`aptly_publish`](documentation/resources/aptly_publish.md)
 - [`aptly_repo`](documentation/resources/aptly_repo.md)
+- [`aptly_serve`](documentation/resources/aptly_serve.md)
+- [`aptly_snapshot`](documentation/resources/aptly_snapshot.md)
 
 ## Testing
 
@@ -85,7 +42,7 @@ Please contribute to keep unit and functional tests up to date.
 After modifications, please run the following commands to check if you break something:
 
 - chef exec rspec
-- kitchen test default-ubuntu-1804
+- kitchen test default-ubuntu-2204
 
 NOTE: if you want to use Policyfile, rename `Policyfile.rb.dist` to `Policyfile.rb` in root and test directories, then execute `chef update` in each folder. Look inside `.kitchen.yml` and `spec/spec_helper.rb` too.
 

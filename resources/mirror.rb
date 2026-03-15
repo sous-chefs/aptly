@@ -15,8 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+provides :aptly_mirror
 unified_mode true
-use '_partials/_common'
+use '_partial/_common'
 
 property :mirror_name,             String, name_property: true
 property :component,               String, default: ''
@@ -105,7 +106,7 @@ action :update do
     environment resource_env
     timeout new_resource.timeout
     returns [0, 2]
-    only_if { mirror_exists?(new_resource.mirror_name) }
+    only_if { mirror_exists?(new_resource.mirror_name, new_resource) }
   end
 end
 
@@ -115,7 +116,7 @@ action :drop do
     user new_resource.user
     group new_resource.group
     environment resource_env
-    only_if { mirror_exists?(new_resource.mirror_name) }
+    only_if { mirror_exists?(new_resource.mirror_name, new_resource) }
   end
 end
 
