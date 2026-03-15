@@ -18,6 +18,7 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 - Debian 11
 - Debian 12
+- Debian 13
 - Ubuntu 22.04
 - Ubuntu 24.04
 

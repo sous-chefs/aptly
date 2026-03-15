@@ -1,10 +1,11 @@
-name 'aptly_test'
+# frozen_string_literal: true
+
+name 'test'
 maintainer 'Test Cookbook'
 maintainer_email 'no-reply@example.com'
 license 'Apache-2.0'
-description 'Installs/Configures aptly_test'
-
+description 'Integration test cookbook for aptly'
 version '0.1.0'
-chef_version '>= 12.14'
+chef_version '>= 15.3'
 
 depends 'aptly'

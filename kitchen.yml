@@ -17,6 +17,7 @@ platforms:
   - name: ubuntu-24.04
   - name: debian-11
   - name: debian-12
+  - name: debian-13
 
 suites:
   - name: default
@@ -24,5 +25,5 @@ suites:
       inspec_tests:
         - test/integration/default
     run_list:
-      - recipe[aptly_test::setup]
-      - recipe[aptly_test::default]
+      - recipe[test::setup]
+      - recipe[test::default]
