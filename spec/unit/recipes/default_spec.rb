@@ -22,8 +22,8 @@ platforms.each do |platform, version|
         expect(chef_run).to install_gpg_install('gpg')
       end
 
-      it 'installs the screen, aptly and graphviz packages' do
-        expect(chef_run).to install_package(%w(screen aptly graphviz))
+      it 'installs the screen, aptly, graphviz, bzip2 and xz-utils packages' do
+        expect(chef_run).to install_package(%w(screen aptly graphviz bzip2 xz-utils))
       end
 
       it 'Create aptly group' do
