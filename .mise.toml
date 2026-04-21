@@ -1,3 +1,2 @@
 [env]
-KITCHEN_LOCAL_YAML = "kitchen.dokken.yml"
 _.path = "/opt/chef-workstation/bin"
