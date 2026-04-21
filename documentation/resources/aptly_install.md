@@ -12,6 +12,7 @@ Install and configure aptly for use by the other aptly custom resources.
 - `repository_distribution` Aptly package repository distribution
 - `repository_components` Aptly package repository components
 - `repository_key` Aptly package repository key URL
+- `repository_cookbook` Cookbook name to use when `repository_key` points to a cookbook file
 - `user` Aptly system user
 - `group` Aptly system group
 - `root_dir` Aptly home directory

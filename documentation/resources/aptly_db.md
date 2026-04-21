@@ -1,52 +1,23 @@
 # `aptly_db`
 
-Manage internal Aptly DB
+Run Aptly database maintenance commands.
 
 ## Actions
 
-- `cleanup` - (default) Database cleanup removes information about unreferenced packages and deletes files in the package pool that aren’t used by packages anymore.
-- `recover` - Database recover does its best to recover database after crash.
+- `:cleanup` removes unreferenced package metadata and pool files
+- `:recover` attempts database recovery after corruption or an unclean shutdown
 
-## Properties
+## Common Properties
 
-None
+- `user`
+- `group`
+- `root_dir`
+- `tmp_dir`
 
-## Examples
+## Example
 
 ```ruby
 aptly_db 'cleanup' do
   action :cleanup
 end
-```
-
-```ruby
-aptly_db 'recover' do
-  action :recover
-end
-```
-
-## Usage
-
-### include recipe in a wrapper cookbook and call resources if needed
-
-```ruby
-aptly_install 'default'
-
-aptly_repo 'my_repo' do
-  comment 'A repository of packages'
-  component 'main'
-  distribution 'bionic'
-end
-
-aptly_snapshot 'my_snapshot' do
-  from 'my_repo'
-  type 'repo'
-end
-
-aptly_publish 'my_repo' do
-  type 'repo'
-  prefix 'ubuntu'
-end
-
-aptly_serve 'Aptly HTTP Service'
 ```

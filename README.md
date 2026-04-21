@@ -24,7 +24,7 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ## Installation
 
-Use the `aptly_install` custom resource to install and configure aptly. Configuration that previously lived in cookbook attributes must now be passed explicitly as resource properties.
+Use the `aptly_install` custom resource to install and configure aptly. This cookbook no longer ships a default recipe or attribute-driven resource configuration; pass any non-default settings explicitly as resource properties.
 
 ## Resources
 
@@ -43,7 +43,7 @@ Please contribute to keep unit and functional tests up to date.
 After modifications, please run the following commands to check if you break something:
 
 - chef exec rspec
-- kitchen test default-ubuntu-2204
+- KITCHEN_LOCAL_YAML=kitchen.dokken.yml kitchen test default-ubuntu-2404 --destroy=always
 
 NOTE: if you want to use Policyfile, rename `Policyfile.rb.dist` to `Policyfile.rb` in root and test directories, then execute `chef update` in each folder. Look inside `.kitchen.yml` and `spec/spec_helper.rb` too.
 

@@ -2,11 +2,11 @@
 
 module Aptly
   module Helpers
-    def aptly_env(resource = nil)
+    def aptly_env(resource = self)
       {
-        'HOME' => aptly_value(resource, :root_dir, 'rootDir'),
-        'USER' => aptly_value(resource, :user, 'user'),
-        'TMPDIR' => aptly_value(resource, :tmp_dir, 'tmpDir') || '/tmp',
+        'HOME' => aptly_property(resource, :root_dir),
+        'USER' => aptly_property(resource, :user),
+        'TMPDIR' => aptly_property(resource, :tmp_dir) || '/tmp',
       }
     end
 
@@ -70,22 +70,22 @@ module Aptly
       arr.empty? ? '' : " -architectures #{arr.join(',')}"
     end
 
-    def mirror_exists?(mirror_name, resource = nil)
+    def mirror_exists?(mirror_name, resource = self)
       shell_out("aptly mirror -raw list | grep ^#{mirror_name}$",
-        user: aptly_value(resource, :user, 'user'),
+        user: aptly_property(resource, :user),
         environment: aptly_env(resource)).exitstatus == 0
     end
 
-    def mirror_show(mirror_name, resource = nil)
+    def mirror_show(mirror_name, resource = self)
       shell_out("aptly mirror show #{mirror_name}",
-        user: aptly_value(resource, :user, 'user'),
+        user: aptly_property(resource, :user),
         environment: aptly_env(resource))
     end
 
-    def mirror_info(mirror_name, resource = nil)
-      return unless resource.nil? ? mirror_exists?(mirror_name) : mirror_exists?(mirror_name, resource)
+    def mirror_info(mirror_name, resource = self)
+      return unless mirror_exists?(mirror_name, resource)
 
-      cmd = resource.nil? ? mirror_show(mirror_name) : mirror_show(mirror_name, resource)
+      cmd = mirror_show(mirror_name, resource)
       # the output of aptly mirror show is broken into sections delimited
       # by a blank line. We're only interested in the first section
       output = cmd.stdout.split("\n\n").first
@@ -110,23 +110,15 @@ module Aptly
     end
 
     def mirror_command(res)
-      if mirror_resource?(res) ? mirror_exists?(res.mirror_name, res) : mirror_exists?(res.mirror_name)
+      if mirror_exists?(res.mirror_name, res)
         "aptly mirror edit#{with_installer(res.with_installer)}#{with_udebs(res.with_udebs)}#{architectures(res.architectures)}#{filter(res.filter)}#{filter_with_deps(res.filter_with_deps)}#{dep_follow_all_variants(res.dep_follow_all_variants)}#{dep_follow_recommends(res.dep_follow_recommends)}#{dep_follow_source(res.dep_follow_source)}#{dep_follow_suggests(res.dep_follow_suggests)}#{dep_verbose_resolve(res.dep_verbose_resolve)}#{ignore_signatures(res.ignore_signatures)} #{res.mirror_name}"
       else
         "aptly mirror create#{with_installer(res.with_installer)}#{with_udebs(res.with_udebs)}#{architectures(res.architectures)}#{filter(res.filter)}#{filter_with_deps(res.filter_with_deps)}#{dep_follow_all_variants(res.dep_follow_all_variants)}#{dep_follow_recommends(res.dep_follow_recommends)}#{dep_follow_source(res.dep_follow_source)}#{dep_follow_suggests(res.dep_follow_suggests)}#{dep_verbose_resolve(res.dep_verbose_resolve)}#{ignore_signatures(res.ignore_signatures)} #{res.mirror_name} #{res.uri} #{res.distribution} #{res.component}"
       end
     end
 
-    def aptly_value(resource, property_name, legacy_key)
-      return resource.public_send(property_name) if resource && resource.respond_to?(property_name)
-      return public_send(property_name) if respond_to?(property_name)
-
-      config = self['aptly'] if respond_to?(:[])
-      config&.[](legacy_key)
-    end
-
-    def mirror_resource?(resource)
-      resource.respond_to?(:root_dir) && resource.respond_to?(:user) && resource.respond_to?(:tmp_dir)
+    def aptly_property(resource, property_name)
+      resource.public_send(property_name)
     end
   end
 end

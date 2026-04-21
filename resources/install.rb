@@ -9,6 +9,7 @@ property :repository_uri, String, default: 'http://repo.aptly.info/'
 property :repository_distribution, String, default: 'squeeze'
 property :repository_components, Array, default: ['main']
 property :repository_key, String, default: 'https://www.aptly.info/pubkey.txt'
+property :repository_cookbook, [String, nil]
 property :packages, Array, default: %w(screen aptly graphviz bzip2 xz-utils)
 property :shell, String, default: '/bin/bash'
 property :config_path, String, default: '/etc/aptly.conf'
@@ -45,6 +46,7 @@ action :create do
     distribution new_resource.repository_distribution
     components new_resource.repository_components
     key new_resource.repository_key
+    cookbook new_resource.repository_cookbook unless new_resource.repository_cookbook.nil?
     sensitive true
   end
 

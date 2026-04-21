@@ -9,7 +9,7 @@ platforms = [
 
 platforms.each do |platform, version|
   describe 'aptly_install' do
-    context "when all attributes are default, on #{platform} #{version}" do
+    context "when all properties are default, on #{platform} #{version}" do
       let(:chef_run) do
         ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_install']).converge('aptly_spec::install')
       end

@@ -6,6 +6,15 @@ Run the Aptly HTTP publish service in a detached screen session.
 
 - `:run` starts `aptly serve`.
 
+## Common Properties
+
+- `listen`
+- `port`
+- `user`
+- `group`
+- `root_dir`
+- `tmp_dir`
+
 ## Example
 
 ```ruby

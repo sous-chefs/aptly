@@ -6,6 +6,16 @@ Run the Aptly API service in a detached screen session.
 
 - `:run` starts `aptly api serve`.
 
+## Common Properties
+
+- `listen`
+- `port`
+- `no_lock`
+- `user`
+- `group`
+- `root_dir`
+- `tmp_dir`
+
 ## Example
 
 ```ruby

@@ -103,7 +103,16 @@ end
 2. **Add explicit properties** for `user`, `group`, `root_dir`, and `tmp_dir` if you were relying on non-default node attributes
 3. **Update `aptly_publish`** resources to include `gpg_passphrase`
 4. **Update `aptly_repo`** resources using `:add` action to explicitly set `directory` or `file`
-5. **Remove node attribute overrides** that are no longer used by resources (they may still be used by the default recipe)
+5. **Remove node attribute overrides** that are no longer used by resources
+
+### Removed Cookbook Structure
+
+Version 3.x completes the migration away from cookbook-level defaults:
+
+- `recipes/default.rb` has been removed
+- `attributes/default.rb` has been removed
+
+Wrapper cookbooks should call `aptly_install` and the other custom resources directly.
 
 ### Wrapper Cookbook Pattern
 
