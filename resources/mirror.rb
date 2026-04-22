@@ -136,12 +136,16 @@ action_class do
     end
 
     execute "Import GPG key #{keyid}" do
-      command "gpg --no-default-keyring --keyring #{new_resource.root_dir}/.gnupg/trustedkeys.gpg --keyserver hkp://#{keyserver} --recv-keys #{keyid}"
+      command "gpg --no-default-keyring --keyring #{new_resource.root_dir}/.gnupg/trustedkeys.gpg --keyserver #{keyserver_uri(keyserver)} --recv-keys #{keyid}"
       user new_resource.user
       group new_resource.group
       environment resource_env
       not_if "gpg --no-default-keyring --keyring #{new_resource.root_dir}/.gnupg/trustedkeys.gpg --list-keys #{keyid}"
     end
+  end
+
+  def keyserver_uri(keyserver)
+    keyserver.match?(%r{^[a-z][a-z0-9+\-.]*://}i) ? keyserver : "hkp://#{keyserver}"
   end
 
   def install_local_key(keyfile, cb)

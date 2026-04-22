@@ -17,7 +17,7 @@ Manage an external Aptly mirror.
 | `distribution` | String | `''` | Distribution passed to `aptly mirror create` |
 | `uri` | String | `''` | Upstream mirror URL |
 | `keyid` | String | `''` | Remote repository signing key ID |
-| `keyserver` | String | `'keys.gnupg.net'` | Keyserver used with `keyid` |
+| `keyserver` | String | `'keys.gnupg.net'` | Keyserver used with `keyid`; accepts either a bare hostname or a full URI such as `hkps://keys.openpgp.org` |
 | `cookbook` | String | `''` | Cookbook containing `keyfile` |
 | `keyfile` | String | `''` | Local key file imported into Aptly's trusted keyring |
 | `filter` | String | `''` | Aptly package filter |
@@ -36,7 +36,7 @@ Manage an external Aptly mirror.
 | `root_dir` | String | `'/opt/aptly'` | Shared common property |
 | `tmp_dir` | String | `'/tmp'` | Shared common property |
 
-## Example
+## Examples
 
 ```ruby
 aptly_mirror 'nginx-bionic' do
@@ -46,5 +46,15 @@ aptly_mirror 'nginx-bionic' do
   keyid '7BD9BF62'
   keyserver 'keyserver.ubuntu.com'
   filter 'nginx (>= 1.16.1)'
+end
+```
+
+```ruby
+aptly_mirror 'debian-bookworm' do
+  distribution 'bookworm'
+  component 'main'
+  uri 'https://deb.debian.org/debian/'
+  keyid 'B7C5D7D6350947F8'
+  keyserver 'hkps://keys.openpgp.org'
 end
 ```

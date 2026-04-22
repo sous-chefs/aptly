@@ -30,6 +30,9 @@ platforms.each do |platform, version|
       ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_mirror']).converge('aptly_spec::mirror')
       # ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_mirror']).converge('aptly::default')
     end
+    let(:chef_run_hkps) do
+      ChefSpec::SoloRunner.new(platform: platform, version: version, step_into: ['aptly_mirror']).converge('aptly_spec::mirror_hkps')
+    end
 
     stubs_for_provider('aptly_mirror[ubuntu-precise-main]') do |provider|
       allow(provider).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', timeout: 3600.0, environment: { 'HOME' => '/opt/aptly', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)
@@ -60,6 +63,12 @@ platforms.each do |platform, version|
         expect(chef_run).to run_execute('Import system platform keyring')
         expect(chef_run).to run_execute('Creating mirror - ubuntu-precise-main')
       end
+
+      it 'Prefixes host-only keyservers with hkp' do
+        expect(chef_run.execute('Import GPG key 437D05B5').command).to eq(
+          'gpg --no-default-keyring --keyring /opt/aptly/.gnupg/trustedkeys.gpg --keyserver hkp://keys.gnupg.net --recv-keys 437D05B5'
+        )
+      end
     end
 
     context 'Update and Drop action test' do
@@ -73,6 +82,18 @@ platforms.each do |platform, version|
       it 'Steps of resource' do
         expect(chef_run).to run_execute('Updating mirror - ubuntu-precise-main')
         expect(chef_run).to run_execute('Droping mirror - ubuntu-precise-main')
+      end
+    end
+
+    context 'Create action test with hkps keyserver' do
+      before do
+        stub_command('gpg --no-default-keyring --keyring /opt/aptly/.gnupg/trustedkeys.gpg --list-keys 437D05B5').and_return(false)
+      end
+
+      it 'Passes a fully qualified keyserver URI through unchanged' do
+        expect(chef_run_hkps.execute('Import GPG key 437D05B5').command).to eq(
+          'gpg --no-default-keyring --keyring /opt/aptly/.gnupg/trustedkeys.gpg --keyserver hkps://keys.openpgp.org --recv-keys 437D05B5'
+        )
       end
     end
   end
