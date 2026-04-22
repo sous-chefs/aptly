@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [4.0.1](https://github.com/sous-chefs/aptly/compare/v4.0.0...v4.0.1) (2026-04-22)
+
+
+### Bug Fixes
+
+* support keyserver URIs in mirrors ([#156](https://github.com/sous-chefs/aptly/issues/156)) ([670561e](https://github.com/sous-chefs/aptly/commit/670561e1696d39090ffa30ec8edfd7257863762b))
+
 ## [4.0.0](https://github.com/sous-chefs/aptly/compare/v3.2.4...v4.0.0) (2026-04-22)
 
 
