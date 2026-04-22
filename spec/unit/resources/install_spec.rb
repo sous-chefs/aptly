@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 platforms = [
-  %w(debian 11),
   %w(debian 12),
   ['ubuntu', '22.04'],
   ['ubuntu', '24.04'],
