@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [4.0.0](https://github.com/sous-chefs/aptly/compare/v3.2.4...v4.0.0) (2026-04-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* this cookbook no longer supports attribute-driven configuration or a default recipe. Consumers must declare aptly resources explicitly and pass configuration via resource properties.
+
+### Features
+
+* migrate to custom resources ([#150](https://github.com/sous-chefs/aptly/issues/150)) ([05d492c](https://github.com/sous-chefs/aptly/commit/05d492c2ebd246eb52f280fcc6abffb7b828a5cb))
+
 ## [3.2.4](https://github.com/sous-chefs/aptly/compare/3.2.3...v3.2.4) (2025-10-14)
 
 
