@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # Cookbook:: aptly
-# Resource:: db
+# Resource:: _partial/_common
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,30 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-provides :aptly_db
-unified_mode true
-use '_partial/_common'
 
-action :cleanup do
-  execute 'DB Cleanup' do
-    command 'aptly db cleanup'
-    user new_resource.user
-    group new_resource.group
-    environment resource_env
-  end
-end
-
-action :recover do
-  execute 'DB Recover' do
-    command 'aptly db recover'
-    user new_resource.user
-    group new_resource.group
-    environment resource_env
-  end
-end
-
-action_class do
-  def resource_env
-    { 'HOME' => new_resource.root_dir, 'USER' => new_resource.user, 'TMPDIR' => new_resource.tmp_dir }
-  end
-end
+property :user,     String, default: 'aptly'
+property :group,    String, default: 'aptly'
+property :root_dir, String, default: '/opt/aptly'
+property :tmp_dir,  String, default: '/tmp'

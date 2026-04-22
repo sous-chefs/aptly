@@ -15,7 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+provides :aptly_snapshot
 unified_mode true
+use '_partial/_common'
+
 property :snapshot_name, String, name_property: true
 property :from,          String, default: ''
 property :type,          String, default: ''
@@ -32,17 +35,17 @@ action :create do
   if new_resource.empty
     execute "Creating Empty Snapshot - #{new_resource.snapshot_name}" do
       command "aptly snapshot create #{new_resource.snapshot_name} empty"
-      user node['aptly']['user']
-      group node['aptly']['group']
-      environment aptly_env
+      user new_resource.user
+      group new_resource.group
+      environment resource_env
       not_if %(aptly snapshot -raw list | grep ^#{new_resource.snapshot_name}$)
     end
   else
     execute "Creating Snapshot - #{new_resource.snapshot_name}" do
       command "aptly snapshot create #{new_resource.snapshot_name} from #{new_resource.type} #{new_resource.from}"
-      user node['aptly']['user']
-      group node['aptly']['group']
-      environment aptly_env
+      user new_resource.user
+      group new_resource.group
+      environment resource_env
       not_if %(aptly snapshot -raw list | grep ^#{new_resource.snapshot_name}$)
     end
   end
@@ -51,9 +54,9 @@ end
 action :verify do
   execute "Verifying - #{new_resource.snapshot_name}" do
     command "aptly snapshot verify #{new_resource.snapshot_name}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     only_if %(aptly snapshot -raw list | grep ^#{new_resource.snapshot_name}$)
   end
 end
@@ -65,9 +68,9 @@ action :pull do
 
   execute "Pull to - #{new_resource.snapshot_name}" do
     command "aptly snapshot pull#{opts} #{new_resource.snapshot_name} #{new_resource.source} #{new_resource.destination} #{new_resource.package_query}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     not_if %(aptly snapshot -raw list | grep ^#{new_resource.snapshot_name}$)
   end
 end
@@ -80,9 +83,9 @@ action :merge do
 
   execute "Merge Snapshots #{flatten_sources} TO #{new_resource.snapshot_name}" do
     command "aptly snapshot merge#{opts} #{new_resource.snapshot_name} #{flatten_sources}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     not_if %(aptly snapshot -raw list | grep ^#{new_resource.snapshot_name}$)
   end
 end
@@ -90,9 +93,15 @@ end
 action :drop do
   execute "Drop Snapshot #{new_resource.snapshot_name}" do
     command "aptly snapshot drop #{new_resource.snapshot_name}"
-    user node['aptly']['user']
-    group node['aptly']['group']
-    environment aptly_env
+    user new_resource.user
+    group new_resource.group
+    environment resource_env
     only_if %(aptly snapshot -raw list | grep ^#{new_resource.snapshot_name}$)
+  end
+end
+
+action_class do
+  def resource_env
+    { 'HOME' => new_resource.root_dir, 'USER' => new_resource.user, 'TMPDIR' => new_resource.tmp_dir }
   end
 end

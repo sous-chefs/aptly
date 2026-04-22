@@ -20,5 +20,9 @@ aptly_mirror 'ubuntu-precise-main' do
   cookbook 'aptly_spec'
   keyfile 'gpg_keyfile'
   filter 'my_awesome_package'
+  user 'aptly'
+  group 'aptly'
+  root_dir '/opt/aptly'
+  tmp_dir '/tmp'
   action :create
 end

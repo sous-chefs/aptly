@@ -4,22 +4,30 @@ require_relative '../../libraries/helpers'
 RSpec.describe Aptly::Helpers do
   class DummyClass < Chef::Node
     include Aptly::Helpers
+
+    def root_dir
+      '/opt/aptly'
+    end
+
+    def user
+      'aptly'
+    end
+
+    def tmp_dir
+      '/tmp'
+    end
   end
 
   subject { DummyClass.new }
 
   describe '#mirror_exists?(mirror)' do
     before do
-      allow(subject).to receive(:[]).with('aptly').and_return(aptly)
       # existing mirror config
-      allow(subject).to receive(:mirror_exists?).with('ubuntu-precise-main').and_call_original
+      allow(subject).to receive(:mirror_exists?).and_call_original
       allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
       # missing mirror config
-      allow(subject).to receive(:mirror_exists?).with('missing-repo-mirror').and_call_original
       allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^missing-repo-mirror$', exitstatus: 1)
     end
-
-    let(:aptly) { { 'rootDir' => '/opt/aptly', 'user' => 'aptly' } }
 
     context 'checks for existence of mirror' do
       let(:mirror) { 'ubuntu-precise-main' }
@@ -42,18 +50,14 @@ RSpec.describe Aptly::Helpers do
 
   describe '#mirror_info(mirror)' do
     before do
-      allow(subject).to receive(:[]).with('aptly').and_return(aptly)
       # existing mirror config
-      allow(subject).to receive(:mirror_exists?).with('ubuntu-precise-main').and_call_original
+      allow(subject).to receive(:mirror_exists?).and_call_original
       allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
       allow(subject).to receive_shell_out('aptly mirror show ubuntu-precise-main', stdout: mirror_show_after_create_stdout)
       # missing mirror config
-      allow(subject).to receive(:mirror_exists?).with('missing-repo-mirror').and_call_original
       allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^missing-repo-mirror$', exitstatus: 1)
       allow(subject).to receive_shell_out('aptly mirror show missing-repo-mirror', exitstatus: 1)
     end
-
-    let(:aptly) { { 'rootDir' => '/opt/aptly', 'user' => 'aptly' } }
 
     context 'show mirror info' do
       let(:mirror) { 'ubuntu-precise-main' }
@@ -75,20 +79,15 @@ RSpec.describe Aptly::Helpers do
 
   describe '#mirror_info(mirror)' do
     before do
-      allow(subject).to receive(:[]).with('aptly').and_return(aptly)
       # existing mirror config
-      allow(subject).to receive(:mirror_exists?).with('ubuntu-precise-main').and_call_original
-      allow(subject).to receive(:mirror_info).with('ubuntu-precise-main').and_call_original
+      allow(subject).to receive(:mirror_exists?).and_call_original
+      allow(subject).to receive(:mirror_info).and_call_original
       allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
       allow(subject).to receive_shell_out('aptly mirror show ubuntu-precise-main', stdout: mirror_show_after_create_stdout)
       # missing mirror config
-      allow(subject).to receive(:mirror_exists?).with('missing-repo-mirror').and_call_original
-      allow(subject).to receive(:mirror_info).with('missing-repo-mirror').and_call_original
       allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^missing-repo-mirror$', exitstatus: 1)
       allow(subject).to receive_shell_out('aptly mirror show missing-repo-mirror', exitstatus: 1)
     end
-
-    let(:aptly) { { 'rootDir' => '/opt/aptly', 'user' => 'aptly' } }
 
     context 'retrieves information for mirror' do
       let(:mirror) { 'ubuntu-precise-main' }
@@ -119,6 +118,9 @@ RSpec.describe Aptly::Helpers do
         component: 'mirror',
         distribution: 'repo',
         uri: 'http://repo.example.com/missing',
+        user: 'aptly',
+        root_dir: '/opt/aptly',
+        tmp_dir: '/tmp',
         filter: '',
         filter_with_deps: false,
         dep_follow_all_variants: false,
@@ -137,6 +139,9 @@ RSpec.describe Aptly::Helpers do
         component: 'main',
         distribution: 'precise',
         uri: 'http://ubuntu.osuosl.org/ubuntu/',
+        user: 'aptly',
+        root_dir: '/opt/aptly',
+        tmp_dir: '/tmp',
         filter: '',
         filter_with_deps: false,
         dep_follow_all_variants: false,
@@ -150,16 +155,12 @@ RSpec.describe Aptly::Helpers do
         with_installer: false,
         with_udebs: false
       )
-      allow(subject).to receive(:[]).with('aptly').and_return(aptly)
       # existing mirror config
-      allow(subject).to receive(:mirror_exists?).with('ubuntu-precise-main').and_call_original
+      allow(subject).to receive(:mirror_exists?).and_call_original
       allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
       # missing mirror config
-      allow(subject).to receive(:mirror_exists?).with('missing-repo-mirror').and_call_original
       allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^missing-repo-mirror$', exitstatus: 1)
     end
-
-    let(:aptly) { { 'rootDir' => '/opt/aptly', 'user' => 'aptly' } }
 
     context 'creates missing mirror' do
       let(:command) { %(aptly mirror create -architectures amd64 missing-repo-mirror http://repo.example.com/missing repo mirror) }
@@ -183,59 +184,11 @@ RSpec.describe Aptly::Helpers do
   end
 
   describe '#aptly_env' do
-    before do
-      allow(subject).to receive(:[]).with('aptly').and_return(aptly)
-    end
-
-    let(:aptly) { { 'rootDir' => '/opt/aptly', 'user' => 'aptly' } }
-
     context 'sets proper environment' do
       it 'for USER and HOME' do
         expect(subject.aptly_env['USER']).to eq 'aptly'
         expect(subject.aptly_env['HOME']).to eq '/opt/aptly'
-      end
-    end
-  end
-
-  describe '#gpg_command' do
-    before do
-      allow(subject).to receive(:[]).with('platform').and_return(platform)
-      allow(subject).to receive(:[]).with('platform_version').and_return(platform_version)
-    end
-
-    context 'on debian 8' do
-      let(:platform) { 'debian' }
-      let(:platform_version) { '8' }
-
-      it 'returns gpg' do
-        expect(subject.gpg_command).to eq 'gpg'
-      end
-    end
-
-    context 'on debian 9' do
-      let(:platform) { 'debian' }
-      let(:platform_version) { '9' }
-
-      it 'returns gpg1' do
-        expect(subject.gpg_command).to eq 'gpg1'
-      end
-    end
-
-    context 'on ubuntu 16.04' do
-      let(:platform) { 'ubuntu' }
-      let(:platform_version) { '16.04' }
-
-      it 'returns gpg' do
-        expect(subject.gpg_command).to eq 'gpg'
-      end
-    end
-
-    context 'on ubuntu 18.04' do
-      let(:platform) { 'ubuntu' }
-      let(:platform_version) { '18.04' }
-
-      it 'returns gpg1' do
-        expect(subject.gpg_command).to eq 'gpg1'
+        expect(subject.aptly_env['TMPDIR']).to eq '/tmp'
       end
     end
   end

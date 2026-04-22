@@ -1,125 +1,41 @@
 # `aptly_publish`
 
-Publish, remove or update a repo or a snapshot
+Publish, update, switch, or drop Aptly publications.
 
 ## Actions
 
-- `create` - (default) Publish a repo or a snapshot
-- `drop` - Drop a publication
-- `switch` - Switch published snapshot to a new snapshot
-- `update` - Update publication
+- `:create` publishes a repo or snapshot
+- `:switch` switches an existing published distribution to a different snapshot
+- `:update` updates an existing publication
+- `:drop` removes a publication
 
-## Properties
+## Key Properties
 
-| Name            | Types   | Description                                     | Default         | Used with...              |
-| --------------- | ------- | ----------------------------------------------- | --------------- | ------------------------- |
-| `publish_name`  | String  | Publication name                                | <resource_name> | all                       |
-| `type`          | String  | Publish type (snapshot or repo)                 | ''              | :create                   |
-| `component`     | String  | Component name to publish                       | []              | :create, :switch          |
-| `distribution`  | String  | Distribution name to publish                    | ''              | :create, :switch          |
-| `architectures` | Array   | Only mentioned architectures would be published | []              | :create                   |
-| `endpoint`      | String  | An optional endpoint reference                  | ''              | :create, :switch, :update |
-| `prefix`        | String  | An optional prefix for publishing               | ''              | :create, :switch, :update |
-| `timeout`       | Integer | Timeout in seconds                              | 3600            | all                       |
+| Property | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `publish_name` | String | resource name | Publication name in Aptly |
+| `type` | String | `''` | `repo` or `snapshot` for `:create` |
+| `component` | Array | `[]` | Passed to `-component` |
+| `distribution` | String | `''` | Required for `:create` and `:switch` |
+| `architectures` | Array | `[]` | When empty, the resource omits `-architectures` and Aptly uses its normal config defaults |
+| `endpoint` | String | `''` | Optional publishing endpoint |
+| `prefix` | String | `''` | Optional publication prefix |
+| `gpg_passphrase` | String | `''` | Required unless `skip_signing true` |
+| `skip_signing` | true, false | `false` | Uses `-skip-signing` instead of a passphrase |
+| `timeout` | Integer | `3600` | Command timeout |
+| `user` | String | `'aptly'` | Shared common property |
+| `group` | String | `'aptly'` | Shared common property |
+| `root_dir` | String | `'/opt/aptly'` | Shared common property |
+| `tmp_dir` | String | `'/tmp'` | Shared common property |
 
-Note: The "architectures" property will use the global configuration (settable via node['aptly']['architectures']) if you do not provide it for a particular repository here.
-
-## Examples
-
-```ruby
-aptly_publish 'my_repo' do
-  type 'repo'
-  component %w(main contrib)
-  prefix 'my_company'
-end
-```
+## Example
 
 ```ruby
 aptly_publish 'my_snapshot' do
   type 'snapshot'
-  endpoint 's3'
+  component ['main']
+  distribution 'bionic'
   prefix 'snap'
-  action :create
-end
-```
-
-```ruby
-aptly_publish 'my_snapshot' do
-  prefix 'snap'
-  action :update
-end
-```
-
-```ruby
-aptly_publish 'my_snapshot' do
-  prefix 'snap'
-  action :drop
-end
-```
-
-```ruby
-aptly_publish 'my_snapshot' do
-  type 'snapshot'
-  prefix 'snap'
-  action :create
-end
-
-aptly_publish 'my_new_snapshot' do
-  type 'snapshot'
-  prefix 'snap'
-  distribution 'bionic' # distribution must be provided with :switch
-  action :switch
-end
-```
-
-### 'aptly_serve'
-
-Serve an HTTP Service
-
-#### Actions
-
-- `run` - (default) Run the service
-
-#### Properties
-
-| Name     | Types             | Description                             | Default             | Used with... |
-| -------- | ----------------- | --------------------------------------- | ------------------- | ------------ |
-| `listen` | String            | Specify IP address about HTTP listening | '' (all interfaces) | :run         |
-| `port`   | [Integer, String] | Publish type (snapshot or repo)         | 8080                | :run         |
-| `user`   | String            | Run command as user                     | 'aptly'             | :run         |
-| `group`  | String            | Run command as group                    | 'aptly'             | :run         |
-
-#### Examples
-
-```ruby
-aptly_serve 'Serve Aptly HTTP Service' do
-  port 8090
-end
-```
-
-### 'aptly_api_serve'
-
-Serve an API Service
-
-#### Actions
-
-- `run` - (default) Run the service
-
-#### Properties
-
-| Name      | Types             | Description                             | Default             | Used with... |
-| --------- | ----------------- | --------------------------------------- | ------------------- | ------------ |
-| `listen`  | String            | Specify IP address about HTTP listening | '' (all interfaces) | :run         |
-| `port`    | [Integer, String] | Publish type (snapshot or repo)         | 8080                | :run         |
-| `user`    | String            | Run command as user                     | 'aptly'             | :run         |
-| `group`   | String            | Run command as group                    | 'aptly'             | :run         |
-| `no_lock` | [true, false]     | Don’t lock the database                 | false               | :run         |
-
-#### Examples
-
-```ruby
-aptly_api_serve 'Serve Aptly API Service' do
-  port 8091
-  no_lock true
+  skip_signing true
 end
 ```
