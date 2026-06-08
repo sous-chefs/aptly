@@ -45,9 +45,10 @@ platforms.each do |platform, version|
     # end
 
     context 'Create and Update action' do
-      before do
-        stub_command('aptly publish list | grep my_repo').and_return(false)
+      stubs_for_provider('aptly_publish[my_repo]') do |provider|
+        allow(provider).to receive_shell_out('aptly publish list', stdout: '')
       end
+
       it 'Run the custom resources' do
         expect(chef_run).to create_aptly_publish('my_repo')
         expect(chef_run).to update_aptly_publish('my_repo').with(prefix: 'foo')
@@ -59,9 +60,10 @@ platforms.each do |platform, version|
     end
 
     context 'Drop action' do
-      before do
-        stub_command('aptly publish list | grep my_repo').and_return(true)
+      stubs_for_provider('aptly_publish[my_repo]') do |provider|
+        allow(provider).to receive_shell_out('aptly publish list', stdout: "my_repo\n")
       end
+
       it 'Run the custom resources' do
         expect(chef_run).to drop_aptly_publish('my_repo')
       end

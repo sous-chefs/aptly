@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'shellwords'
+
 provides :aptly_publish
 unified_mode true
 use '_partial/_common'
@@ -32,26 +34,21 @@ property :skip_signing,   [true, false], default: false
 
 action :create do
   components = new_resource.component.join(',')
-  endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
-  signing_options = publish_signing_options
 
   execute "Publish #{new_resource.type} - #{new_resource.publish_name}" do
-    command "aptly publish #{new_resource.type} -batch#{signing_options} -component='#{components}' #{architectures(new_resource.architectures)} -distribution='#{new_resource.distribution}' -- #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
+    command aptly_command('aptly', 'publish', new_resource.type, '-batch', *publish_signing_options, "-component=#{components}", *publish_architecture_options, "-distribution=#{new_resource.distribution}", '--', new_resource.publish_name, publish_endpoint_prefix)
     user new_resource.user
     group new_resource.group
     environment resource_env
     sensitive !new_resource.skip_signing
     timeout new_resource.timeout
-    not_if %(aptly publish list | grep #{new_resource.publish_name})
+    not_if { publish_exists?(new_resource.publish_name) }
   end
 end
 
 action :switch do
-  endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
-  component = new_resource.component.empty? ? '' : "-component=#{new_resource.component.join(',')}"
-  signing_options = publish_signing_options
   execute "Switching distribution - #{new_resource.prefix}/#{new_resource.distribution} #{new_resource.publish_name}" do
-    command "aptly publish switch -batch#{signing_options} #{component} #{new_resource.distribution} #{endpoint}#{new_resource.prefix} #{new_resource.publish_name}"
+    command aptly_command('aptly', 'publish', 'switch', '-batch', *publish_signing_options, publish_component_option, new_resource.distribution, publish_endpoint_prefix, new_resource.publish_name)
     user new_resource.user
     group new_resource.group
     environment resource_env
@@ -61,11 +58,8 @@ action :switch do
 end
 
 action :update do
-  endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
-  signing_options = publish_signing_options
-
   execute "Updating distribution - #{new_resource.prefix} #{new_resource.publish_name}" do
-    command "aptly publish update -batch#{signing_options} #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
+    command aptly_command('aptly', 'publish', 'update', '-batch', *publish_signing_options, new_resource.publish_name, publish_endpoint_prefix)
     user new_resource.user
     group new_resource.group
     environment resource_env
@@ -75,27 +69,50 @@ action :update do
 end
 
 action :drop do
-  endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
   prefix = new_resource.prefix.empty? ? './' : "#{new_resource.prefix}/"
 
   execute "Stop publishing - #{prefix}#{new_resource.publish_name}" do
-    command "aptly publish drop #{new_resource.publish_name} #{endpoint}#{new_resource.prefix}"
+    command aptly_command('aptly', 'publish', 'drop', new_resource.publish_name, publish_endpoint_prefix)
     user new_resource.user
     group new_resource.group
     environment resource_env
     timeout new_resource.timeout
-    only_if %(aptly publish list | grep #{new_resource.publish_name})
+    only_if { publish_exists?(new_resource.publish_name) }
   end
 end
 
 action_class do
-  def publish_signing_options
-    return ' -skip-signing' if new_resource.skip_signing
+  include ::Aptly::Helpers
 
-    " -passphrase='#{new_resource.gpg_passphrase}'"
+  def publish_signing_options
+    return ['-skip-signing'] if new_resource.skip_signing
+
+    ["-passphrase=#{new_resource.gpg_passphrase}"]
+  end
+
+  def publish_component_option
+    return if new_resource.component.empty?
+
+    "-component=#{new_resource.component.join(',')}"
+  end
+
+  def publish_architecture_options
+    return [] if new_resource.architectures.empty?
+
+    ['-architectures', new_resource.architectures.join(',')]
+  end
+
+  def publish_endpoint_prefix
+    endpoint = new_resource.endpoint.empty? ? '' : "#{new_resource.endpoint}:"
+    "#{endpoint}#{new_resource.prefix}"
   end
 
   def resource_env
     { 'HOME' => new_resource.root_dir, 'USER' => new_resource.user, 'TMPDIR' => new_resource.tmp_dir }
+  end
+
+  def publish_exists?(publish_name)
+    cmd = shell_out(aptly_command('aptly', 'publish', 'list'), user: new_resource.user, group: new_resource.group, environment: resource_env)
+    cmd.exitstatus == 0 && cmd.stdout.include?(publish_name)
   end
 end

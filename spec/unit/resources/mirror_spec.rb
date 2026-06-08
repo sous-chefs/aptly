@@ -35,20 +35,23 @@ platforms.each do |platform, version|
     end
 
     stubs_for_provider('aptly_mirror[ubuntu-precise-main]') do |provider|
-      allow(provider).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', timeout: 3600.0, environment: { 'HOME' => '/opt/aptly', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)
+      allow(provider).to receive_shell_out('aptly mirror -raw list', stdout: '', stderr: '', exitstatus: 1)
+      allow(provider).to receive_shell_out('gpg --no-default-keyring --keyring /opt/aptly/.gnupg/trustedkeys.gpg --list-keys 437D05B5', exitstatus: 1)
     end
 
     stubs_for_resource('aptly_mirror[ubuntu-precise-main]') do |resource|
-      allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'TMPDIR' => '/tmp', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)
+      allow(resource).to receive_shell_out('aptly mirror -raw list', stdout: '', stderr: '', exitstatus: 1)
+      allow(resource).to receive_shell_out('gpg --no-default-keyring --keyring /opt/aptly/.gnupg/trustedkeys.gpg --list-keys 437D05B5', exitstatus: 1)
     end
 
     stubs_for_resource do |resource|
-      allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'TMPDIR' => '/tmp', 'USER' => 'aptly' } }, stdout: 'ubuntu-precise-main')
+      allow(resource).to receive_shell_out('aptly mirror -raw list', stdout: "ubuntu-precise-main\n")
+      allow(resource).to receive_shell_out('gpg --no-default-keyring --keyring /opt/aptly/.gnupg/trustedkeys.gpg --list-keys 437D05B5', exitstatus: 1)
     end
 
     context 'Create action test' do
       stubs_for_resource('execute[Creating mirror - ubuntu-precise-main]') do |resource|
-        allow(resource).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', { user: 'aptly', environment: { 'HOME' => '/opt/aptly', 'USER' => 'aptly' } }, stdout: '', stderr: '', exitstatus: 1)
+        allow(resource).to receive_shell_out('aptly mirror -raw list', stdout: '', stderr: '', exitstatus: 1)
         allow(resource).to receive_shell_out('aptly mirror show ubuntu-precise-main', exitstatus: 1)
       end
 

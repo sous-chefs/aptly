@@ -24,9 +24,7 @@ RSpec.describe Aptly::Helpers do
     before do
       # existing mirror config
       allow(subject).to receive(:mirror_exists?).and_call_original
-      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
-      # missing mirror config
-      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^missing-repo-mirror$', exitstatus: 1)
+      allow(subject).to receive_shell_out('aptly mirror -raw list', stdout: "ubuntu-precise-main\n")
     end
 
     context 'checks for existence of mirror' do
@@ -42,6 +40,7 @@ RSpec.describe Aptly::Helpers do
       let(:mirror) { 'missing-repo-mirror' }
 
       it 'missing-repo-mirror' do
+        allow(subject).to receive_shell_out('aptly mirror -raw list', stdout: '')
         expect(subject.mirror_exists?(mirror)).to eq false
         expect(subject.mirror_exists?(mirror)).not_to eq true
       end
@@ -52,10 +51,9 @@ RSpec.describe Aptly::Helpers do
     before do
       # existing mirror config
       allow(subject).to receive(:mirror_exists?).and_call_original
-      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
+      allow(subject).to receive_shell_out('aptly mirror -raw list', stdout: "ubuntu-precise-main\n")
       allow(subject).to receive_shell_out('aptly mirror show ubuntu-precise-main', stdout: mirror_show_after_create_stdout)
       # missing mirror config
-      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^missing-repo-mirror$', exitstatus: 1)
       allow(subject).to receive_shell_out('aptly mirror show missing-repo-mirror', exitstatus: 1)
     end
 
@@ -82,10 +80,9 @@ RSpec.describe Aptly::Helpers do
       # existing mirror config
       allow(subject).to receive(:mirror_exists?).and_call_original
       allow(subject).to receive(:mirror_info).and_call_original
-      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
+      allow(subject).to receive_shell_out('aptly mirror -raw list', stdout: "ubuntu-precise-main\n")
       allow(subject).to receive_shell_out('aptly mirror show ubuntu-precise-main', stdout: mirror_show_after_create_stdout)
       # missing mirror config
-      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^missing-repo-mirror$', exitstatus: 1)
       allow(subject).to receive_shell_out('aptly mirror show missing-repo-mirror', exitstatus: 1)
     end
 
@@ -157,9 +154,7 @@ RSpec.describe Aptly::Helpers do
       )
       # existing mirror config
       allow(subject).to receive(:mirror_exists?).and_call_original
-      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^ubuntu-precise-main$', stdout: 'ubuntu-precise-main')
-      # missing mirror config
-      allow(subject).to receive_shell_out('aptly mirror -raw list | grep ^missing-repo-mirror$', exitstatus: 1)
+      allow(subject).to receive_shell_out('aptly mirror -raw list', stdout: "ubuntu-precise-main\n")
     end
 
     context 'creates missing mirror' do
@@ -201,8 +196,8 @@ RSpec.describe Aptly::Helpers do
     context 'zip (<= 3.0)' do
       let(:filter_string) { 'zip (<= 3.0)' }
 
-      it "returns -filter 'zip (<= 3.0)' argument" do
-        expect(subject.filter(filter_string)).to eq " -filter 'zip (<= 3.0)'"
+      it 'returns escaped -filter argument' do
+        expect(subject.filter(filter_string)).to eq ' -filter zip\ \(\<\=\ 3.0\)'
       end
     end
 

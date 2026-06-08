@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
+require 'shellwords'
+
 module Aptly
   module Helpers
+    def aptly_command(*args)
+      Shellwords.join(args.flatten.compact.reject { |arg| arg.to_s.empty? }.map(&:to_s))
+    end
+
     def aptly_env(resource = self)
       {
         'HOME' => aptly_property(resource, :root_dir),
@@ -11,7 +17,7 @@ module Aptly
     end
 
     def filter(f)
-      f.empty? ? '' : " -filter '#{f}'"
+      f.empty? ? '' : " -filter #{Shellwords.escape(f)}"
     end
 
     def filter_with_deps(f)
@@ -67,17 +73,49 @@ module Aptly
     end
 
     def architectures(arr)
-      arr.empty? ? '' : " -architectures #{arr.join(',')}"
+      arr.empty? ? '' : " -architectures #{Shellwords.escape(arr.join(','))}"
+    end
+
+    def mirror_create_options(res)
+      args = []
+      args << '-with-installer' if res.with_installer
+      args << '-with-udebs' if res.with_udebs
+      args.push('-architectures', res.architectures.join(',')) unless res.architectures.empty?
+      args.push('-filter', res.filter) unless res.filter.empty?
+      args << '-filter-with-deps' if res.filter_with_deps
+      args << '-dep-follow-all-variants' if res.dep_follow_all_variants
+      args << '-dep-follow-recommends' if res.dep_follow_recommends
+      args << '-dep-follow-source' if res.dep_follow_source
+      args << '-dep-follow-suggests' if res.dep_follow_suggests
+      args << '-dep-verbose-resolve' if res.dep_verbose_resolve
+      args << '-ignore-signatures' if res.ignore_signatures
+      args
+    end
+
+    def mirror_update_options(res)
+      args = []
+      args << '-dep-follow-all-variants' if res.dep_follow_all_variants
+      args << '-dep-follow-recommends' if res.dep_follow_recommends
+      args << '-dep-follow-source' if res.dep_follow_source
+      args << '-dep-follow-suggests' if res.dep_follow_suggests
+      args << '-dep-verbose-resolve' if res.dep_verbose_resolve
+      args << '-ignore-checksums' if res.ignore_checksums
+      args << '-ignore-signatures' if res.ignore_signatures
+      args.push('-download-limit', res.download_limit) if res.download_limit > 0
+      args.push('-max-tries', res.max_tries) if res.max_tries > 1
+      args << '-skip-existing-packages' if res.skip_existing_packages
+      args
     end
 
     def mirror_exists?(mirror_name, resource = self)
-      shell_out("aptly mirror -raw list | grep ^#{mirror_name}$",
+      cmd = shell_out(aptly_command('aptly', 'mirror', '-raw', 'list'),
         user: aptly_property(resource, :user),
-        environment: aptly_env(resource)).exitstatus == 0
+        environment: aptly_env(resource))
+      cmd.exitstatus == 0 && cmd.stdout.lines.any? { |line| line.chomp == mirror_name }
     end
 
     def mirror_show(mirror_name, resource = self)
-      shell_out("aptly mirror show #{mirror_name}",
+      shell_out(aptly_command('aptly', 'mirror', 'show', mirror_name),
         user: aptly_property(resource, :user),
         environment: aptly_env(resource))
     end
@@ -111,10 +149,18 @@ module Aptly
 
     def mirror_command(res)
       if mirror_exists?(res.mirror_name, res)
-        "aptly mirror edit#{with_installer(res.with_installer)}#{with_udebs(res.with_udebs)}#{architectures(res.architectures)}#{filter(res.filter)}#{filter_with_deps(res.filter_with_deps)}#{dep_follow_all_variants(res.dep_follow_all_variants)}#{dep_follow_recommends(res.dep_follow_recommends)}#{dep_follow_source(res.dep_follow_source)}#{dep_follow_suggests(res.dep_follow_suggests)}#{dep_verbose_resolve(res.dep_verbose_resolve)}#{ignore_signatures(res.ignore_signatures)} #{res.mirror_name}"
+        aptly_command('aptly', 'mirror', 'edit', *mirror_create_options(res), res.mirror_name)
       else
-        "aptly mirror create#{with_installer(res.with_installer)}#{with_udebs(res.with_udebs)}#{architectures(res.architectures)}#{filter(res.filter)}#{filter_with_deps(res.filter_with_deps)}#{dep_follow_all_variants(res.dep_follow_all_variants)}#{dep_follow_recommends(res.dep_follow_recommends)}#{dep_follow_source(res.dep_follow_source)}#{dep_follow_suggests(res.dep_follow_suggests)}#{dep_verbose_resolve(res.dep_verbose_resolve)}#{ignore_signatures(res.ignore_signatures)} #{res.mirror_name} #{res.uri} #{res.distribution} #{res.component}"
+        aptly_command('aptly', 'mirror', 'create', *mirror_create_options(res), res.mirror_name, res.uri, res.distribution, res.component)
       end
+    end
+
+    def mirror_update_command(res)
+      aptly_command('aptly', 'mirror', 'update', *mirror_update_options(res), res.mirror_name)
+    end
+
+    def mirror_drop_command(res)
+      aptly_command('aptly', 'mirror', 'drop', res.mirror_name)
     end
 
     def aptly_property(resource, property_name)
