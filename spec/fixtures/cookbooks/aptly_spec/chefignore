@@ -79,7 +79,6 @@ Rakefile
 # Berkshelf #
 #############
 Berksfile
-Berksfile.lock
 cookbooks/*
 tmp
 
