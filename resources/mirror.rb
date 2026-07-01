@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'shellwords'
+
 provides :aptly_mirror
 unified_mode true
 use '_partial/_common'
@@ -78,13 +80,17 @@ action :create do
     install_key(new_resource.keyid, new_resource.keyserver)
   end
 
+  platform_keyring = "/usr/share/keyrings/#{node['platform']}-archive-keyring.gpg"
+  trusted_keyring = "#{new_resource.root_dir}/.gnupg/trustedkeys.gpg"
+  platform_keyring_marker = "#{new_resource.root_dir}/.platform_keyring_imported"
+
   execute 'Import system platform keyring' do
-    command "gpg --no-default-keyring --keyring /usr/share/keyrings/#{node['platform']}-archive-keyring.gpg --export | gpg --no-default-keyring --keyring #{new_resource.root_dir}/.gnupg/trustedkeys.gpg --import && touch #{new_resource.root_dir}/.platform_keyring_imported"
+    command "gpg --no-default-keyring --keyring #{Shellwords.escape(platform_keyring)} --export | gpg --no-default-keyring --keyring #{Shellwords.escape(trusted_keyring)} --import && touch #{Shellwords.escape(platform_keyring_marker)}"
     user new_resource.user
     group new_resource.group
     retries 2
     environment resource_env
-    not_if { ::File.exist?("#{new_resource.root_dir}/.platform_keyring_imported") }
+    not_if { ::File.exist?(platform_keyring_marker) }
   end
 
   converge_if_changed do
@@ -100,7 +106,7 @@ end
 
 action :update do
   execute "Updating mirror - #{new_resource.mirror_name}" do
-    command "aptly mirror update#{dep_follow_all_variants(new_resource.dep_follow_all_variants)}#{dep_follow_recommends(new_resource.dep_follow_recommends)}#{dep_follow_source(new_resource.dep_follow_source)}#{dep_follow_suggests(new_resource.dep_follow_suggests)}#{dep_verbose_resolve(new_resource.dep_verbose_resolve)}#{ignore_checksums(new_resource.ignore_checksums)}#{ignore_signatures(new_resource.ignore_signatures)}#{download_limit(new_resource.download_limit)}#{max_tries(new_resource.max_tries)}#{skip_existing_packages(new_resource.skip_existing_packages)} #{new_resource.mirror_name}"
+    command mirror_update_command(new_resource)
     user new_resource.user
     group new_resource.group
     environment resource_env
@@ -112,7 +118,7 @@ end
 
 action :drop do
   execute "Droping mirror - #{new_resource.mirror_name}" do
-    command "aptly mirror drop #{new_resource.mirror_name}"
+    command mirror_drop_command(new_resource)
     user new_resource.user
     group new_resource.group
     environment resource_env
@@ -136,11 +142,12 @@ action_class do
     end
 
     execute "Import GPG key #{keyid}" do
-      command "gpg --no-default-keyring --keyring #{new_resource.root_dir}/.gnupg/trustedkeys.gpg --keyserver #{keyserver_uri(keyserver)} --recv-keys #{keyid}"
+      trusted_keyring = "#{new_resource.root_dir}/.gnupg/trustedkeys.gpg"
+      command Shellwords.join(['gpg', '--no-default-keyring', '--keyring', trusted_keyring, '--keyserver', keyserver_uri(keyserver), '--recv-keys', keyid])
       user new_resource.user
       group new_resource.group
       environment resource_env
-      not_if "gpg --no-default-keyring --keyring #{new_resource.root_dir}/.gnupg/trustedkeys.gpg --list-keys #{keyid}"
+      not_if { gpg_key_imported?(trusted_keyring, keyid) }
     end
   end
 
@@ -162,7 +169,7 @@ action_class do
     end
 
     execute "Import GPG key from #{keyfile}" do
-      command "gpg --no-default-keyring --keyring #{new_resource.root_dir}/.gnupg/trustedkeys.gpg --import #{Chef::Config['file_cache_path']}/#{keyfile}"
+      command Shellwords.join(['gpg', '--no-default-keyring', '--keyring', "#{new_resource.root_dir}/.gnupg/trustedkeys.gpg", '--import', "#{Chef::Config['file_cache_path']}/#{keyfile}"])
       user new_resource.user
       group new_resource.group
       environment resource_env
@@ -174,5 +181,12 @@ action_class do
       group new_resource.group
       action :create
     end
+  end
+
+  def gpg_key_imported?(trusted_keyring, keyid)
+    cmd = shell_out(Shellwords.join(['gpg', '--no-default-keyring', '--keyring', trusted_keyring, '--list-keys', keyid]),
+      user: new_resource.user,
+      environment: resource_env)
+    cmd.exitstatus == 0
   end
 end
