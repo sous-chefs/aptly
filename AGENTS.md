@@ -1,4 +1,15 @@
-# Aptly Cookbook Limitations
+# AGENTS.md
+
+## Cookbook Purpose
+
+Installs/Configures aptly
+
+## Agent Findings
+
+* This cookbook is in an incremental modernization pass. Preserve existing public recipes and attributes unless a later full migration is explicitly selected.
+* Dependency management should use `Policyfile.rb`; do not reintroduce Berkshelf.
+
+## Known Limitations
 
 - Aptly upstream publishes packages for Debian `bullseye`, `bookworm`, and `trixie`, plus Ubuntu `jammy` and `noble`.
 - Debian 12 remains supported through June 10, 2026 in standard Debian security support and through June 30, 2028 in Debian LTS.
