@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [4.0.2](https://github.com/sous-chefs/aptly/compare/v4.0.1...v4.0.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* harden aptly shell commands ([#227](https://github.com/sous-chefs/aptly/issues/227)) ([f6c4679](https://github.com/sous-chefs/aptly/commit/f6c4679e5c00b5148fad8e3fdfa1df89aa6e8ce6))
+
 ## [4.0.1](https://github.com/sous-chefs/aptly/compare/v4.0.0...v4.0.1) (2026-04-22)
 
 
