@@ -38,10 +38,11 @@ platforms.each do |platform, version|
     # end
 
     context 'Add action with directory' do
-      before do
-        stub_command('aptly repo list --raw | grep my_repo').and_return(false)
-        stub_command('aptly repo show -with-packages my_repo | grep hosts').and_return(false)
+      stubs_for_provider('aptly_repo[my_repo]') do |provider|
+        allow(provider).to receive_shell_out('aptly repo list --raw', stdout: '')
+        allow(provider).to receive_shell_out('aptly repo show -with-packages my_repo', stdout: '')
       end
+
       it 'Run the custom resources' do
         expect(chef_run).to add_aptly_repo('my_repo').with(directory: '/tmp')
       end

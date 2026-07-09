@@ -59,10 +59,11 @@ platforms.each do |platform, version|
     # end
 
     context 'Create action test' do
-      before do
-        stub_command('aptly repo list --raw | grep my_repo').and_return(false)
-        stub_command('aptly repo show -with-packages my_repo | grep hosts').and_return(false)
+      stubs_for_provider('aptly_repo[my_repo]') do |provider|
+        allow(provider).to receive_shell_out('aptly repo list --raw', stdout: '')
+        allow(provider).to receive_shell_out('aptly repo show -with-packages my_repo', stdout: '')
       end
+
       it 'Run the custom resources' do
         expect(chef_run).to create_aptly_repo('my_repo').with(comment: 'A repository of packages', component: 'main', distribution: 'Ubuntu')
       end
@@ -72,10 +73,11 @@ platforms.each do |platform, version|
     end
 
     context 'Add action with file' do
-      before do
-        stub_command('aptly repo list --raw | grep my_repo').and_return(true)
-        stub_command('aptly repo show -with-packages my_repo | grep hosts').and_return(false)
+      stubs_for_provider('aptly_repo[my_repo]') do |provider|
+        allow(provider).to receive_shell_out('aptly repo list --raw', stdout: "my_repo\n")
+        allow(provider).to receive_shell_out('aptly repo show -with-packages my_repo', stdout: '')
       end
+
       it 'Run the custom resources' do
         expect(chef_run).to add_aptly_repo('my_repo').with(file: '/etc/hosts')
       end
@@ -85,10 +87,11 @@ platforms.each do |platform, version|
     end
 
     context 'Drop and remove action' do
-      before do
-        stub_command('aptly repo list --raw | grep my_repo').and_return(true)
-        stub_command('aptly repo show -with-packages my_repo | grep hosts').and_return(true)
+      stubs_for_provider('aptly_repo[my_repo]') do |provider|
+        allow(provider).to receive_shell_out('aptly repo list --raw', stdout: "my_repo\n")
+        allow(provider).to receive_shell_out('aptly repo show -with-packages my_repo', stdout: "hosts\n")
       end
+
       it 'Run the custom resources' do
         expect(chef_run).to drop_aptly_repo('my_repo')
         expect(chef_run).to remove_aptly_repo('my_repo').with(package_query: 'hosts')
